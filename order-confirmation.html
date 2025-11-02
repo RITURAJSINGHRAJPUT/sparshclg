@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta / SEO -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - Thank You for Your Purchase</title>
+    <meta name="description" content="Your Sparsh NFC order has been confirmed. Thank you for your purchase!">
+    <!-- Favicon uses the new palette -->
+    <link rel="icon" href="https://placehold.co/32x32/C8B6FF/FFD6FF?text=✓" type="image/x-icon">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        /* --- COLOR PALETTE (Pinks/Purples) --- */
+        :root {
+            --color-primary: #C8B6FF;    /* Mid Purple (CTA/Accent) */
+            --color-secondary: #E7C6FF;  /* Light Lavender (Secondary/Accent) */
+            --color-light-bg: #FFD6FF;   /* Lightest Pink (Background Start) */
+            --color-accent-text: #B8C0FF;/* Light Blue-Violet Accent */
+            --color-dark-text: #1e2025;  /* Dark text for contrast */
+            --color-dark-bg: #6b4c9e;    /* Dark footer/contrast background */
+        }
+        
+        /* FULL-PAGE GRADIENT */
+        html {
+            height: 100%;
+            background: linear-gradient(
+                to bottom right,
+                var(--color-light-bg),
+                var(--color-secondary),
+                var(--color-accent-text)
+            );
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: transparent; 
+            color: var(--color-dark-text); 
+            min-height: 100%; 
+        }
+        
+        /* Custom CTA Styles */
+        .cta-primary {
+            @apply inline-flex items-center justify-center px-10 py-4 text-lg font-semibold rounded-full shadow-xl text-white transition duration-300 transform hover:scale-[1.05];
+            background-color: var(--color-primary);
+        }
+        .cta-primary:hover {
+            background-color: #a496d0;
+        }
+
+        .text-dark {
+            color: var(--color-dark-text);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-50 bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo (Left) -->
+                <a href="index.html" class="text-2xl font-extrabold text-gray-900 tracking-tight">Sparsh <span class="text-accent-text" style="color: var(--color-accent-text);">NFC</span></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-12 sm:py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Success Icon and Message -->
+            <div class="text-center mb-12">
+                <!-- Success Illustration -->
+                <div class="inline-flex items-center justify-center w-32 h-32 rounded-full mb-6 relative" style="background: linear-gradient(135deg, rgba(200, 182, 255, 0.3), rgba(231, 198, 255, 0.3));">
+                    <svg class="w-24 h-24 absolute" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="45" fill="#C8B6FF" opacity="0.3"/>
+                        <path d="M35 50L45 60L65 40" stroke="#10b981" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="50" cy="50" r="48" stroke="#C8B6FF" stroke-width="2" opacity="0.5"/>
+                    </svg>
+                    <svg class="w-16 h-16 relative z-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <h1 class="text-4xl font-extrabold text-dark mb-4">Order Confirmed!</h1>
+                <p class="text-xl text-gray-600">Thank you for your purchase. We've received your order and will begin processing it shortly.</p>
+            </div>
+
+            <!-- Order Summary Card -->
+            <div class="bg-white p-8 rounded-2xl shadow-2xl border-4 mb-8" style="border-color: var(--color-primary);">
+                <h2 class="text-2xl font-extrabold text-dark mb-6">Order Summary</h2>
+                
+                <div id="order-items" class="space-y-4 mb-6">
+                    <!-- Order items will be loaded here -->
+                </div>
+
+                <div class="pt-6 border-t space-y-3 text-gray-700" style="border-color: var(--color-secondary);">
+                    <div class="flex justify-between">
+                        <span>Order ID</span>
+                        <span id="order-id" class="font-mono font-bold text-dark">#SP-000000</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span id="order-subtotal">₹ 0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Shipping</span>
+                        <span class="font-bold text-green-600">FREE</span>
+                    </div>
+                    <div id="order-cod-charge" class="flex justify-between" style="display: none;">
+                        <span>COD Charge</span>
+                        <span>₹ 50</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>GST (18%)</span>
+                        <span id="order-gst">₹ 0</span>
+                    </div>
+                    <div class="flex justify-between pt-4 text-2xl font-extrabold text-dark border-t" style="border-color: var(--color-secondary);">
+                        <span>Total Paid</span>
+                        <span id="order-total">₹ 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping Information -->
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-extrabold text-dark">Shipping Details</h2>
+                    <!-- Location Pin Illustration -->
+                    <svg class="w-12 h-12 hidden md:block" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="60" height="60" rx="8" fill="#FFD6FF"/>
+                        <path d="M30 15C23.3726 15 18 20.3726 18 27C18 35 30 45 30 45C30 45 42 35 42 27C42 20.3726 36.6274 15 30 15Z" fill="#C8B6FF" stroke="#6b4c9e" stroke-width="2"/>
+                        <circle cx="30" cy="27" r="6" fill="#6b4c9e"/>
+                    </svg>
+                </div>
+                <div id="shipping-details" class="space-y-2 text-gray-700">
+                    <!-- Shipping details will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 mb-8">
+                <h2 class="text-2xl font-extrabold text-dark mb-6">What Happens Next?</h2>
+                <div class="space-y-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white mb-2" style="background-color: var(--color-primary);">1</div>
+                            <!-- Email Illustration -->
+                            <svg class="w-16 h-16 mt-2" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="80" height="80" rx="12" fill="#FFD6FF"/>
+                                <rect x="15" y="20" width="50" height="35" rx="3" fill="#C8B6FF" stroke="#6b4c9e" stroke-width="2"/>
+                                <path d="M15 20L40 38L65 20" stroke="#6b4c9e" stroke-width="2" fill="none"/>
+                                <circle cx="45" cy="30" r="3" fill="#6b4c9e"/>
+                                <path d="M40 45L25 35M40 45L55 35" stroke="#6b4c9e" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="flex-grow pt-2">
+                            <h3 class="font-bold text-dark mb-2 text-lg">Order Confirmation Email</h3>
+                            <p class="text-gray-600">You'll receive an email confirmation with your order details and tracking information within 24 hours.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white mb-2" style="background-color: var(--color-primary);">2</div>
+                            <!-- Production Illustration -->
+                            <svg class="w-16 h-16 mt-2" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="80" height="80" rx="12" fill="#E7C6FF"/>
+                                <rect x="20" y="25" width="40" height="25" rx="3" fill="#C8B6FF" stroke="#6b4c9e" stroke-width="2"/>
+                                <circle cx="30" cy="37" r="2" fill="#6b4c9e"/>
+                                <circle cx="40" cy="37" r="2" fill="#6b4c9e"/>
+                                <circle cx="50" cy="37" r="2" fill="#6b4c9e"/>
+                                <rect x="25" y="55" width="30" height="8" rx="2" fill="#B8C0FF"/>
+                                <path d="M35 55V50M45 55V50" stroke="#6b4c9e" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="flex-grow pt-2">
+                            <h3 class="font-bold text-dark mb-2 text-lg">Production & Processing</h3>
+                            <p class="text-gray-600">We'll begin customizing your NFC cards. Standard orders process in 1-2 business days, premium cards with engraving take 4-7 days.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0 flex flex-col items-center">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-white mb-2" style="background-color: var(--color-primary);">3</div>
+                            <!-- Delivery Illustration -->
+                            <svg class="w-16 h-16 mt-2" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="80" height="80" rx="12" fill="#FFD6FF"/>
+                                <rect x="15" y="35" width="50" height="30" rx="4" fill="#C8B6FF" stroke="#6b4c9e" stroke-width="2"/>
+                                <circle cx="28" cy="65" r="6" fill="#6b4c9e"/>
+                                <circle cx="52" cy="65" r="6" fill="#6b4c9e"/>
+                                <path d="M20 40L65 40" stroke="#6b4c9e" stroke-width="2"/>
+                                <path d="M25 45L60 45" stroke="#6b4c9e" stroke-width="1.5"/>
+                                <path d="M18 50L40 45" stroke="#6b4c9e" stroke-width="2" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="flex-grow pt-2">
+                            <h3 class="font-bold text-dark mb-2 text-lg">Shipping & Delivery</h3>
+                            <p class="text-gray-600">Once ready, your order will be dispatched via our trusted courier partner. Free shipping across India typically takes 3-7 business days.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="index.html" class="cta-primary text-center">
+                    Continue Shopping
+                </a>
+                <a href="#" class="inline-flex items-center justify-center px-10 py-4 text-lg font-semibold rounded-full border-2 text-dark transition duration-300 transform hover:scale-[1.05]" style="border-color: var(--color-primary); color: var(--color-primary);">
+                    Track Your Order
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-white mt-16" style="background-color: var(--color-dark-bg);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b pb-4 mb-4" style="border-color: #4b5563;">
+                <div class="col-span-2 md:col-span-1 text-left">
+                    <h4 class="text-2xl font-extrabold text-white tracking-tight mb-4">Sparsh <span style="color: var(--color-accent-text);">NFC</span></h4>
+                    <p class="text-sm text-gray-400">Upgrade how you share your details. Elegant, smart, and sustainable.</p>
+                </div>
+                <div class="text-left">
+                    <h5 class="font-semibold text-gray-300 mb-4">Products</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html#shop" class="text-gray-300 hover:text-white transition">Shop</a></li>
+                        <li><a href="corporatepack.html" class="text-gray-300 hover:text-white transition">Corporate</a></li>
+                    </ul>
+                </div>
+                <div class="text-left">
+                    <h5 class="font-semibold text-gray-300 mb-4">Company</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html#about" class="text-gray-300 hover:text-white transition">About Us</a></li>
+                        <li><a href="index.html#faq" class="text-gray-300 hover:text-white transition">FAQs</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Support</a></li>
+                    </ul>
+                </div>
+                <div class="text-left">
+                    <h5 class="font-semibold text-gray-300 mb-4">Legal</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-4 text-center text-sm text-gray-500">
+                &copy; 2025 Sparsh NFC. All rights reserved. Shipping across India.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrderDetails();
+        });
+
+        function loadOrderDetails() {
+            const orderData = localStorage.getItem('lastOrder');
+            
+            if (!orderData) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const order = JSON.parse(orderData);
+            
+            // Generate order ID
+            const orderId = 'SP-' + Date.now().toString().slice(-6);
+            document.getElementById('order-id').textContent = '#' + orderId;
+
+            // Display order items
+            const itemsContainer = document.getElementById('order-items');
+            itemsContainer.innerHTML = order.order.items.map(item => {
+                const totalPrice = item.price * item.quantity;
+                return `
+                    <div class="flex items-center space-x-4 pb-4 border-b" style="border-color: var(--color-secondary);">
+                        <img src="${item.image}" alt="${item.name}" class="w-20 h-16 object-cover rounded">
+                        <div class="flex-grow">
+                            <h3 class="font-bold text-dark">${item.name}</h3>
+                            <p class="text-sm text-gray-500">${item.finish} × ${item.quantity}</p>
+                        </div>
+                        <span class="font-bold text-dark">₹ ${totalPrice.toLocaleString('en-IN')}</span>
+                    </div>
+                `;
+            }).join('');
+
+            // Display totals
+            document.getElementById('order-subtotal').textContent = `₹ ${order.order.subtotal.toLocaleString('en-IN')}`;
+            document.getElementById('order-gst').textContent = `₹ ${order.order.gst.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+            
+            if (order.order.codCharge > 0) {
+                document.getElementById('order-cod-charge').style.display = 'flex';
+            }
+            
+            document.getElementById('order-total').textContent = `₹ ${order.order.total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+
+            // Display shipping details
+            const shippingContainer = document.getElementById('shipping-details');
+            shippingContainer.innerHTML = `
+                <p class="font-semibold text-dark">${order.shipping.name}</p>
+                <p>${order.shipping.addressLine1}</p>
+                ${order.shipping.addressLine2 ? `<p>${order.shipping.addressLine2}</p>` : ''}
+                <p>${order.shipping.city}, ${order.shipping.state} ${order.shipping.pincode}</p>
+                <p class="mt-2">📧 ${order.shipping.email}</p>
+                <p>📞 ${order.shipping.phone}</p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
+

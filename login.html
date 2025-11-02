@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta / SEO -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sparsh NFC | Sign In or Create Account</title>
+    <meta name="description" content="Sign in to your Sparsh NFC account or create a new one to manage your orders and profile.">
+    <!-- Favicon -->
+    <link rel="icon" href="https://placehold.co/32x32/C8B6FF/FFD6FF?text=🔐" type="image/x-icon">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Firebase Config (Module) -->
+    <script type="module" src="firebase-config.js"></script>
+    <!-- Auth Management (Module) -->
+    <script type="module" src="auth-modular.js"></script>
+    <!-- Interactive UI Enhancements -->
+    <script src="interactive-ui.js"></script>
+
+    <style>
+        :root {
+            --color-primary: #6b4c9e;
+            --color-secondary: #C8B6FF;
+            --color-light-bg: #FFD6FF;
+            --color-accent: #E7C6FF;
+            --color-dark-text: #1e2025;
+        }
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FFD6FF 0%, #E7C6FF 50%, #C8B6FF 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .illustration-section {
+            background: var(--color-primary);
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            min-height: 600px;
+        }
+
+        .illustration-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600"><path d="M0,150 Q100,100 200,150 T400,150 L400,600 L0,600 Z" fill="%23C8B6FF" opacity="0.1"/><path d="M0,300 Q100,250 200,300 T400,300 L400,600 L0,600 Z" fill="%23E7C6FF" opacity="0.1"/></svg>');
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .illustration-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: white;
+        }
+
+        .illustration-content h2 {
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .illustration-content p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .illustration-svg {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            margin: 40px 0;
+        }
+
+        .form-section {
+            padding: 60px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .form-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-dark-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-subtitle {
+            color: #6c757d;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            z-index: 2;
+        }
+
+        .form-control {
+            padding-left: 45px;
+            height: 50px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 0.2rem rgba(107, 76, 158, 0.15);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            border: none;
+            border-radius: 10px;
+            height: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a3f87;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 76, 158, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .social-divider {
+            position: relative;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .social-divider::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background: #dee2e6;
+        }
+
+        .social-divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .btn-social {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 12px;
+            background: white;
+            color: var(--color-dark-text);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-social:hover {
+            border-color: var(--color-primary);
+            background: #f8f9fa;
+            transform: translateY(-2px);
+        }
+
+        .social-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-tabs {
+            border: none;
+            margin-bottom: 2rem;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: #6c757d;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .nav-tabs .nav-link:hover {
+            border: none;
+            color: var(--color-primary);
+        }
+
+        .form-section-extended {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        .form-section-extended::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .form-section-extended::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .form-section-extended::-webkit-scrollbar-thumb {
+            background: var(--color-secondary);
+            border-radius: 10px;
+        }
+
+        .form-section-extended::-webkit-scrollbar-thumb:hover {
+            background: var(--color-primary);
+        }
+
+        @media (max-width: 768px) {
+            .illustration-section {
+                display: none;
+            }
+            
+            .form-section {
+                padding: 40px 30px;
+            }
+
+            .illustration-section {
+                min-height: 300px;
+            }
+        }
+
+        .clock-icon {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="auth-container">
+        <div class="row g-0">
+            <!-- Left Section: Illustration -->
+            <div class="col-lg-5 d-none d-lg-block">
+                <div class="illustration-section">
+                    <!-- Clock Icon -->
+                    <svg class="clock-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="18" stroke="#C8B6FF" stroke-width="2" fill="none"/>
+                        <line x1="20" y1="20" x2="20" y2="12" stroke="#C8B6FF" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="20" y1="20" x2="26" y2="20" stroke="#C8B6FF" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    
+                    <div class="illustration-content">
+                        <h2>Sparsh NFC</h2>
+                        <p>Join thousands of professionals who network smarter</p>
+                        
+                        <!-- SVG Illustration -->
+                        <svg class="illustration-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Person -->
+                            <circle cx="200" cy="150" r="50" fill="#C8B6FF" stroke="#fff" stroke-width="3"/>
+                            <path d="M100 350 Q100 280 150 280 L250 280 Q300 280 300 350" fill="#C8B6FF" stroke="#fff" stroke-width="3"/>
+                            <!-- Laptop -->
+                            <rect x="150" y="300" width="100" height="60" rx="5" fill="#E7C6FF" stroke="#fff" stroke-width="2"/>
+                            <rect x="155" y="305" width="90" height="40" rx="3" fill="#fff"/>
+                            <!-- Blocks -->
+                            <rect x="80" y="200" width="60" height="80" rx="5" fill="#C8B6FF" opacity="0.6" stroke="#fff" stroke-width="2"/>
+                            <rect x="260" y="180" width="60" height="100" rx="5" fill="#E7C6FF" opacity="0.6" stroke="#fff" stroke-width="2"/>
+                            <!-- Dots on blocks -->
+                            <circle cx="95" cy="220" r="4" fill="#fff"/>
+                            <circle cx="115" cy="240" r="4" fill="#fff"/>
+                            <circle cx="100" cy="260" r="4" fill="#fff"/>
+                            <!-- Wavy lines -->
+                            <path d="M50 100 Q100 80 150 100 T250 100" stroke="#C8B6FF" stroke-width="3" fill="none" opacity="0.7"/>
+                            <path d="M50 350 Q100 330 150 350 T250 350" stroke="#E7C6FF" stroke-width="3" fill="none" opacity="0.7"/>
+                            <!-- Floating dots -->
+                            <circle cx="100" cy="80" r="6" fill="#C8B6FF" opacity="0.5"/>
+                            <circle cx="320" cy="120" r="8" fill="#E7C6FF" opacity="0.5"/>
+                            <circle cx="80" cy="380" r="5" fill="#C8B6FF" opacity="0.5"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section: Form -->
+            <div class="col-lg-7">
+                <div class="form-section">
+                    <!-- Tab Navigation -->
+                    <ul class="nav nav-tabs" id="authTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="signin-tab" data-bs-toggle="tab" data-bs-target="#signin" type="button" role="tab">
+                                Sign In
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="signup-tab" data-bs-toggle="tab" data-bs-target="#signup" type="button" role="tab">
+                                Sign Up
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="authTabContent">
+                        <!-- Sign In Tab -->
+                        <div class="tab-pane fade show active" id="signin" role="tabpanel">
+                            <h1 class="form-title">Welcome Back</h1>
+                            <p class="form-subtitle">Hey enter your details to sign in to your account</p>
+
+                            <div id="signin-error" class="alert alert-danger d-none" role="alert"></div>
+                            <div id="signin-success" class="alert alert-success d-none" role="alert"></div>
+
+                            <form id="signin-form">
+                                <div class="form-group">
+                                    <i class="bi bi-envelope input-icon"></i>
+                                    <input type="email" id="signin-email" class="form-control" placeholder="Enter your Email" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <i class="bi bi-lock input-icon"></i>
+                                    <input type="password" id="signin-password" class="form-control" placeholder="Enter your Password" required>
+                                </div>
+
+                                <div class="d-flex justify-content-end mb-3">
+                                    <button type="button" id="forgot-password-btn" class="btn btn-link p-0" style="color: var(--color-primary); text-decoration: none;">
+                                        Forgot Password?
+                                    </button>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Sign in</button>
+                            </form>
+
+                            <div class="social-divider">
+                                <span>Or Sign in with</span>
+                            </div>
+
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <button type="button" id="google-signin-btn" class="btn btn-social w-100">
+                                        <svg class="social-icon" viewBox="0 0 24 24">
+                                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-2.62z"/>
+                                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                        </svg>
+                                        <span>Google</span>
+                                    </button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" id="facebook-signin-btn" class="btn btn-social w-100">
+                                        <svg class="social-icon" fill="#1877F2" viewBox="0 0 24 24">
+                                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                        </svg>
+                                        <span>Facebook</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="login-link">
+                                Don't have an account? <a href="#" onclick="document.getElementById('signup-tab').click(); return false;">Sign up</a>
+                            </div>
+                        </div>
+
+                        <!-- Sign Up Tab -->
+                        <div class="tab-pane fade" id="signup" role="tabpanel">
+                            <div class="form-section-extended">
+                                <h1 class="form-title">Student Signup</h1>
+                                <p class="form-subtitle">Hey enter your details to create your account</p>
+
+                                <div id="signup-error" class="alert alert-danger d-none" role="alert"></div>
+                                <div id="signup-success" class="alert alert-success d-none" role="alert"></div>
+
+                                <form id="signup-form" novalidate>
+                                    <div class="form-group">
+                                        <i class="bi bi-person input-icon"></i>
+                                        <input type="text" id="signup-name" class="form-control" placeholder="Enter your Name" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <i class="bi bi-envelope input-icon"></i>
+                                        <input type="email" id="signup-email" class="form-control" placeholder="Enter your Email" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <i class="bi bi-telephone input-icon"></i>
+                                        <input type="tel" id="signup-phone" class="form-control" placeholder="Enter your Phone" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <i class="bi bi-lock input-icon"></i>
+                                        <input type="password" id="signup-password" class="form-control" placeholder="Create Password" required minlength="6">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <i class="bi bi-lock-fill input-icon"></i>
+                                        <input type="password" id="signup-confirm-password" class="form-control" placeholder="Confirm Password" required>
+                                    </div>
+
+                                    <!-- Extended Fields (Hidden by default, shown if needed) -->
+                                    <div id="extended-fields" style="display: none;">
+                                        <hr class="my-4">
+                                        
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Gender</label>
+                                                    <select id="signup-gender" class="form-control">
+                                                        <option value="">Select</option>
+                                                        <option value="male">Male</option>
+                                                        <option value="female">Female</option>
+                                                        <option value="other">Other</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Date of Birth</label>
+                                                    <input type="date" id="signup-dob" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label">Occupation / Role</label>
+                                            <input type="text" id="signup-occupation" class="form-control" placeholder="e.g., Software Engineer">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label">Company / Organization</label>
+                                            <input type="text" id="signup-company" class="form-control" placeholder="Company name">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label">Street Address</label>
+                                            <input type="text" id="signup-street" class="form-control" placeholder="House/Flat No., Building Name">
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">City</label>
+                                                    <input type="text" id="signup-city" class="form-control" placeholder="City">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">State</label>
+                                                    <input type="text" id="signup-state" class="form-control" placeholder="State">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="form-label">Postal Code</label>
+                                            <input type="text" id="signup-postal" class="form-control" placeholder="110001" pattern="[0-9]{6}">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="terms" required>
+                                        <label class="form-check-label" for="terms">
+                                            I agree to the <a href="#" style="color: var(--color-primary);">Terms of Service</a> and <a href="#" style="color: var(--color-primary);">Privacy Policy</a>
+                                        </label>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary">Sign up</button>
+                                </form>
+
+                                <div class="social-divider">
+                                    <span>Or Sign up with</span>
+                                </div>
+
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <button type="button" id="google-signup-btn" class="btn btn-social w-100">
+                                            <svg class="social-icon" viewBox="0 0 24 24">
+                                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-2.62z"/>
+                                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                                            </svg>
+                                            <span>Google</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button type="button" id="facebook-signup-btn" class="btn btn-social w-100">
+                                            <svg class="social-icon" fill="#1877F2" viewBox="0 0 24 24">
+                                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                            </svg>
+                                            <span>Facebook</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="login-link">
+                                    Already have an account? <a href="#" onclick="document.getElementById('signin-tab').click(); return false;">Sign in</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Reset Modal -->
+    <div class="modal fade" id="password-reset-modal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Reset Password</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-muted">Enter your email address and we'll send you a link to reset your password.</p>
+                    <form id="password-reset-form">
+                        <div id="reset-error" class="alert alert-danger d-none" role="alert"></div>
+                        <div id="reset-success" class="alert alert-success d-none" role="alert"></div>
+                        <div class="form-group mb-3">
+                            <i class="bi bi-envelope input-icon"></i>
+                            <input type="email" id="reset-email" class="form-control" placeholder="your.email@example.com" required>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-outline-secondary flex-fill" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary flex-fill">Send Reset Link</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Wait for sparshAuth to be available
+        function waitForSparshAuth(callback, maxAttempts = 20) {
+            let attempts = 0;
+            const checkAuth = setInterval(() => {
+                attempts++;
+                if (typeof sparshAuth !== 'undefined' && sparshAuth.signUp) {
+                    clearInterval(checkAuth);
+                    callback();
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(checkAuth);
+                    console.error('sparshAuth not available after', maxAttempts * 500, 'ms');
+                }
+            }, 500);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is already authenticated
+            waitForSparshAuth(() => {
+                if (sparshAuth.isAuthenticated()) {
+                    const redirectUrl = localStorage.getItem('redirectAfterLogin') || 'index.html';
+                    localStorage.removeItem('redirectAfterLogin');
+                    window.location.href = redirectUrl;
+                }
+            });
+
+            // Sign In Form Handler
+            const signinForm = document.getElementById('signin-form');
+            signinForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const errorDiv = document.getElementById('signin-error');
+                const successDiv = document.getElementById('signin-success');
+                
+                errorDiv.classList.add('d-none');
+                successDiv.classList.add('d-none');
+
+                // Check if sparshAuth is available
+                if (typeof sparshAuth === 'undefined' || !sparshAuth.signIn) {
+                    errorDiv.textContent = 'Authentication service is not ready. Please refresh the page and try again.';
+                    errorDiv.classList.remove('d-none');
+                    console.error('sparshAuth is not available');
+                    return;
+                }
+
+                const email = document.getElementById('signin-email').value;
+                const password = document.getElementById('signin-password').value;
+
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Signing In...';
+
+                try {
+                    const result = await sparshAuth.signIn(email, password);
+
+                    if (result.success) {
+                        successDiv.textContent = 'Sign in successful! Redirecting...';
+                        successDiv.classList.remove('d-none');
+                        
+                        // Force redirect after successful login
+                        const redirectUrl = localStorage.getItem('redirectAfterLogin') || 'index.html';
+                        localStorage.removeItem('redirectAfterLogin');
+                        
+                        console.log('Redirecting to:', redirectUrl);
+                        setTimeout(() => {
+                            window.location.href = redirectUrl;
+                        }, 500);
+                    } else {
+                        errorDiv.textContent = result.error || 'Failed to sign in. Please check your credentials.';
+                        errorDiv.classList.remove('d-none');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Sign in';
+                    }
+                } catch (error) {
+                    console.error('Signin exception:', error);
+                    errorDiv.textContent = 'An unexpected error occurred. Please try again.';
+                    errorDiv.classList.remove('d-none');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Sign in';
+                }
+            });
+
+            // Sign Up Form Handler
+            const signupForm = document.getElementById('signup-form');
+            signupForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const errorDiv = document.getElementById('signup-error');
+                const successDiv = document.getElementById('signup-success');
+                
+                errorDiv.classList.add('d-none');
+                successDiv.classList.add('d-none');
+
+                // Validate required fields
+                const name = document.getElementById('signup-name').value.trim();
+                const email = document.getElementById('signup-email').value.trim();
+                const phone = document.getElementById('signup-phone').value.trim();
+                const password = document.getElementById('signup-password').value;
+                const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+                if (!name || !email || !phone || !password) {
+                    errorDiv.textContent = 'Please fill in all required fields.';
+                    errorDiv.classList.remove('d-none');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    errorDiv.textContent = 'Password must be at least 6 characters long.';
+                    errorDiv.classList.remove('d-none');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    errorDiv.textContent = 'Passwords do not match!';
+                    errorDiv.classList.remove('d-none');
+                    return;
+                }
+
+                // Check if sparshAuth is available
+                if (typeof sparshAuth === 'undefined' || !sparshAuth.signUp) {
+                    errorDiv.textContent = 'Authentication service is not ready. Please refresh the page and try again.';
+                    errorDiv.classList.remove('d-none');
+                    console.error('sparshAuth is not available');
+                    return;
+                }
+
+                // Collect profile data (only get fields that exist)
+                const profileData = {
+                    fullName: name,
+                    email: email,
+                    phone: phone
+                };
+
+                // Add optional fields if they exist
+                const genderEl = document.getElementById('signup-gender');
+                const dobEl = document.getElementById('signup-dob');
+                const occupationEl = document.getElementById('signup-occupation');
+                const companyEl = document.getElementById('signup-company');
+                const streetEl = document.getElementById('signup-street');
+                const cityEl = document.getElementById('signup-city');
+                const stateEl = document.getElementById('signup-state');
+                const postalEl = document.getElementById('signup-postal');
+
+                if (genderEl && genderEl.value) {
+                    profileData.gender = genderEl.value;
+                }
+
+                if (dobEl && dobEl.value) {
+                    profileData.dateOfBirth = dobEl.value;
+                }
+
+                if (occupationEl && occupationEl.value) {
+                    profileData.occupation = occupationEl.value.trim();
+                }
+
+                if (companyEl && companyEl.value) {
+                    profileData.company = companyEl.value.trim();
+                }
+
+                // Add address if fields exist and have values
+                if (streetEl || cityEl || stateEl || postalEl) {
+                    profileData.address = {
+                        street: streetEl?.value.trim() || '',
+                        city: cityEl?.value.trim() || '',
+                        state: stateEl?.value.trim() || '',
+                        postalCode: postalEl?.value.trim() || '',
+                        country: 'India',
+                        addressType: 'home',
+                        isDefault: true
+                    };
+                }
+
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating Account...';
+
+                try {
+                    console.log('Attempting signup with:', { email, profileData });
+                    const result = await sparshAuth.signUp(email, password, profileData);
+                    console.log('Signup result:', result);
+
+                    if (result.success) {
+                        successDiv.textContent = 'Account created successfully! Redirecting...';
+                        successDiv.classList.remove('d-none');
+                        
+                        setTimeout(() => {
+                            const redirectUrl = localStorage.getItem('redirectAfterLogin') || 'index.html';
+                            localStorage.removeItem('redirectAfterLogin');
+                            window.location.href = redirectUrl;
+                        }, 2000);
+                    } else {
+                        errorDiv.textContent = result.error || 'Failed to create account. Please try again.';
+                        errorDiv.classList.remove('d-none');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
+                        console.error('Signup error:', result.error);
+                    }
+                } catch (error) {
+                    console.error('Signup exception:', error);
+                    errorDiv.textContent = 'An unexpected error occurred. Please try again.';
+                    errorDiv.classList.remove('d-none');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                }
+            });
+
+            // Password Reset
+            const forgotPasswordBtn = document.getElementById('forgot-password-btn');
+            const passwordResetModal = new bootstrap.Modal(document.getElementById('password-reset-modal'));
+            const passwordResetForm = document.getElementById('password-reset-form');
+
+            forgotPasswordBtn.addEventListener('click', function() {
+                passwordResetModal.show();
+            });
+
+            passwordResetForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const errorDiv = document.getElementById('reset-error');
+                const successDiv = document.getElementById('reset-success');
+                
+                errorDiv.classList.add('d-none');
+                successDiv.classList.add('d-none');
+
+                const email = document.getElementById('reset-email').value;
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Sending...';
+
+                const result = await sparshAuth.sendPasswordReset(email);
+
+                if (result.success) {
+                    successDiv.textContent = 'Password reset email sent! Please check your inbox.';
+                    successDiv.classList.remove('d-none');
+                    setTimeout(() => {
+                        passwordResetModal.hide();
+                    }, 3000);
+                } else {
+                    errorDiv.textContent = result.error || 'Failed to send reset email. Please try again.';
+                    errorDiv.classList.remove('d-none');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Reset Link';
+                }
+            });
+
+            // Social Login Placeholders
+            document.getElementById('google-signin-btn').addEventListener('click', function() {
+                alert('Google Sign In will be available after Firebase configuration.');
+            });
+
+            document.getElementById('google-signup-btn').addEventListener('click', function() {
+                alert('Google Sign Up will be available after Firebase configuration.');
+            });
+
+            document.getElementById('facebook-signin-btn').addEventListener('click', function() {
+                alert('Facebook Sign In will be available after Firebase configuration.');
+            });
+
+            document.getElementById('facebook-signup-btn').addEventListener('click', function() {
+                alert('Facebook Sign Up will be available after Firebase configuration.');
+            });
+        });
+    </script>
+
+</body>
+</html>

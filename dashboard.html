@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta / SEO -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Sparsh NFC Dashboard</title>
+    <meta name="description" content="Manage your Sparsh NFC account, orders, and profile settings.">
+    <link rel="icon" href="https://placehold.co/32x32/C8B6FF/FFD6FF?text=👤" type="image/x-icon">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Firebase Config (Module) -->
+    <script type="module" src="firebase-config.js"></script>
+    <!-- Auth Management (Module) -->
+    <script type="module" src="auth-modular.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        :root {
+            --color-primary: #C8B6FF;
+            --color-secondary: #E7C6FF;
+            --color-light-bg: #FFD6FF;
+            --color-accent-text: #B8C0FF;
+            --color-dark-text: #1e2025;
+            --color-dark-bg: #6b4c9e;
+        }
+        
+        html {
+            height: 100%;
+            background: linear-gradient(to bottom right, var(--color-light-bg), var(--color-secondary), var(--color-accent-text));
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: transparent; 
+            color: var(--color-dark-text); 
+        }
+
+        .cta-primary {
+            @apply inline-flex items-center justify-center px-8 py-3 text-lg font-semibold rounded-full shadow-xl text-white transition duration-300;
+            background-color: var(--color-primary);
+        }
+        .cta-primary:hover {
+            background-color: #a496d0;
+        }
+
+        .text-dark {
+            color: var(--color-dark-text);
+        }
+
+        .dashboard-card {
+            @apply bg-white p-6 rounded-2xl shadow-xl border border-gray-100;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="text-2xl font-extrabold text-gray-900 tracking-tight">
+                    Sparsh <span style="color: var(--color-accent-text);">NFC</span>
+                </a>
+                <a href="index.html" class="text-lg font-medium text-gray-700 hover:text-primary transition" style="--text-primary: var(--color-primary);">
+                    ← Back to Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <h1 class="text-4xl font-extrabold text-dark mb-8">My Account</h1>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                
+                <!-- Profile Section -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Profile Info Card -->
+                    <div class="dashboard-card">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-extrabold text-dark">Profile Information</h2>
+                            <!-- Profile Illustration -->
+                            <svg class="w-16 h-16 hidden md:block" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="80" height="80" rx="16" fill="#FFD6FF"/>
+                                <circle cx="40" cy="28" r="12" fill="#C8B6FF" stroke="#6b4c9e" stroke-width="2"/>
+                                <path d="M20 58C20 50 28 44 40 44C52 44 60 50 60 58" fill="#C8B6FF" stroke="#6b4c9e" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        
+                        <div id="profile-info" class="space-y-6">
+                            <!-- Profile Header -->
+                            <div class="flex items-center space-x-4">
+                                <div id="profile-photo-container" class="w-20 h-20 rounded-full bg-gradient-to-br overflow-hidden flex items-center justify-center text-2xl font-bold text-white" style="background: linear-gradient(135deg, #C8B6FF, #E7C6FF);">
+                                    <img id="profile-photo-img" class="hidden w-full h-full object-cover" src="" alt="Profile">
+                                    <span id="profile-initial" class="block">U</span>
+                                </div>
+                                <div>
+                                    <h3 id="profile-name" class="text-xl font-bold text-dark">Loading...</h3>
+                                    <p id="profile-email" class="text-gray-600">Loading...</p>
+                                    <p id="profile-phone" class="text-sm text-gray-500"></p>
+                                </div>
+                            </div>
+                            
+                            <!-- Basic Info -->
+                            <div class="pt-4 border-t space-y-3" style="border-color: var(--color-secondary);">
+                                <h4 class="font-bold text-dark mb-2">Basic Information</h4>
+                                <div class="grid grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <span class="text-gray-600">Gender:</span>
+                                        <span id="profile-gender" class="ml-2 font-semibold text-dark">-</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">Date of Birth:</span>
+                                        <span id="profile-dob" class="ml-2 font-semibold text-dark">-</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Email Verified</span>
+                                    <span id="email-verified-status" class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-100 text-gray-600">Checking...</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-700">Member Since</span>
+                                    <span id="member-since" class="text-gray-900 font-semibold">Loading...</span>
+                                </div>
+                            </div>
+
+                            <!-- Professional Info -->
+                            <div id="professional-info-section" class="pt-4 border-t space-y-3" style="border-color: var(--color-secondary); display: none;">
+                                <h4 class="font-bold text-dark mb-2">Professional Information</h4>
+                                <div class="space-y-2 text-sm">
+                                    <div>
+                                        <span class="text-gray-600">Occupation:</span>
+                                        <span id="profile-occupation" class="ml-2 font-semibold text-dark">-</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">Company:</span>
+                                        <span id="profile-company" class="ml-2 font-semibold text-dark">-</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-gray-600">Website:</span>
+                                        <a id="profile-website" href="#" target="_blank" class="ml-2 text-primary hover:underline" style="color: var(--color-primary);">-</a>
+                                    </div>
+                                    <div class="flex space-x-4">
+                                        <div>
+                                            <span class="text-gray-600">LinkedIn:</span>
+                                            <a id="profile-linkedin" href="#" target="_blank" class="ml-2 text-primary hover:underline" style="color: var(--color-primary);">-</a>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-600">Instagram:</span>
+                                            <a id="profile-instagram" href="#" target="_blank" class="ml-2 text-primary hover:underline" style="color: var(--color-primary);">-</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Address Info -->
+                            <div id="address-info-section" class="pt-4 border-t space-y-3" style="border-color: var(--color-secondary); display: none;">
+                                <h4 class="font-bold text-dark mb-2">Address</h4>
+                                <div class="text-sm space-y-1">
+                                    <p id="profile-address-full" class="font-semibold text-dark"></p>
+                                    <p id="profile-address-city-state" class="text-gray-600"></p>
+                                    <p id="profile-address-postal-country" class="text-gray-600"></p>
+                                    <span id="profile-address-type" class="inline-block mt-2 px-2 py-1 rounded text-xs font-semibold bg-gray-100 text-gray-700"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order History -->
+                    <div class="dashboard-card">
+                        <h2 class="text-2xl font-extrabold text-dark mb-6">Order History</h2>
+                        <div id="order-history" class="space-y-4">
+                            <!-- Orders will be loaded here -->
+                            <div class="text-center py-12 text-gray-500">
+                                <svg class="w-24 h-24 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                </svg>
+                                <p class="text-lg">No orders yet</p>
+                                <a href="index.html#shop" class="inline-block mt-4 text-primary hover:underline" style="color: var(--color-primary);">Start Shopping</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Quick Actions -->
+                    <div class="dashboard-card">
+                        <h2 class="text-xl font-extrabold text-dark mb-4">Quick Actions</h2>
+                        <div class="space-y-3">
+                            <a href="index.html#shop" class="block w-full text-center py-3 px-6 rounded-lg font-semibold border-2 transition" style="border-color: var(--color-primary); color: var(--color-primary);">
+                                Continue Shopping
+                            </a>
+                            <a href="cart.html" class="block w-full text-center py-3 px-6 rounded-lg font-semibold text-white transition" style="background-color: var(--color-primary);">
+                                View Cart
+                            </a>
+                            <button id="logout-btn-dashboard" class="block w-full text-center py-3 px-6 rounded-lg font-semibold text-red-600 hover:bg-red-50 transition border-2 border-red-200">
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Account Settings -->
+                    <div class="dashboard-card">
+                        <h2 class="text-xl font-extrabold text-dark mb-4">Account Settings</h2>
+                        <div class="space-y-3">
+                            <button id="change-password-btn" class="w-full text-left py-2 px-4 rounded-lg hover:bg-gray-50 transition text-gray-700">
+                                Change Password
+                            </button>
+                            <button id="edit-profile-btn" class="w-full text-left py-2 px-4 rounded-lg hover:bg-gray-50 transition text-gray-700">
+                                Edit Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-white mt-16" style="background-color: var(--color-dark-bg);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b pb-4 mb-4" style="border-color: #4b5563;">
+                <div class="col-span-2 md:col-span-1 text-left">
+                    <h4 class="text-2xl font-extrabold text-white tracking-tight mb-4">Sparsh <span style="color: var(--color-accent-text);">NFC</span></h4>
+                    <p class="text-sm text-gray-400">Upgrade how you share your details. Elegant, smart, and sustainable.</p>
+                </div>
+                <div class="text-left">
+                    <h5 class="font-semibold text-gray-300 mb-4">Products</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html#shop" class="text-gray-300 hover:text-white transition">Shop</a></li>
+                        <li><a href="corporatepack.html" class="text-gray-300 hover:text-white transition">Corporate</a></li>
+                    </ul>
+                </div>
+                <div class="text-left">
+                    <h5 class="font-semibold text-gray-300 mb-4">Company</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html#about" class="text-gray-300 hover:text-white transition">About Us</a></li>
+                        <li><a href="index.html#faq" class="text-gray-300 hover:text-white transition">FAQs</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-4 text-center text-sm text-gray-500">
+                &copy; 2025 Sparsh NFC. All rights reserved. Shipping across India.
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Wait for sparshAuth to be available
+            await new Promise(resolve => {
+                const checkAuth = setInterval(() => {
+                    if (typeof sparshAuth !== 'undefined') {
+                        clearInterval(checkAuth);
+                        resolve();
+                    }
+                }, 100);
+            });
+
+            // Check authentication
+            if (!sparshAuth.isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = sparshAuth.getCurrentUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load user profile from Firestore
+            await loadUserProfile(user);
+
+            // Load order history
+            loadOrderHistory();
+
+            // Logout button
+            document.getElementById('logout-btn-dashboard').addEventListener('click', async function() {
+                const result = await sparshAuth.signOut();
+                if (result.success) {
+                    window.location.href = 'index.html';
+                }
+            });
+
+            // Change password button
+            document.getElementById('change-password-btn').addEventListener('click', function() {
+                alert('Password change functionality will be available soon.');
+            });
+
+            // Edit profile button
+            document.getElementById('edit-profile-btn').addEventListener('click', function() {
+                alert('Profile editing functionality will be available soon.');
+            });
+        });
+
+        async function loadUserProfile(user) {
+            // Load basic auth info
+            document.getElementById('profile-name').textContent = user.displayName || 'User';
+            document.getElementById('profile-email').textContent = user.email;
+            
+            // Profile initial
+            const initial = (user.displayName || user.email).charAt(0).toUpperCase();
+            document.getElementById('profile-initial').textContent = initial;
+
+            // Email verification status
+            const emailStatus = document.getElementById('email-verified-status');
+            if (user.emailVerified) {
+                emailStatus.textContent = 'Verified';
+                emailStatus.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700';
+            } else {
+                emailStatus.textContent = 'Not Verified';
+                emailStatus.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-700';
+            }
+
+            // Member since
+            if (user.metadata && user.metadata.creationTime) {
+                const creationDate = new Date(user.metadata.creationTime);
+                document.getElementById('member-since').textContent = creationDate.toLocaleDateString('en-IN', { year: 'numeric', month: 'long' });
+            }
+
+            // Load extended profile from Firestore
+            const profileResult = await sparshAuth.getUserProfile(user.uid);
+            if (profileResult.success && profileResult.data) {
+                const profile = profileResult.data;
+                
+                // Profile photo
+                if (profile.profilePhoto) {
+                    document.getElementById('profile-photo-img').src = profile.profilePhoto;
+                    document.getElementById('profile-photo-img').classList.remove('hidden');
+                    document.getElementById('profile-initial').classList.add('hidden');
+                }
+
+                // Phone
+                if (profile.phone) {
+                    document.getElementById('profile-phone').textContent = profile.phone;
+                }
+
+                // Gender
+                if (profile.gender) {
+                    document.getElementById('profile-gender').textContent = profile.gender.charAt(0).toUpperCase() + profile.gender.slice(1);
+                }
+
+                // Date of Birth
+                if (profile.dateOfBirth) {
+                    const dob = new Date(profile.dateOfBirth);
+                    document.getElementById('profile-dob').textContent = dob.toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' });
+                }
+
+                // Professional Information
+                if (profile.occupation || profile.company || profile.website || profile.linkedin || profile.instagram) {
+                    document.getElementById('professional-info-section').style.display = 'block';
+                    
+                    if (profile.occupation) {
+                        document.getElementById('profile-occupation').textContent = profile.occupation;
+                    }
+                    if (profile.company) {
+                        document.getElementById('profile-company').textContent = profile.company;
+                    }
+                    if (profile.website) {
+                        const websiteLink = document.getElementById('profile-website');
+                        websiteLink.href = profile.website;
+                        websiteLink.textContent = profile.website;
+                    }
+                    if (profile.linkedin) {
+                        const linkedinLink = document.getElementById('profile-linkedin');
+                        linkedinLink.href = profile.linkedin;
+                        linkedinLink.textContent = 'View Profile';
+                    }
+                    if (profile.instagram) {
+                        const instagramLink = document.getElementById('profile-instagram');
+                        instagramLink.href = profile.instagram;
+                        instagramLink.textContent = 'View Profile';
+                    }
+                }
+
+                // Address Information
+                if (profile.address) {
+                    const addr = profile.address;
+                    document.getElementById('address-info-section').style.display = 'block';
+                    
+                    let addressParts = [];
+                    if (addr.street) addressParts.push(addr.street);
+                    if (addr.landmark) addressParts.push(addr.landmark);
+                    document.getElementById('profile-address-full').textContent = addressParts.join(', ');
+                    
+                    let cityStateParts = [];
+                    if (addr.city) cityStateParts.push(addr.city);
+                    if (addr.state) cityStateParts.push(addr.state);
+                    document.getElementById('profile-address-city-state').textContent = cityStateParts.join(', ');
+                    
+                    let postalCountryParts = [];
+                    if (addr.postalCode) postalCountryParts.push(addr.postalCode);
+                    if (addr.country) postalCountryParts.push(addr.country);
+                    document.getElementById('profile-address-postal-country').textContent = postalCountryParts.join(', ');
+                    
+                    if (addr.addressType) {
+                        const typeBadge = document.getElementById('profile-address-type');
+                        typeBadge.textContent = addr.addressType.charAt(0).toUpperCase() + addr.addressType.slice(1);
+                        if (addr.isDefault) {
+                            typeBadge.textContent += ' (Default)';
+                            typeBadge.classList.add('bg-primary', 'text-white');
+                            typeBadge.style.backgroundColor = 'var(--color-primary)';
+                        }
+                    }
+                }
+            }
+        }
+
+        function loadOrderHistory() {
+            // Check for order in localStorage
+            const lastOrder = localStorage.getItem('lastOrder');
+            const orderHistory = document.getElementById('order-history');
+
+            if (lastOrder) {
+                try {
+                    const order = JSON.parse(lastOrder);
+                    const orderId = 'SP-' + Date.now().toString().slice(-6);
+                    
+                    orderHistory.innerHTML = `
+                        <div class="border rounded-lg p-4 hover:shadow-md transition" style="border-color: var(--color-secondary);">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="font-bold text-dark">Order #${orderId}</h3>
+                                    <p class="text-sm text-gray-500">Placed on ${new Date().toLocaleDateString('en-IN')}</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Completed</span>
+                            </div>
+                            <div class="text-sm text-gray-600 mb-2">
+                                ${order.order.items.length} item(s) • Total: ₹ ${order.order.total.toFixed(2)}
+                            </div>
+                            <a href="order-confirmation.html" class="text-sm text-primary hover:underline" style="color: var(--color-primary);">
+                                View Details →
+                            </a>
+                        </div>
+                    `;
+                } catch (e) {
+                    console.error('Error loading order history:', e);
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
+

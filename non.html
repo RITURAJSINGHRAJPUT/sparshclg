@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta / SEO -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparsh NFC — Elegant NFC Business Cards & Smart Contact Cards</title>
+    <meta name="description" content="Upgrade how you share your details. Sparsh NFC crafts elegant, customizable NFC business cards — instant contact sharing, QR backup, .vcf download, and premium finishes. Fast shipping across India.">
+    <link rel="icon" href="https://placehold.co/32x32/1e3a8a/ffffff?text=S" type="image/x-icon">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb; /* Light Gray Background */
+        }
+        .cta-primary {
+            @apply inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-xl shadow-lg text-white bg-indigo-700 hover:bg-indigo-800 transition duration-300 transform hover:scale-[1.02];
+        }
+        .cta-secondary {
+            @apply inline-flex items-center justify-center px-8 py-3 border-2 border-indigo-700 text-base font-medium rounded-xl text-indigo-700 bg-white hover:bg-indigo-50 transition duration-300;
+        }
+        .feature-badge {
+            @apply flex flex-col p-6 bg-white rounded-xl shadow-md transition duration-300 hover:shadow-xl hover:ring-2 hover:ring-indigo-500;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html" class="text-2xl font-extrabold text-indigo-700 tracking-tight">Sparsh <span class="text-amber-500">NFC</span></a>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#shop" class="text-sm font-medium text-gray-600 hover:text-indigo-700">Shop</a>
+                    <a href="#how-it-works" class="text-sm font-medium text-gray-600 hover:text-indigo-700">How It Works</a>
+                    <a href="corporatepack.html" class="text-sm font-medium text-gray-600 hover:text-indigo-700">Corporate</a>
+                    <a href="#faq" class="text-sm font-medium text-gray-600 hover:text-indigo-700">FAQ</a>
+                </nav>
+                <div class="flex items-center space-x-4">
+                    <a href="#shop" class="cta-primary py-2 px-4 text-sm hidden sm:inline-flex">Shop Cards</a>
+                    <a href="#design" class="cta-secondary py-2 px-4 text-sm hidden sm:inline-flex">Design Your Card</a>
+                    <!-- Mobile Menu Button - for demonstration only, full JS not required -->
+                    <button class="md:hidden text-gray-600 hover:text-indigo-700 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="pt-16 pb-24 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900 mb-6">
+                    Ditch the paper. <span class="text-indigo-700">Tap. Connect.</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-500 max-w-3xl mx-auto mb-10">
+                    Elegant NFC business cards that share your contact, links, and brand with a single tap. Sleek design — effortless networking.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-16">
+                    <a href="#shop" class="cta-primary">Shop Cards</a>
+                    <a href="#design" class="cta-secondary">Design Your Card</a>
+                </div>
+
+                <!-- Hero Supporting Text -->
+                <p class="text-lg text-gray-600 max-w-4xl mx-auto border-t pt-8 border-gray-200">
+                    A modern, sustainable alternative to paper business cards. Share phone, email, portfolio links, social profiles or payment pages — all with a single tap. **No app required.**
+                </p>
+            </div>
+        </section>
+
+        <!-- Value Propositions (Badges) -->
+        <section id="values" class="py-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <!-- Value Prop 1 -->
+                    <div class="feature-badge">
+                        <span class="text-indigo-700 text-3xl mb-3">📄</span>
+                        <p class="font-bold text-lg">Instant contact share</p>
+                        <p class="text-sm text-gray-500">Tap to save as a vCard.</p>
+                    </div>
+                    <!-- Value Prop 2 -->
+                    <div class="feature-badge">
+                        <span class="text-indigo-700 text-3xl mb-3">✨</span>
+                        <p class="font-bold text-lg">Premium materials</p>
+                        <p class="text-sm text-gray-500">Metal, wood-look, matte & glossy finishes.</p>
+                    </div>
+                    <!-- Value Prop 3 -->
+                    <div class="feature-badge">
+                        <span class="text-indigo-700 text-3xl mb-3">🔗</span>
+                        <p class="font-bold text-lg">QR and .vcf backup</p>
+                        <p class="text-sm text-gray-500">Included with every card purchase.</p>
+                    </div>
+                    <!-- Value Prop 4 -->
+                    <div class="feature-badge">
+                        <span class="text-indigo-700 text-3xl mb-3">🔒</span>
+                        <p class="font-bold text-lg">Secure & reprogrammable</p>
+                        <p class="text-sm text-gray-500">Update your info anytime.</p>
+                    </div>
+                    <!-- Value Prop 5 -->
+                    <div class="feature-badge">
+                        <span class="text-indigo-700 text-3xl mb-3">👥</span>
+                        <p class="font-bold text-lg">Bulk & corporate orders</p>
+                        <p class="text-sm text-gray-500">Branded onboarding solutions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Overview -->
+        <section id="shop" class="py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-16">Find Your Perfect Card</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Product 1: Classic -->
+                    <div class="bg-white p-8 border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition duration-300">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-2">Classic NFC Card</h3>
+                        <p class="text-gray-500 mb-6 font-medium">Minimal • Reliable • Affordable</p>
+                        <img src="https://placehold.co/600x400/eeeeee/1e3a8a?text=Classic+Card" alt="Classic NFC Card" class="w-full h-auto rounded-lg mb-6">
+                        <p class="text-gray-600 mb-6">
+                            The Classic is perfect for professionals who want an elegant, no-fuss NFC card. Slim, durable, and water-resistant — programmed to share your vCard, website, socials, or a custom landing page.
+                        </p>
+                        <ul class="text-sm text-gray-500 space-y-2 mb-8">
+                            <li>• ISO card size</li>
+                            <li>• Passive NFC tag (Type 2/4)</li>
+                            <li>• Rewritable & works with iOS/Android</li>
+                        </ul>
+                        <a href="classic card.html" class="cta-primary w-full text-center">Customize & Buy</a>
+                    </div>
+
+                    <!-- Product 2: Premium -->
+                    <div class="bg-white p-8 border-4 border-amber-500 rounded-2xl shadow-2xl scale-[1.03] transition duration-300">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-2">Premium NFC Card</h3>
+                        <p class="text-amber-600 mb-6 font-bold">Luxury finish, lasting impression</p>
+                        <img src="https://placehold.co/600x400/1f2937/d97706?text=Premium+Metal+Card" alt="Premium NFC Card" class="w-full h-auto rounded-lg mb-6">
+                        <p class="text-gray-600 mb-6">
+                            The Premium edition uses upgraded materials (metal-backed or high-grade laminate) and offers premium engraving/foil-print options. Ideal for founders, creatives, and executives who want a memorable first impression.
+                        </p>
+                        <ul class="text-sm text-gray-500 space-y-2 mb-8">
+                            <li>• Enhanced tag durability</li>
+                            <li>• Refined finishes & engraving</li>
+                            <li>• Anti-scratch coating</li>
+                        </ul>
+                        <a href="premiumcard.html" class="cta-secondary border-amber-500 text-amber-600 hover:bg-amber-50 w-full text-center">View Options</a>
+                    </div>
+
+                    <!-- Product 3: Corporate -->
+                    <div class="bg-white p-8 border border-gray-200 rounded-2xl shadow-lg hover:shadow-xl transition duration-300">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-2">Corporate & Team Packs</h3>
+                        <p class="text-gray-500 mb-6 font-medium">Manage, scale, impress</p>
+                        <img src="https://placehold.co/600x400/9ca3af/1f2937?text=Team+Cards" alt="Corporate Team Packs" class="w-full h-auto rounded-lg mb-6">
+                        <p class="text-gray-600 mb-6">
+                            Bulk ordering with custom branding, onboarding assistance, and a simple admin workflow to push updated URLs or landing pages to a fleet of cards. Includes team analytics and dedicated support.
+                        </p>
+                        <ul class="text-sm text-gray-500 space-y-2 mb-8">
+                            <li>• Volume pricing & white-label</li>
+                            <li>• Centralized reprogramming</li>
+                            <li>• Personalized landing pages</li>
+                        </ul>
+                        <a href="corporatepack.html" class="cta-primary w-full text-center bg-gray-700 hover:bg-gray-800">Request a Quote</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Features -->
+        <section id="features" class="py-24 bg-indigo-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-16">The Sparsh Advantage</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 text-center">
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <p class="text-xl mb-1">📞</p>
+                        <p class="text-sm font-medium">Tap-to-share vCard</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <p class="text-xl mb-1">🔗</p>
+                        <p class="text-sm font-medium">Portfolio & Link Sharing</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <p class="text-xl mb-1">🔄</p>
+                        <p class="text-sm font-medium">Rewritable Tag</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <p class="text-xl mb-1">🔲</p>
+                        <p class="text-sm font-medium">Built-in QR Fallback</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <p class="text-xl mb-1">⚙️</p>
+                        <p class="text-sm font-medium">Privacy Controls</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <p class="text-xl mb-1">🛡️</p>
+                        <p class="text-sm font-medium">Durable Finishes</p>
+                    </div>
+                    <div class="p-4 bg-white rounded-lg shadow-md">
+                        <p class="text-xl mb-1">📱</p>
+                        <p class="text-sm font-medium">iOS/Android Compatible</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works (3-step section) -->
+        <section id="how-it-works" class="py-24">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-16">Effortless Connections in 3 Steps</h2>
+                <div class="space-y-12">
+                    <!-- Step 1 -->
+                    <div class="flex flex-col md:flex-row items-start md:space-x-8">
+                        <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-indigo-700 text-white font-bold text-xl mb-4 md:mb-0">1</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Design & Order</h3>
+                            <p class="text-lg text-gray-600">Choose a finish and personalize the landing page or vCard details. We handle the programming.</p>
+                        </div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="flex flex-col md:flex-row items-start md:space-x-8">
+                        <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-indigo-700 text-white font-bold text-xl mb-4 md:mb-0">2</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Tap & Share</h3>
+                            <p class="text-lg text-gray-600">Tap the card to a phone’s NFC reader — contact details pop up instantly. QR code on the card works as a backup.</p>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="flex flex-col md:flex-row items-start md:space-x-8">
+                        <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-indigo-700 text-white font-bold text-xl mb-4 md:mb-0">3</div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Update Anytime</h3>
+                            <p class="text-lg text-gray-600">Use our reprogramming page to update links or contact info — the same card, new details, instantly.</p>
+                        </div>
+                    </div>
+                    <div class="text-center pt-8">
+                         <a href="#" class="cta-secondary text-base">Try Demo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Us & Trust -->
+        <section id="about" class="py-24 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="lg:grid lg:grid-cols-2 lg:gap-12">
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="text-4xl font-extrabold text-gray-900 mb-6">Our Mission</h2>
+                        <p class="text-lg text-gray-600 leading-relaxed">
+                            At **Sparsh NFC**, we blend thoughtful design with smart technology. Founded to replace wasteful paper cards and to help professionals make meaningful connections faster, we craft premium, reprogrammable NFC cards that are beautiful, functional, and built to last. We’re based in India and ship nationwide.
+                        </p>
+                    </div>
+                    <div>
+                        <h2 class="text-4xl font-extrabold text-gray-900 mb-6">Trusted by Professionals</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3 text-lg text-gray-700">
+                                <span class="text-green-500 font-bold text-xl">✓</span>
+                                <p>Trusted by **2,000+ professionals and startups**</p>
+                            </div>
+                            <div class="flex items-center space-x-3 text-lg text-gray-700">
+                                <span class="text-green-500 font-bold text-xl">✓</span>
+                                <p>**30-day satisfaction guarantee**</p>
+                            </div>
+                            <div class="flex items-center space-x-3 text-lg text-gray-700">
+                                <span class="text-green-500 font-bold text-xl">✓</span>
+                                <p>Secure, GDPR-aligned data handling for landing pages</p>
+                            </div>
+                            <div class="flex items-center space-x-3 text-lg text-gray-700">
+                                <span class="text-green-500 font-bold text-xl">✓</span>
+                                <p>Fast dispatch for custom orders</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section (Simple Accordion Style) -->
+        <section id="faq" class="py-24">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-900 mb-16">Frequently Asked Questions</h2>
+                <div class="space-y-4">
+                    <!-- FAQ 1 -->
+                    <details class="bg-white p-6 rounded-xl shadow-md cursor-pointer border border-gray-200 group">
+                        <summary class="flex justify-between items-center text-lg font-semibold text-gray-800 focus:outline-none">
+                            Do NFC cards work with all phones?
+                            <span class="text-indigo-700 transform transition group-open:rotate-90">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            </span>
+                        </summary>
+                        <p class="mt-4 text-gray-600">
+                            Most modern **Android phones and iPhones (iPhone 7 and later) support NFC**. For older/non-NFC phones, the printed QR code provides the same functionality.
+                        </p>
+                    </details>
+                    <!-- FAQ 2 -->
+                    <details class="bg-white p-6 rounded-xl shadow-md cursor-pointer border border-gray-200 group">
+                        <summary class="flex justify-between items-center text-lg font-semibold text-gray-800 focus:outline-none">
+                            Can I reprogram the card?
+                            <span class="text-indigo-700 transform transition group-open:rotate-90">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            </span>
+                        </summary>
+                        <p class="mt-4 text-gray-600">
+                            Yes. Every card is **rewritable**. We provide a simple web tool to update the card’s destination URL or vCard details, allowing you to change your information anytime.
+                        </p>
+                    </details>
+                    <!-- FAQ 3 -->
+                    <details class="bg-white p-6 rounded-xl shadow-md cursor-pointer border border-gray-200 group">
+                        <summary class="flex justify-between items-center text-lg font-semibold text-gray-800 focus:outline-none">
+                            Is there any personal data stored on the card?
+                            <span class="text-indigo-700 transform transition group-open:rotate-90">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            </span>
+                        </summary>
+                        <p class="mt-4 text-gray-600">
+                            The NFC tag typically contains only a **URL or vCard**. Landing pages are hosted securely; personal data storage follows our privacy policy. **You control what’s shared.**
+                        </p>
+                    </details>
+                    <!-- FAQ 4 -->
+                    <details class="bg-white p-6 rounded-xl shadow-md cursor-pointer border border-gray-200 group">
+                        <summary class="flex justify-between items-center text-lg font-semibold text-gray-800 focus:outline-none">
+                            How long does the battery last?
+                            <span class="text-indigo-700 transform transition group-open:rotate-90">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            </span>
+                        </summary>
+                        <p class="mt-4 text-gray-600">
+                            NFC cards are **passive and don’t have a battery** — they work indefinitely unless physically damaged.
+                        </p>
+                    </details>
+                    <!-- FAQ 5 -->
+                    <details class="bg-white p-6 rounded-xl shadow-md cursor-pointer border border-gray-200 group">
+                        <summary class="flex justify-between items-center text-lg font-semibold text-gray-800 focus:outline-none">
+                            What are the shipping times?
+                            <span class="text-indigo-700 transform transition group-open:rotate-90">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            </span>
+                        </summary>
+                        <p class="mt-4 text-gray-600">
+                            Standard items ship within **3–7 business days**. Custom and engraved orders may take **7–10 business days**.
+                        </p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Banner -->
+        <section class="bg-indigo-700 py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-4xl font-extrabold text-white mb-4">Ready to upgrade your networking?</h2>
+                <p class="text-indigo-200 text-xl mb-8">Start designing your perfect card today.</p>
+                <a href="#design" class="inline-flex items-center justify-center px-12 py-4 border border-transparent text-lg font-medium rounded-xl shadow-xl text-indigo-700 bg-white hover:bg-gray-100 transition duration-300 transform hover:scale-[1.05]">
+                    Design Your Card
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-700 pb-10 mb-10">
+                <div class="col-span-2 md:col-span-1">
+                    <h4 class="text-2xl font-extrabold text-white tracking-tight mb-4">Sparsh <span class="text-amber-500">NFC</span></h4>
+                    <p class="text-sm text-gray-400">Upgrade how you share your details. Elegant, smart, and sustainable.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h5 class="font-semibold text-gray-300 mb-4">Products</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#shop" class="text-gray-400 hover:text-white transition">Shop</a></li>
+                        <li><a href="corporatepack.html" class="text-gray-400 hover:text-white transition">Corporate</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Try Demo</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div>
+                    <h5 class="font-semibold text-gray-300 mb-4">Company</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#faq" class="text-gray-400 hover:text-white transition">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Support</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h5 class="font-semibold text-gray-300 mb-4">Legal</h5>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Shipping</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Returns & Warranty</a></li>
+                    </ul>
+                </div>
+
+                 <!-- Contact -->
+                <div class="col-span-2 md:col-span-1">
+                    <h5 class="font-semibold text-gray-300 mb-4">Stay Connected</h5>
+                    <p class="text-sm text-gray-400 mb-4">
+                        Networking in one tap. Meet Sparsh NFC — elegant, reprogrammable business cards that actually get used. 🔗✨
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-indigo-400 transition" aria-label="LinkedIn">
+                            <!-- Placeholder for LinkedIn Icon -->
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.563-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.764 7 2.457v6.778z"/></svg>
+                        </a>
+                         <a href="#" class="text-gray-400 hover:text-indigo-400 transition" aria-label="Instagram">
+                             <!-- Placeholder for Instagram Icon -->
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c2.716 0 3.056.01 4.122.06 1.066.05 1.791.218 2.428.465.66.254 1.216.591 1.77.996.558.406.97.973 1.135 1.77.202.558.37 1.283.418 2.348.049 1.066.06 1.405.06 4.122s-.011 3.056-.06 4.122c-.05 1.066-.218 1.791-.465 2.428-.254.66-.591 1.216-.996 1.77-.406.558-.973.97-1.77 1.135-.558.202-1.283.37-2.348.418-1.066.049-1.405.06-4.122.06s-3.056-.011-4.122-.06c-1.066-.05-1.791-.218-2.428-.465-.66-.254-1.216-.591-1.77-.996-.558-.406-.97-.973-1.135-1.77-.202-.558-.37-1.283-.418-2.348-.049-1.066-.06-1.405-.06-4.122s.011-3.056.06-4.122c.05-1.066.218-1.791.465-2.428.254-.66.591-1.216.996-1.77.406-.558.973-.97 1.77-1.135.558-.202 1.283-.37 2.348-.418 1.066-.049 1.405-.06 4.122-.06zm0-2c-2.793 0-3.148.01-4.238.061-1.09.051-1.849.227-2.502.483-.717.275-1.341.678-1.933 1.269s-.994 1.216-1.269 1.933c-.256.653-.432 1.412-.483 2.502-.051 1.09-.061 1.445-.061 4.238s.01 3.148.061 4.238c.051 1.09.227 1.849.483 2.502.275.717.678 1.341 1.269 1.933s1.216.994 1.933 1.269c.653.256 1.412.432 2.502.483 1.09.051 1.445.061 4.238.061s3.148-.01 4.238-.061c1.09-.051 1.849-.227 2.502-.483.717-.275 1.341-.678 1.933-1.269s.994-1.216 1.269-1.933c.256-.653.432-1.412.483-2.502.051-1.09.061-1.445.061-4.238s-.01-3.148-.061-4.238c-.051-1.09-.227-1.849-.483-2.502-.275-.717-.678-1.341-1.269-1.933s-1.216-.994-1.933-1.269c-.653-.256-1.412-.432-2.502-.483-1.09-.051-1.445-.061-4.238-.061zm0 4c-4.411 0-8 3.589-8 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8zm0 14c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6zm6-11.417c0-1.416-1.157-2.583-2.573-2.583s-2.573 1.167-2.573 2.583 1.157 2.583 2.573 2.583 2.573-1.167 2.573-2.583z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 text-center text-sm text-gray-500">
+                &copy; 2025 Sparsh NFC. All rights reserved. Shipping across India.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
