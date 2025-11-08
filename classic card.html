@@ -1,391 +1,693 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta / SEO -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy Sparsh Classic NFC Card - The Essential Contact Sharing Solution</title>
-    <meta name="description" content="Purchase the Sparsh Classic NFC Card. Minimalist design, durable material, instant contact sharing, and QR backup. Perfect for professionals in India.">
-    <!-- Favicon uses the new palette -->
-    <link rel="icon" href="https://placehold.co/32x32/C8B6FF/FFD6FF?text=S" type="image/x-icon">
+    <title>Sparsh Classic NFC Card — Minimalist Tap-to-Share Card</title>
+    <meta name="description" content="Design and order the Sparsh Classic NFC card. Durable PVC, instant tap-to-share, QR backup and lifetime rewrites. Ships across India.">
+    <link rel="icon" href="https://placehold.co/32x32/6366f1/ffffff?text=S" type="image/x-icon">
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Cart Management Script -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="auth-modular.js"></script>
     <script src="cart.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    <script src="interactive-ui.js"></script>
 
-        /* --- COLOR PALETTE (Pinks/Purples) --- */
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
         :root {
-            --color-primary: #C8B6FF;    /* Mid Purple (CTA/Accent) */
-            --color-secondary: #E7C6FF;  /* Light Lavender (Secondary/Accent) */
-            --color-light-bg: #FFD6FF;   /* Lightest Pink (Background Start) */
-            --color-accent-text: #B8C0FF;/* Light Blue-Violet Accent */
-            --color-dark-text: #1e2025;  /* Dark text for contrast */
-            --color-dark-bg: #6b4c9e;    /* Dark footer/contrast background */
+            --color-primary: #7069ff;
+            --color-primary-strong: #4c46d9;
+            --color-secondary: #f5f3ff;
+            --color-accent: #1f2937;
+            --color-muted: #6b7280;
+            --color-surface: rgba(255, 255, 255, 0.85);
+            --shadow-soft: 0 24px 60px -30px rgba(79, 70, 229, 0.45);
+            --shadow-card: 0 20px 45px -20px rgba(15, 23, 42, 0.18);
         }
-        
-        /* FULL-PAGE GRADIENT */
+
+        * {
+            box-sizing: border-box;
+        }
+
         html {
             height: 100%;
-            background: linear-gradient(
-                to bottom right,
-                var(--color-light-bg),
-                var(--color-secondary),
-                var(--color-accent-text)
-            );
-            background-repeat: no-repeat;
-            background-attachment: fixed; 
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: transparent; 
-            color: var(--color-dark-text); 
-            min-height: 100%; 
+            min-height: 100%;
+            color: var(--color-accent);
+            background: radial-gradient(circle at top left, #f8f9ff 0%, #eef2ff 35%, #f6f6ff 70%, #ffffff 100%);
+            position: relative;
         }
-        
-        /* Custom CTA Styles */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 10% 5%, rgba(125, 106, 255, 0.18) 0, transparent 45%),
+                        radial-gradient(circle at 85% 10%, rgba(147, 197, 253, 0.2) 0, transparent 52%),
+                        radial-gradient(circle at 20% 80%, rgba(196, 181, 253, 0.25) 0, transparent 55%);
+            z-index: -2;
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-shell {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-spacing {
+            padding-top: clamp(3rem, 2vw + 3rem, 6rem);
+            padding-bottom: clamp(3rem, 2vw + 3rem, 6rem);
+        }
+
+        .surface-card {
+            background-color: var(--color-surface);
+            backdrop-filter: blur(22px);
+            box-shadow: var(--shadow-card);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.55);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(236, 233, 255, 0.82) 100%);
+            border-radius: 1.75rem;
+            border: 1px solid rgba(236, 233, 255, 0.9);
+            box-shadow: var(--shadow-card);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(112, 105, 255, 0.18);
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.95), rgba(234, 233, 255, 0.65));
+            box-shadow: 0 12px 30px -18px rgba(79, 70, 229, 0.4);
+        }
+
+        .headline {
+            font-size: clamp(2.25rem, 2.5vw + 2rem, 3.75rem);
+            line-height: 1.07;
+            letter-spacing: -0.035em;
+            color: #0f172a;
+        }
+
+        .headline span {
+            background: linear-gradient(120deg, #6366f1, #8b5cf6);
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
         .cta-primary {
-            /* UPDATED: Increased padding (px-14) and set to rounded-full */
-            @apply inline-flex items-center justify-center px-14 py-5 text-2xl font-semibold rounded-full shadow-xl text-white transition duration-300 transform hover:scale-[1.03];
-            background-color: var(--color-primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 1.9rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #6c63ff, #4c46d9);
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            gap: 0.5rem;
+            border: none;
         }
+
         .cta-primary:hover {
-            background-color: #a496d0;
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 30px 60px -25px rgba(79, 70, 229, 0.55);
         }
 
         .cta-secondary {
-            /* UPDATED: Increased padding (px-14) and set to rounded-full */
-            @apply inline-flex items-center justify-center px-14 py-5 text-2xl font-semibold rounded-full border-2 transition duration-300 transform hover:scale-[1.03] hover:bg-gray-50;
-            border-color: var(--color-primary);
-            color: var(--color-primary);
-            background-color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 1.9rem;
+            border-radius: 999px;
+            border: 1.5px solid rgba(112, 105, 255, 0.4);
+            background: rgba(255, 255, 255, 0.9);
+            color: #4c46d9;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            gap: 0.5rem;
         }
-        
-        /* Ensures internal sections use the body's dark text color */
-        .text-dark {
-            color: var(--color-dark-text);
+
+        .cta-secondary:hover {
+            transform: translateY(-2px);
+            border-color: rgba(112, 105, 255, 0.7);
+            box-shadow: 0 18px 45px -26px rgba(79, 70, 229, 0.35);
+        }
+
+        .cta-secondary.is-ghost {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.7);
+            color: #ffffff;
+        }
+
+        .cta-secondary.is-ghost:hover {
+            border-color: #ffffff;
+        }
+
+        .badge-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 1rem;
+            background: rgba(112, 105, 255, 0.12);
+            color: var(--color-primary);
+        }
+
+        .finish-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.1rem;
+            border-radius: 999px;
+            border: 1.5px solid rgba(148, 163, 184, 0.45);
+            background: rgba(255, 255, 255, 0.85);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1f2937;
+            transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+        }
+
+        .finish-chip:hover {
+            border-color: rgba(112, 105, 255, 0.6);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px -18px rgba(67, 56, 202, 0.45);
+        }
+
+        .finish-chip.active {
+            border-color: rgba(112, 105, 255, 0.85);
+            background: rgba(112, 105, 255, 0.12);
+            color: #312e81;
+            box-shadow: 0 15px 32px -24px rgba(79, 70, 229, 0.5);
+        }
+
+        .stat-pill {
+            display: grid;
+            gap: 0.35rem;
+            padding: 1.15rem 1.4rem;
+            background: rgba(255, 255, 255, 0.78);
+            border-radius: 1.25rem;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 18px 50px -30px rgba(30, 64, 175, 0.35);
+        }
+
+        .stat-pill strong {
+            font-size: 1.35rem;
+            color: #111827;
+        }
+
+        .stat-pill span {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        header {
+            backdrop-filter: blur(14px);
+        }
+
+        #mobile-menu {
+            box-shadow: -8px 0 40px rgba(30, 41, 59, 0.16);
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(18px);
+        }
+
+        .feature-card {
+            border-radius: 1.5rem;
+            border: 1px solid rgba(226, 232, 240, 0.7);
+            background: rgba(255, 255, 255, 0.92);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        footer {
+            background: #111827;
+        }
+
+        @media (max-width: 1024px) {
+            header nav {
+                display: none;
+            }
+
+            .page-shell {
+                padding: 0 1.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .headline {
+                font-size: clamp(2.2rem, 8vw, 3.1rem);
+            }
+
+            .stat-pill {
+                border-radius: 1.05rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
     </style>
 </head>
-<body>
-    
-    <!-- Header / Navigation (Simple version, kept consistent with original) -->
-    <header class="sticky top-0 z-50 bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo (Left) -->
-                <!-- LINK UPDATED to index.html -->
-                <a href="index.html" class="text-2xl font-extrabold text-gray-900 tracking-tight">Sparsh <span class="text-accent-text" style="color: var(--color-accent-text);">NFC</span></a>
-
-                <!-- Nav/Back Link (Right) -->
-                <!-- LINK UPDATED to index.html -->
-                <a href="index.html#shop" class="text-lg font-medium text-gray-700 hover:text-primary transition" style="--text-primary: var(--color-primary);">
-                    ← Back to Shop Overview
+<body class="text-slate-800">
+    <header class="fixed inset-x-0 top-0 z-50 border-b border-slate-200/60 bg-white/80">
+        <div class="page-shell">
+            <div class="flex items-center justify-between gap-6 py-4 lg:py-5">
+                <a href="index.html" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+                    <span>Sparsh</span>
+                    <span class="headline"><span>NFC</span></span>
                 </a>
+
+                <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                    <a href="index.html#shop" class="transition hover:text-slate-900">Shop</a>
+                    <a href="premiumcard.html" class="transition hover:text-slate-900">Premium</a>
+                    <a href="corporatepack.html" class="transition hover:text-slate-900">Teams</a>
+                    <a href="index.html#faq" class="transition hover:text-slate-900">FAQ</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <a href="login.html" class="hidden sm:inline-flex text-sm font-semibold text-slate-600 hover:text-slate-900 transition">Login</a>
+
+                    <a href="cart.html" aria-label="Shopping cart" class="relative inline-flex">
+                        <button class="p-2.5 rounded-full border border-slate-200/70 text-slate-600 hover:text-slate-900 hover:border-slate-300 transition bg-white/80 flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-lg w-7 h-7 flex items-center justify-center shadow-xl z-50" style="display: none; min-width: 1.75rem; padding: 0.25rem; border: 2px solid white;">
+                                <span id="cart-count" class="leading-none text-xs font-extrabold">0</span>
+                            </span>
+                        </button>
+                    </a>
+
+                    <button id="mobile-menu-btn" class="lg:hidden inline-flex items-center justify-center rounded-full border border-slate-300/70 p-2.5 text-slate-600 hover:text-slate-900 transition bg-white/80" aria-label="Toggle mobile menu">
+                        <svg id="menu-icon" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                        <svg id="close-icon" class="h-7 w-7 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
             </div>
         </div>
+
+        <div id="mobile-menu" class="lg:hidden fixed inset-0 z-40 transform -translate-x-full transition-transform duration-300 ease-in-out" style="top: 4.75rem;">
+            <div class="flex flex-col h-[calc(100vh-4.75rem)] overflow-y-auto pb-16 bg-white/95">
+                <div class="px-6 pt-6 pb-3 border-b border-slate-200/70">
+                    <p class="text-sm font-semibold text-slate-500 uppercase tracking-widest">Navigation</p>
+                </div>
+                <nav class="px-4 py-6 space-y-2">
+                    <a href="index.html#shop" class="mobile-menu-item block text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">Shop</a>
+                    <a href="premiumcard.html" class="mobile-menu-item block text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">Premium NFC</a>
+                    <a href="corporatepack.html" class="mobile-menu-item block text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">Teams & enterprise</a>
+                    <a href="index.html#faq" class="mobile-menu-item block text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">FAQ</a>
+                    <a href="login.html" class="mobile-menu-item block text-base font-medium text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">Login</a>
+                    <a href="cart.html" class="mobile-menu-item flex items-center justify-between text-base font-medium text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">
+                        <span class="flex items-center gap-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Cart
+                        </span>
+                        <span id="mobile-cart-count" class="ml-2 bg-rose-500 text-white text-xs font-bold rounded-full px-2 py-0.5" style="display: none;">0</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <div id="mobile-menu-backdrop" class="lg:hidden fixed inset-0 bg-slate-900/40 z-30 opacity-0 pointer-events-none transition-opacity duration-300" style="top: 0;"></div>
     </header>
 
-    <main class="py-12 sm:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="pt-28 sm:pt-32">
+        <section class="section-spacing">
+            <div class="page-shell space-y-8">
+                <nav class="text-sm text-slate-500 flex items-center gap-2">
+                    <a href="index.html" class="hover:text-slate-900 transition">Home</a>
+                    <span>/</span>
+                    <a href="index.html#shop" class="hover:text-slate-900 transition">Shop</a>
+                    <span>/</span>
+                    <span class="text-slate-800 font-semibold">Classic NFC Card</span>
+                </nav>
 
-            <!-- PRODUCT BREADCRUMBS -->
-            <nav class="mb-8 text-sm text-gray-600">
-                <!-- LINKS UPDATED to index.html and classic_card.html -->
-                <a href="index.html" class="hover:underline">Home</a> / 
-                <a href="index.html#shop" class="hover:underline">Shop</a> / 
-                <span class="font-semibold text-dark">Classic NFC Card</span>
-            </nav>
+                <div class="grid gap-10 lg:grid-cols-[1.1fr,0.9fr]">
+                    <div class="space-y-6">
+                        <div class="surface-card p-6 sm:p-8">
+                            <div class="relative overflow-hidden rounded-3xl border border-slate-200/60 bg-gradient-to-br from-indigo-100/60 via-white to-indigo-50 p-10 flex items-center justify-center">
+                                <div class="absolute -top-12 -left-8 h-40 w-40 rounded-full bg-indigo-200/50 blur-3xl"></div>
+                                <div class="absolute -bottom-14 -right-10 h-48 w-48 rounded-full bg-purple-200/40 blur-3xl"></div>
+                                <div class="relative w-full max-w-xl">
+                                    <svg class="w-full h-auto" viewBox="0 0 400 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="40" y="40" width="320" height="180" rx="20" fill="#ffffff" stroke="#cbd5f5" stroke-width="3"/>
+                                        <rect x="70" y="70" width="260" height="26" rx="8" fill="#e0e7ff"/>
+                                        <rect x="70" y="110" width="200" height="16" rx="6" fill="#e0e7ff" opacity="0.7"/>
+                                        <rect x="70" y="140" width="220" height="16" rx="6" fill="#e0e7ff" opacity="0.5"/>
+                                        <circle cx="300" cy="130" r="26" fill="#a5b4fc" opacity="0.6"/>
+                                        <path d="M286 130 L296 142 L314 118" stroke="#6366f1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                            </div>
 
-
-            <!-- PRODUCT GALLERY AND PURCHASE OPTIONS (Amazon-style 2-column layout) -->
-            <div class="lg:grid lg:grid-cols-12 lg:gap-x-8">
-
-                <!-- 1. Product Image Gallery (Left Column - 7/12) -->
-                <div class="lg:col-span-7 mb-10 lg:mb-0">
-                    <div class="relative overflow-hidden rounded-3xl shadow-2xl p-6 bg-white">
-                        
-                        <!-- Main Product Image -->
-                        <div class="w-full rounded-2xl mb-4 border border-gray-100 bg-gradient-to-br p-8 sm:p-12 aspect-[4/3] flex items-center justify-center" style="background: linear-gradient(135deg, #FFD6FF, #E7C6FF);">
-                            <svg class="w-full h-full max-w-md" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="50" y="50" width="300" height="200" rx="12" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="3"/>
-                                <rect x="70" y="80" width="260" height="30" rx="6" fill="#C8B6FF" opacity="0.3"/>
-                                <rect x="70" y="125" width="200" height="20" rx="4" fill="#E7C6FF" opacity="0.5"/>
-                                <rect x="70" y="155" width="230" height="20" rx="4" fill="#E7C6FF" opacity="0.5"/>
-                                <circle cx="320" cy="150" r="25" fill="#B8C0FF" opacity="0.7"/>
-                                <path d="M310 150 L316 156 L330 142" stroke="#6b4c9e" stroke-width="3" stroke-linecap="round"/>
-                            </svg>
+                            <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                <div class="glass-card p-3 flex items-center justify-center">
+                                    <svg class="w-full h-auto" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="15" y="15" width="90" height="50" rx="8" fill="#ffffff" stroke="#c7d2fe" stroke-width="2"/>
+                                        <circle cx="70" cy="40" r="12" fill="#818cf8" opacity="0.7"/>
+                                    </svg>
+                                </div>
+                                <div class="glass-card p-3 flex items-center justify-center">
+                                    <svg class="w-full h-auto" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="20" y="10" width="80" height="40" rx="6" fill="#ffffff" stroke="#a5b4fc" stroke-width="2"/>
+                                        <rect x="35" y="55" width="50" height="15" rx="4" fill="#1f2937" stroke="#4c46d9" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <div class="glass-card p-3 flex items-center justify-center">
+                                    <svg class="w-full h-auto" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="18" y="12" width="84" height="56" rx="10" fill="#ffffff" stroke="#c7d2fe" stroke-width="2"/>
+                                        <rect x="30" y="28" width="60" height="6" rx="2" fill="#94a3ff"/>
+                                        <rect x="30" y="42" width="60" height="6" rx="2" fill="#94a3ff" opacity="0.6"/>
+                                    </svg>
+                                </div>
+                                <div class="glass-card p-3 flex items-center justify-center">
+                                    <svg class="w-full h-auto" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="25" y="18" width="70" height="44" rx="8" fill="#ffffff" stroke="#818cf8" stroke-width="2"/>
+                                        <path d="M25 32 L60 42 L95 32" stroke="#4c46d9" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Thumbnail Gallery -->
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6">
-                             <div class="rounded-lg shadow-md hover:ring-2 ring-primary transition cursor-pointer border border-gray-100 bg-gradient-to-br p-3 aspect-[3/2]" style="--tw-ring-color: var(--color-primary); background: linear-gradient(135deg, #FFD6FF, #E7C6FF);">
-                                 <svg class="w-full h-full" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                     <rect x="10" y="10" width="80" height="50" rx="4" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                     <circle cx="50" cy="35" r="8" fill="#B8C0FF"/>
-                                 </svg>
-                             </div>
-                             <div class="rounded-lg shadow-md hover:ring-2 ring-primary transition cursor-pointer border border-gray-100 bg-gradient-to-br p-3 aspect-[3/2]" style="--tw-ring-color: var(--color-primary); background: linear-gradient(135deg, #E7C6FF, #C8B6FF);">
-                                 <svg class="w-full h-full" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                     <rect x="15" y="5" width="40" height="30" rx="3" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                     <circle cx="35" cy="20" r="6" fill="#B8C0FF"/>
-                                     <rect x="40" y="35" width="45" height="35" rx="5" fill="#1e2025" stroke="#6b4c9e" stroke-width="2"/>
-                                     <path d="M35 30 Q30 28 25 30" stroke="#C8B6FF" stroke-width="2" fill="none" stroke-dasharray="2,2"/>
-                                 </svg>
-                             </div>
-                             <div class="rounded-lg shadow-md hover:ring-2 ring-primary transition cursor-pointer border border-gray-100 bg-gradient-to-br p-3 aspect-[3/2]" style="--tw-ring-color: var(--color-primary); background: linear-gradient(135deg, #B8C0FF, #E7C6FF);">
-                                 <svg class="w-full h-full" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                     <rect x="10" y="10" width="80" height="50" rx="4" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                     <rect x="20" y="20" width="60" height="40" rx="2" fill="#FFFFFF"/>
-                                     <rect x="25" y="25" width="50" height="5" fill="#000000"/>
-                                     <rect x="25" y="35" width="50" height="5" fill="#000000"/>
-                                     <rect x="25" y="45" width="50" height="5" fill="#000000"/>
-                                 </svg>
-                             </div>
-                             <div class="rounded-lg shadow-md hover:ring-2 ring-primary transition cursor-pointer border border-gray-100 bg-gradient-to-br p-3 aspect-[3/2]" style="--tw-ring-color: var(--color-primary); background: linear-gradient(135deg, #BBD0FF, #FFD6FF);">
-                                 <svg class="w-full h-full" viewBox="0 0 100 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                     <rect x="20" y="15" width="60" height="40" rx="6" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                     <path d="M20 25 L50 35 L80 25" stroke="#6b4c9e" stroke-width="2"/>
-                                 </svg>
-                             </div>
+                        <div class="grid gap-4 sm:grid-cols-3">
+                            <div class="stat-pill">
+                                <strong>500+</strong>
+                                <span>Cards replaced annually</span>
+                            </div>
+                            <div class="stat-pill">
+                                <strong>60s</strong>
+                                <span>Setup with our designer</span>
+                            </div>
+                            <div class="stat-pill">
+                                <strong>3</strong>
+                                <span>Finishes included</span>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 2. Product Details and CTA (Right Column - 5/12) -->
-                <div class="lg:col-span-5 bg-white p-6 rounded-3xl shadow-2xl space-y-6">
-                    
-                    <!-- Title and Price -->
-                    <h1 class="text-2xl sm:text-3xl font-extrabold text-dark tracking-tight">Sparsh Classic NFC Card</h1>
-                    <p class="text-xs sm:text-sm font-medium text-gray-500">Model: SP-C-200 | SKU: 1024-C</p>
-                    
-                    <div class="text-3xl sm:text-4xl font-extrabold text-dark mt-2">
-                        ₹ 999.00 <span class="text-base sm:text-lg text-gray-500 line-through ml-2">₹ 1,499.00</span>
-                    </div>
-                    
-                    <!-- Availability -->
-                    <p class="text-lg font-bold text-green-600">In Stock</p>
-                    <p class="text-sm text-gray-600">Ships in 1-2 business days. Free shipping across India.</p>
+                    <aside class="surface-card p-6 sm:p-8 space-y-6">
+                        <div class="space-y-3">
+                            <h1 class="headline text-[1.85rem] leading-tight">Classic NFC card</h1>
+                            <p class="text-sm font-semibold uppercase tracking-[0.35em] text-slate-400">Essential series</p>
+                            <div class="flex items-end gap-3">
+                                <p class="text-3xl font-extrabold text-slate-900">₹ 999</p>
+                                <p class="text-sm text-slate-400 line-through">₹ 1,499</p>
+                            </div>
+                            <p class="text-sm font-semibold text-emerald-500 flex items-center gap-2">
+                                <span class="inline-block h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                In stock · ships in 48h
+                            </p>
+                        </div>
 
-                    <hr class="border-gray-200">
-                    
-                    <!-- Key Features -->
-                    <h2 class="text-xl font-bold text-dark">Key Features</h2>
-                    <ul class="space-y-3 text-base text-gray-700">
-                        <li class="flex items-start">
-                            <span class="text-xl mr-3 check-icon" style="color: var(--color-primary);">✓</span>
-                            <span>**Durable PVC Construction:** Thin, water-resistant, and built for daily use.</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-xl mr-3 check-icon" style="color: var(--color-primary);">✓</span>
-                            <span>**Universal Compatibility:** Works instantly with most modern iOS and Android phones (iPhone 7+).</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-xl mr-3 check-icon" style="color: var(--color-primary);">✓</span>
-                            <span>**Lifetime License:** One-time purchase, update your profile links forever.</span>
-                        </li>
-                        <li class="flex items-start">
-                            <span class="text-xl mr-3 check-icon" style="color: var(--color-primary);">✓</span>
-                            <span>**Built-in QR Code:** Seamless sharing backup for older devices.</span>
-                        </li>
-                    </ul>
+                        <div class="space-y-3 text-sm text-slate-600">
+                            <div class="flex gap-3">
+                                <span class="badge-icon">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6H4z"/><path d="M9 14h6"/><path d="M12 17v-3"/><path d="M4 10h16v10H4z"/></svg>
+                                </span>
+                                <div>
+                                    <p class="font-semibold text-slate-900">Tap + QR dual mode</p>
+                                    <p>Instant contact share on NFC phones with QR fallback for everything else.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <span class="badge-icon">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-3-3.87"/><path d="M4 4v17"/><path d="M4 4h16"/></svg>
+                                </span>
+                                <div>
+                                    <p class="font-semibold text-slate-900">Lifetime rewrites</p>
+                                    <p>Update destinations from your dashboard anytime — no hidden fees.</p>
+                                </div>
+                            </div>
+                        </div>
 
-                    <hr class="border-gray-200">
+                        <div class="space-y-4">
+                            <div class="space-y-2">
+                                <label class="text-sm font-semibold text-slate-700">Choose finish</label>
+                                <div class="flex flex-wrap gap-3" id="finish-options">
+                                    <button type="button" data-finish="Black Matte" class="finish-chip active" aria-label="Black Matte selected">
+                                        <span class="size-4 rounded-full bg-slate-900"></span>
+                                        <span>Black matte</span>
+                                    </button>
+                                    <button type="button" data-finish="White Gloss" class="finish-chip" aria-label="White gloss">
+                                        <span class="size-4 rounded-full bg-white border border-slate-300"></span>
+                                        <span>White gloss</span>
+                                    </button>
+                                    <button type="button" data-finish="Silver Metallic" class="finish-chip" aria-label="Silver metallic">
+                                        <span class="size-4 rounded-full bg-slate-200"></span>
+                                        <span>Silver metallic</span>
+                                    </button>
+                                </div>
+                            </div>
 
-                    <!-- Customization Options -->
-                    <h2 class="text-xl font-bold text-dark">Select Finish & Quantity</h2>
-                    
-                    <!-- Color/Finish Selector -->
-                    <div class="flex space-x-3 items-center">
-                        <label class="text-base font-medium text-gray-700">Finish:</label>
-                        <button class="w-8 h-8 rounded-full border-4 border-primary ring-2 ring-offset-2 ring-gray-300 transition duration-150" style="background-color: #1e2025; border-color: var(--color-primary);" aria-label="Black Matte Selected"></button>
-                        <button class="w-8 h-8 rounded-full border-2 border-gray-300 hover:ring-2 hover:ring-offset-2 hover:ring-gray-400 transition duration-150" style="background-color: white;" aria-label="White Gloss"></button>
-                        <button class="w-8 h-8 rounded-full border-2 border-gray-300 hover:ring-2 hover:ring-offset-2 hover:ring-gray-400 transition duration-150" style="background-color: #F7F7F7;" aria-label="Silver Metallic"></button>
-                    </div>
+                            <div class="space-y-2">
+                                <label for="quantity" class="text-sm font-semibold text-slate-700">Quantity</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="number" id="quantity" min="1" value="1" class="w-24 rounded-xl border border-slate-200 px-4 py-2 font-semibold text-center shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+                                    <p class="text-xs text-slate-500">Bulk pricing unlocks at 10+ cards.</p>
+                                </div>
+                            </div>
 
-                    <!-- Quantity Input -->
-                    <div class="flex items-center space-x-4">
-                        <label for="quantity" class="text-base font-medium text-gray-700">Quantity:</label>
-                        <input type="number" id="quantity" value="1" min="1" class="w-20 text-center border border-gray-300 rounded-lg p-2 focus:ring-primary focus:border-primary" style="border-color: var(--color-primary);">
-                    </div>
-                    
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col space-y-4 pt-4">
-                        <button class="cta-primary text-white" id="add-to-cart-btn">
-                            Add to Cart
-                        </button>
-                        <button class="cta-secondary" id="buy-now-btn">
-                            Buy Now
-                        </button>
-                    </div>
+                            <div class="grid gap-3">
+                                <button class="cta-primary justify-center" id="add-to-cart-btn">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    Add to cart
+                                </button>
+                                <button class="cta-secondary justify-center" id="buy-now-btn">
+                                    Buy now
+                                </button>
+                            </div>
+                        </div>
 
-                </div>
-            </div>
-            
-            
-            <!-- DETAILED FEATURES SECTION (Full Width) -->
-            <div class="mt-20">
-                <h2 class="text-3xl font-extrabold text-dark text-center mb-10">Why Choose the Classic Card?</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    
-                    <!-- Feature 1 -->
-                    <div class="p-8 rounded-2xl shadow-xl bg-white border border-gray-100">
-                        <svg class="w-10 h-10 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: var(--color-dark-bg);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                        <h3 class="text-xl font-bold mb-3 text-dark">Instant Phone Transfer</h3>
-                        <p class="text-gray-600">The most seamless way to share contacts. Just a quick tap, and your recipient instantly receives your vCard details to save to their phone.</p>
-                    </div>
-                    
-                    <!-- Feature 2 -->
-                    <div class="p-8 rounded-2xl shadow-xl bg-white border border-gray-100">
-                        <svg class="w-10 h-10 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: var(--color-dark-bg);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg>
-                        <h3 class="text-xl font-bold mb-3 text-dark">Robust and Reliable</h3>
-                        <p class="text-gray-600">Manufactured with high-quality, water-resistant PVC, the Classic card withstands daily wear and tear better than paper. It's built to last.</p>
-                    </div>
-
-                    <!-- Feature 3 -->
-                    <div class="p-8 rounded-2xl shadow-xl bg-white border border-gray-100">
-                        <svg class="w-10 h-10 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: var(--color-dark-bg);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13l-3 3m0 0l-3-3m3 3V8m0 12a9 9 0 110-18 9 9 0 010 18z"></path></svg>
-                        <h3 class="text-xl font-bold mb-3 text-dark">Eco-Friendly Networking</h3>
-                        <p class="text-gray-600">Eliminate paper waste and reduce your carbon footprint. One Sparsh card replaces hundreds of disposable paper business cards.</p>
-                    </div>
+                        <div class="rounded-2xl border border-indigo-100 bg-gradient-to-r from-indigo-50/80 via-white to-indigo-50/80 p-4 text-sm text-slate-600">
+                            <p class="font-semibold text-slate-900 mb-2">What happens after checkout?</p>
+                            <ul class="space-y-1 list-disc list-inside">
+                                <li>Upload brand assets or hop on a quick design call.</li>
+                                <li>Preview and approve digital proof in under 24h.</li>
+                                <li>Cards are printed, encoded, QC tested and shipped.</li>
+                            </ul>
+                        </div>
+                    </aside>
                 </div>
             </div>
-            
-        </div>
+        </section>
+
+        <section class="section-spacing bg-white/60">
+            <div class="page-shell space-y-12">
+                <div class="max-w-3xl space-y-4">
+                    <span class="hero-badge">Why professionals pick Classic</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Simple, durable and always on-brand.</h2>
+                    <p class="text-base sm:text-lg text-slate-600">Classic is our bestselling card for consultants, founders and sales teams who need a reliable tap-to-share companion without the heavy price tag of metals. Built on premium PVC with scratch resistant lamination.</p>
+                </div>
+
+                <div class="grid gap-6 md:grid-cols-3">
+                    <article class="feature-card space-y-3">
+                        <span class="badge-icon">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12"/><path d="M18 12H6"/></svg>
+                        </span>
+                        <h3 class="text-lg font-semibold text-slate-900">One tap, unlimited edits</h3>
+                        <p class="text-sm text-slate-600">Update vCard, microsite links, payments or lead forms instantly through your dashboard. No subscription, ever.</p>
+                    </article>
+                    <article class="feature-card space-y-3">
+                        <span class="badge-icon">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6a6 6 0 100 12 6 6 0 000-12z"/><path d="M9.88 9.88L5 5"/><path d="M18.12 5L5 18.12"/></svg>
+                        </span>
+                        <h3 class="text-lg font-semibold text-slate-900">Built for everyday carry</h3>
+                        <p class="text-sm text-slate-600">Durable PVC core with matte lamination resists bends, spills and daily wear. QR fallback is UV printed to last.</p>
+                    </article>
+                    <article class="feature-card space-y-3">
+                        <span class="badge-icon">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7v10c0 2.209 3.582 4 8 4s8-1.791 8-4V7"/><path d="M4 7c0 2.209 3.582 4 8 4s8-1.791 8-4"/><path d="M4 7c0-2.209 3.582-4 8-4s8 1.791 8 4"/></svg>
+                        </span>
+                        <h3 class="text-lg font-semibold text-slate-900">Sustainable networking</h3>
+                        <p class="text-sm text-slate-600">One card replaces hundreds of paper business cards each quarter, keeping your introductions eco-conscious.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-spacing">
+            <div class="page-shell space-y-10">
+                <div class="max-w-3xl space-y-4">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">FAQs</h2>
+                    <p class="text-base text-slate-600">Common questions about Classic. Need help picking the right finish? Ping our concierge team from the footer.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <details class="feature-card group">
+                        <summary class="flex justify-between items-center text-base sm:text-lg font-semibold text-slate-800 cursor-pointer">
+                            Do phones need an app to read Classic?
+                            <span class="text-indigo-500 transition-transform group-open:rotate-90">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7" /></svg>
+                            </span>
+                        </summary>
+                        <p class="mt-3 text-sm sm:text-base text-slate-500">No apps required. iPhone 7 and newer plus most Android phones read the NFC chip automatically. We also print a QR code and short link on the back for laptops or legacy devices.</p>
+                    </details>
+                    <details class="feature-card group">
+                        <summary class="flex justify-between items-center text-base sm:text-lg font-semibold text-slate-800 cursor-pointer">
+                            Can I rewrite the card after handing it out?
+                            <span class="text-indigo-500 transition-transform group-open:rotate-90">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7" /></svg>
+                            </span>
+                        </summary>
+                        <p class="mt-3 text-sm sm:text-base text-slate-500">Absolutely. Your profile link, vCard or microsite can be updated instantly from the Sparsh dashboard. Everyone tapping the card sees the new destination right away.</p>
+                    </details>
+                    <details class="feature-card group">
+                        <summary class="flex justify-between items-center text-base sm:text-lg font-semibold text-slate-800 cursor-pointer">
+                            What are the finish options included?
+                            <span class="text-indigo-500 transition-transform group-open:rotate-90">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7" /></svg>
+                            </span>
+                        </summary>
+                        <p class="mt-3 text-sm sm:text-base text-slate-500">Black matte (most popular), white gloss and silver metallic are available at checkout. Need a custom Pantone or textured material? Explore Premium or drop us a note.</p>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative overflow-hidden py-16 sm:py-20">
+            <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-500"></div>
+            <div class="page-shell relative">
+                <div class="surface-card bg-white/10 border-white/20 text-center px-6 py-14 sm:py-16 lg:py-20 text-white space-y-6">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Ready to switch from paper cards?</h2>
+                    <p class="text-base sm:text-lg text-white/80 max-w-2xl mx-auto">Design your Classic NFC card, approve the digital proof in a day and start tapping. We’ll guide you through finishes, QR back layout and profile setup.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="index.html#shop" class="cta-primary">Compare all cards</a>
+                        <a href="premiumcard.html#gallery" class="cta-secondary is-ghost">Need premium finishes?</a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer - Consistent with original file -->
-    <footer class="text-white" style="background-color: var(--color-dark-bg);">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
-            <!-- Grid Layout -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b pb-4 mb-4" style="border-color: #4b5563;">
-                <div class="col-span-2 md:col-span-1 text-left">
-                    <h4 class="text-2xl font-extrabold text-white tracking-tight mb-4">Sparsh <span class="text-gold-accent" style="color: var(--color-accent-text);">NFC</span></h4>
-                    <p class="text-sm text-gray-400">Upgrade how you share your details. Elegant, smart, and sustainable.</p>
-                </div>
-                <!-- Quick Links -->
-                <div class="text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Products</h5>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="index.html#shop" class="text-gray-300 hover:text-white transition">Shop</a></li>
-                        <li><a href="index.html#corporate" class="text-gray-300 hover:text-white transition">Corporate</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Try Demo</a></li>
-                    </ul>
-                </div>
-                <!-- Company -->
-                <div class="text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Company</h5>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="index.html#about" class="text-gray-300 hover:text-white transition">About Us</a></li>
-                        <li><a href="index.html#faq" class="text-gray-300 hover:text-white transition">FAQs</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Support</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Contact</a></li>
-                    </ul>
-                </div>
-                <!-- Legal -->
-                <div class="text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Legal</h5>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Terms of Service</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Shipping</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Returns & Warranty</a></li>
-                    </ul>
-                </div>
-                 <!-- Contact -->
-                 <div class="col-span-2 md:col-span-1 text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Stay Connected</h5>
-                    <p class="text-sm text-gray-400 mb-4">
-                        Networking in one tap. Meet Sparsh NFC — elegant, reprogrammable business cards that actually get used. 🔗✨
-                    </p>
-                    <div class="flex space-x-4 justify-start">
-                        <a href="#" class="text-gray-400 hover:text-white transition" aria-label="LinkedIn">
-                            <!-- Placeholder for LinkedIn Icon --><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.563-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.764 7 2.457v6.778z"/></svg>
+    <footer class="text-white">
+        <div class="page-shell py-12 lg:py-16">
+            <div class="grid gap-10 lg:grid-cols-5">
+                <div class="lg:col-span-2 space-y-4">
+                    <a href="#top" class="inline-flex items-center gap-2 text-2xl font-extrabold tracking-tight text-white">
+                        <span>Sparsh</span>
+                        <span class="text-indigo-300">NFC</span>
+                    </a>
+                    <p class="text-sm text-slate-300 max-w-md">Elegant NFC business cards, bespoke landing pages and analytics — handcrafted in India and shipped worldwide.</p>
+                    <div class="flex gap-4 text-slate-300">
+                        <a href="https://www.linkedin.com" aria-label="LinkedIn" class="hover:text-white transition">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zm-11 19H5V9h3v10zM6.5 7.73c-.96 0-1.75-.79-1.75-1.76 0-.97.79-1.76 1.75-1.76s1.75.79 1.75 1.76c0 .97-.79 1.76-1.75 1.76zM20 19h-3v-4.9c0-3.26-4-3.01-4 0V19h-3V9h3v1.71c1.4-2.6 7-2.8 7 2.48V19z"/></svg>
                         </a>
-                         <a href="#" class="text-gray-400 hover:text-white transition" aria-label="Instagram">
-                             <!-- Placeholder for Instagram Icon --><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c2.716 0 3.056.01 4.122.06 1.066.05 1.791.218 2.428.465.66.254 1.216.591 1.77.996.558.406.97.973 1.135 1.77.202.558.37 1.283.418 2.348.049 1.066.06 1.405.06 4.122s-.011 3.056-.06 4.122c-.05 1.066-.218 1.791-.465 2.428-.254.66-.591 1.216-.996 1.77-.406.558-.973.97-1.77 1.135-.558.202-1.283.37-2.348.418-1.066.049-1.405.06-4.122.06s-3.056-.011-4.122-.06c-1.066-.05-1.791-.218-2.428-.465-.66-.254-1.216-.591-1.77-.996-.558-.406-.97-.973-1.135-1.77-.202-.558-.37-1.283-.418-2.348-.049-1.066-.06-1.405-.06-4.122s.011-3.056.06-4.122c.05-1.066.218-1.791.465-2.428.254-.66.591-1.216.996-1.77.406-.558.973-.97 1.77-1.135.558-.202 1.283-.37 2.348-.418 1.066-.049 1.405-.06 4.122-.06zm0-2c-2.793 0-3.148.01-4.238.061-1.09.051-1.849.227-2.502.483-.717.275-1.341.678-1.933 1.269s-.994 1.216-1.269 1.933c-.256.653-.432 1.412-.483 2.502-.051 1.09-.061 1.445-.061 4.238s.01 3.148.061 4.238c.051 1.09.227 1.849.483 2.502.275.717.678 1.341 1.269 1.933s1.216.994 1.933 1.269c.653.256 1.412.432 2.502.483 1.09.051 1.445.061 4.238.061s3.148-.01 4.238-.061c1.09-.051 1.849-.227 2.502-.483.717-.275 1.341-.678 1.933-1.269s.994-1.216 1.269-1.933c-.256-.653-.432-1.412-.483-2.502-.051-1.09-.061-1.445-.061-4.122s.01-3.148-.061-4.238c-.051-1.09-.227-1.849-.483-2.502-.275-.717-.678-1.341-1.269-1.933s-1.216-.994-1.933-1.269c-.653-.256-1.412-.432-2.502-.483-1.09-.051-1.445-.061-4.238-.061zm0 4c-4.411 0-8 3.589-8 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8zm0 14c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6zm6-11.417c0-1.416-1.157-2.583-2.573-2.583s-2.573 1.167-2.573 2.583 1.157 2.583 2.573 2.583 2.573-1.167 2.573-2.583z"/></svg>
+                        <a href="https://www.instagram.com" aria-label="Instagram" class="hover:text-white transition">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm8.75 2.15a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/></svg>
                         </a>
                     </div>
                 </div>
+
+                <div>
+                    <h5 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 mb-4">Products</h5>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><a href="index.html#shop" class="hover:text-white transition">Classic card</a></li>
+                        <li><a href="premiumcard.html" class="hover:text-white transition">Premium finishes</a></li>
+                        <li><a href="corporatepack.html" class="hover:text-white transition">Corporate packs</a></li>
+                        <li><a href="premiumcard.html#gallery" class="hover:text-white transition">Material gallery</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 mb-4">Company</h5>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><a href="index.html#about" class="hover:text-white transition">About Sparsh</a></li>
+                        <li><a href="index.html#testimonials" class="hover:text-white transition">Customer stories</a></li>
+                        <li><a href="index.html#faq" class="hover:text-white transition">FAQs</a></li>
+                        <li><a href="mailto:hello@sparshnfc.com" class="hover:text-white transition">Contact support</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 mb-4">Legal</h5>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><a href="#" class="hover:text-white transition">Privacy policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms & conditions</a></li>
+                        <li><a href="#" class="hover:text-white transition">Shipping & returns</a></li>
+                        <li><a href="#" class="hover:text-white transition">Accessibility</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="pt-4 text-center text-sm text-gray-500">
-                &copy; 2025 Sparsh NFC. All rights reserved. Shipping across India.
+
+            <div class="mt-10 border-t border-slate-700 pt-6 flex flex-col sm:flex-row justify-between gap-4 text-xs text-slate-400">
+                <p>&copy; 2025 Sparsh NFC. All rights reserved.</p>
+                <p>Made in India · Shipping worldwide · GST invoices available</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Get selected finish
-        function getSelectedFinish() {
-            const finishButtons = document.querySelectorAll('button[aria-label*="Selected"], button[aria-label*="Matte"], button[aria-label*="Gloss"], button[aria-label*="Metallic"]');
-            for (let btn of finishButtons) {
-                if (btn.classList.contains('border-4')) {
-                    const label = btn.getAttribute('aria-label');
-                    if (label.includes('Black')) return 'Black Matte';
-                    if (label.includes('White')) return 'White Gloss';
-                    if (label.includes('Silver')) return 'Silver Metallic';
-                    return 'Black Matte';
-                }
-            }
-            return 'Black Matte'; // Default
+        const finishButtons = document.querySelectorAll('.finish-chip');
+        function setActiveFinish(button) {
+            finishButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
         }
-
-        // Handle finish selection
-        document.querySelectorAll('button[aria-label*="Matte"], button[aria-label*="Gloss"], button[aria-label*="Metallic"]').forEach(btn => {
-            btn.addEventListener('click', function() {
-                // Remove selected state from all buttons
-                document.querySelectorAll('button[aria-label*="Matte"], button[aria-label*="Gloss"], button[aria-label*="Metallic"]').forEach(b => {
-                    b.classList.remove('border-4', 'ring-2', 'ring-offset-2');
-                    b.classList.add('border-2');
-                });
-                // Add selected state to clicked button
-                this.classList.remove('border-2');
-                this.classList.add('border-4', 'ring-2', 'ring-offset-2', 'ring-gray-300');
+        finishButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                setActiveFinish(button);
             });
         });
 
-        // Add to Cart functionality
-        document.getElementById('add-to-cart-btn').addEventListener('click', function() {
-            const quantity = parseInt(document.getElementById('quantity').value) || 1;
-            const finish = getSelectedFinish();
-            
-            const product = {
+        function getSelectedFinish() {
+            const active = document.querySelector('.finish-chip.active');
+            return active ? active.dataset.finish : 'Black Matte';
+        }
+
+        function sanitiseQuantity(value) {
+            const qty = parseInt(value, 10);
+            return Number.isNaN(qty) || qty < 1 ? 1 : qty;
+        }
+
+        function buildProduct(quantity) {
+            return {
                 id: 'classic-card',
                 name: 'Classic NFC Card',
                 type: 'classic',
                 price: 999,
-                quantity: quantity,
-                image: 'https://placehold.co/100x75/FFD6FF/6b4c9e?text=Classic',
-                finish: finish,
+                quantity,
+                image: 'https://placehold.co/120x80/EEF2FF/4C46D9?text=Classic',
+                finish: getSelectedFinish(),
                 sku: 'SP-C-200'
             };
-            
-            addToCart(product);
+        }
+
+        document.getElementById('add-to-cart-btn').addEventListener('click', () => {
+            const quantity = sanitiseQuantity(document.getElementById('quantity').value);
+            addToCart(buildProduct(quantity));
+            document.getElementById('quantity').value = 1;
         });
 
-        // Buy Now functionality (redirects to cart)
-        document.getElementById('buy-now-btn').addEventListener('click', function() {
-            const quantity = parseInt(document.getElementById('quantity').value) || 1;
-            const finish = getSelectedFinish();
-            
-            const product = {
-                id: 'classic-card',
-                name: 'Classic NFC Card',
-                type: 'classic',
-                price: 999,
-                quantity: quantity,
-                image: 'https://placehold.co/100x75/FFD6FF/6b4c9e?text=Classic',
-                finish: finish,
-                sku: 'SP-C-200'
-            };
-            
-            addToCart(product);
-            window.location.href = 'cart.html';
+        document.getElementById('buy-now-btn').addEventListener('click', () => {
+            const quantity = sanitiseQuantity(document.getElementById('quantity').value);
+            addToCart(buildProduct(quantity));
+            window.location.href = 'checkout.html';
         });
     </script>
-
 </body>
 </html>

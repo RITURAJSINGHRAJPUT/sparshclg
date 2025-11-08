@@ -1,4 +1,4 @@
-// Cart Management System for Sparsh NFC
+ // Cart Management System for Sparsh NFC
 // Handles adding items, removing items, updating quantities, and displaying cart count
 
 // Cart data structure:
@@ -93,9 +93,9 @@ function getCartTotal() {
     return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
 }
 
-// Calculate GST (18%)
-function calculateGST(subtotal) {
-    return subtotal * 0.18;
+// Calculate shipping charges
+function calculateShipping() {
+    return 70; // ₹70 shipping charges
 }
 
 // Update cart badge in header
@@ -103,17 +103,34 @@ function updateCartCount() {
     const count = getCartCount();
     const cartBadge = document.getElementById('cart-count-badge');
     const cartCountSpan = document.getElementById('cart-count');
+    const mobileCartCount = document.getElementById('mobile-cart-count');
     
     if (cartBadge) {
         if (count > 0) {
-            cartBadge.style.display = 'inline-flex';
+            cartBadge.style.display = 'flex';
+            cartBadge.style.visibility = 'visible';
+            cartBadge.style.opacity = '1';
+            cartBadge.style.zIndex = '100';
+            cartBadge.style.position = 'absolute';
             if (cartCountSpan) {
                 cartCountSpan.textContent = count;
+                cartCountSpan.style.fontSize = '0.75rem';
+                cartCountSpan.style.fontWeight = '700';
             } else {
                 cartBadge.textContent = count;
             }
         } else {
             cartBadge.style.display = 'none';
+        }
+    }
+
+    if (mobileCartCount) {
+        if (count > 0) {
+            mobileCartCount.textContent = count;
+            mobileCartCount.style.display = 'inline-flex';
+            mobileCartCount.style.visibility = 'visible';
+        } else {
+            mobileCartCount.style.display = 'none';
         }
     }
 }
@@ -235,11 +252,11 @@ function renderCartItems() {
 // Update order summary on cart page
 function updateOrderSummary(cart) {
     const subtotal = getCartTotal();
-    const gst = calculateGST(subtotal);
-    const total = subtotal + gst;
+    const shipping = calculateShipping();
+    const total = subtotal + shipping;
     
     const subtotalElement = document.getElementById('cart-subtotal');
-    const gstElement = document.getElementById('cart-gst');
+    const shippingElement = document.getElementById('cart-shipping');
     const totalElement = document.getElementById('cart-total');
     const itemCountElement = document.getElementById('cart-item-count');
     
@@ -252,12 +269,12 @@ function updateOrderSummary(cart) {
         subtotalElement.textContent = `₹ ${subtotal.toLocaleString('en-IN')}`;
     }
     
-    if (gstElement) {
-        gstElement.textContent = `₹ ${gst.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+    if (shippingElement) {
+        shippingElement.textContent = `₹ ${shipping.toLocaleString('en-IN')}`;
     }
     
     if (totalElement) {
-        totalElement.textContent = `₹ ${total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        totalElement.textContent = `₹ ${total.toLocaleString('en-IN')}`;
     }
 }
 

@@ -7,7 +7,9 @@ import {
     signOut, 
     sendPasswordResetEmail,
     updateProfile,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signInWithPopup,
+    GoogleAuthProvider
 } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
 import { 
@@ -28,6 +30,15 @@ import { auth, db } from "./firebase-config.js";
 
 // Wait for DOM and Firebase to be ready
 let authReady = false;
+
+// Promise to signal when the initial auth state has been determined
+let __authStateResolved = false;
+let __authReadyResolve = null;
+const __authReadyPromise = new Promise((resolve) => { __authReadyResolve = resolve; });
+
+function waitForAuthReady() {
+    return __authReadyPromise;
+}
 
 function initializeAuth() {
     if (window.firebaseAuth) {
@@ -61,6 +72,11 @@ function initializeAuthListeners() {
         } else {
             updateUIForLoggedOutUser();
             clearUserFromStorage();
+        }
+        // Resolve initial auth readiness once (user may be null or an object)
+        if (!__authStateResolved && typeof __authReadyResolve === 'function') {
+            __authStateResolved = true;
+            __authReadyResolve(user);
         }
     });
 }
@@ -118,6 +134,57 @@ async function signOutUser() {
     } catch (error) {
         console.error('Sign out error:', error);
         return { success: false, error: error.message };
+    }
+}
+
+// Sign in with Google
+async function signInWithGoogle() {
+    try {
+        const provider = new GoogleAuthProvider();
+        // Add additional scopes if needed
+        provider.addScope('profile');
+        provider.addScope('email');
+        
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        
+        // Save user profile to Firestore
+        const profileData = {
+            email: user.email,
+            fullName: user.displayName || user.email.split('@')[0],
+            photoURL: user.photoURL || '',
+            provider: 'google',
+            createdAt: new Date().toISOString(),
+            lastLogin: new Date().toISOString()
+        };
+        
+        await saveUserProfile(user.uid, profileData);
+        
+        // Update localStorage
+        localStorage.setItem('sparshUserProfile', JSON.stringify(profileData));
+        
+        return { success: true, user: user };
+    } catch (error) {
+        console.error('Google sign in error:', error);
+        
+        // Provide helpful error message for unauthorized domain
+        if (error.code === 'auth/unauthorized-domain') {
+            const currentDomain = window.location.hostname || 'localhost';
+            return { 
+                success: false, 
+                error: `Domain not authorized. Please add "${currentDomain}" to Firebase Console > Authentication > Settings > Authorized domains. For localhost, add "127.0.0.1" and "localhost".` 
+            };
+        }
+        
+        // Handle popup closed by user
+        if (error.code === 'auth/popup-closed-by-user') {
+            return { 
+                success: false, 
+                error: 'Sign-in popup was closed. Please try again.' 
+            };
+        }
+        
+        return { success: false, error: getErrorMessage(error.code) };
     }
 }
 
@@ -434,6 +501,7 @@ if (typeof window !== 'undefined') {
     window.sparshAuth = {
         signUp,
         signIn,
+        signInWithGoogle,
         signOut: signOutUser,
         sendPasswordReset,
         getCurrentUser,
@@ -443,7 +511,8 @@ if (typeof window !== 'undefined') {
         updateUserProfile,
         saveUserProfile,
         saveOrder,
-        getUserOrders
+        getUserOrders,
+        waitForAuthReady
     };
 }
 

@@ -20,766 +20,1125 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
-        /* --- UPDATED COLOR PALETTE (Pinks/Purples) --- */
         :root {
-            --color-primary: #C8B6FF;    /* Mid Purple (New Primary for CTA/Accent) */
-            --color-secondary: #E7C6FF;  /* Light Lavender (New Secondary/Accent) */
-            --color-light-bg: #FFD6FF;   /* Lightest Pink (New Light Background) */
-            --color-accent-text: #B8C0FF;/* Light Blue-Violet Accent */
-            
-            /* UPDATED: Darker color for main content text contrast */
-            --color-dark-text: #1e2025;  
-            /* Custom darker purple for contrast/footer */
-            --color-dark-bg: #6b4c9e;    
+            --color-primary: #7069ff;
+            --color-primary-strong: #4c46d9;
+            --color-secondary: #f5f3ff;
+            --color-accent-text: #c7d2fe;
+            --color-dark-bg: #0f172a;
+            --color-accent: #1f2937;
+            --color-muted: #6b7280;
+            --color-surface: rgba(255, 255, 255, 0.85);
+            --shadow-soft: 0 24px 60px -30px rgba(79, 70, 229, 0.45);
+            --shadow-card: 0 20px 45px -20px rgba(15, 23, 42, 0.18);
         }
-        
-        /* 1. APPLY FULL-PAGE GRADIENT TO HTML ELEMENT */
+
+        * {
+            box-sizing: border-box;
+        }
+
         html {
             height: 100%;
-            /* Gradient: Lightest Pink -> Mid Purple -> Light Blue-Violet */
-            background: linear-gradient(
-                to bottom right,
-                var(--color-light-bg),     /* Start light (#FFD6FF) */
-                var(--color-secondary),    /* Mid-point (#E7C6FF) */
-                var(--color-accent-text)   /* End slightly darker (#B8C0FF) */
-            );
-            background-repeat: no-repeat;
-            background-attachment: fixed; 
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            /* Ensure body background is transparent to show html gradient */
-            background-color: transparent; 
-            /* Text color applied here (now darker) */
-            color: var(--color-dark-text); 
             min-height: 100%; 
+            color: var(--color-accent);
+            background: radial-gradient(circle at top left, #f8f9ff 0%, #eef2ff 35%, #f6f6ff 70%, #ffffff 100%);
+            position: relative;
         }
-        
-        /* Ensure text visibility on gradient backgrounds */
-        p, li, span, div {
-            color: inherit;
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 5% 15%, rgba(167, 139, 250, 0.18) 0, transparent 45%),
+                        radial-gradient(circle at 85% 10%, rgba(147, 197, 253, 0.2) 0, transparent 50%),
+                        radial-gradient(circle at 20% 80%, rgba(196, 181, 253, 0.25) 0, transparent 50%);
+            z-index: -2;
         }
-        
-        /* Make sure headings are visible */
-        h1, h2, h3, h4, h5, h6 {
-            color: #1e2025;
+
+        main {
+            position: relative;
+            z-index: 1;
         }
-        
-        /* Custom styles for elegance and premium feel, using new colors */
+
+        .page-shell {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-spacing {
+            padding-top: clamp(3rem, 2vw + 3rem, 6rem);
+            padding-bottom: clamp(3rem, 2vw + 3rem, 6rem);
+        }
+
+        .surface-card {
+            background-color: var(--color-surface);
+            backdrop-filter: blur(22px);
+            box-shadow: var(--shadow-card);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(236, 233, 255, 0.78) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 1.75rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--color-muted);
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(112, 105, 255, 0.18);
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.95), rgba(234, 233, 255, 0.65));
+            box-shadow: 0 12px 30px -18px rgba(79, 70, 229, 0.4);
+        }
+
+        .hero-headline {
+            font-size: clamp(2.5rem, 2.5vw + 2rem, 4.75rem);
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            color: #0f172a;
+            text-wrap: balance;
+        }
+
+        .hero-highlight {
+            background: linear-gradient(120deg, #6366f1, #8b5cf6);
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
         .cta-primary {
-            /* Now uses the new Mid Purple primary color */
-            @apply inline-flex items-center justify-center px-10 py-3.5 border border-transparent text-lg font-semibold rounded-2xl shadow-xl text-white transition duration-300 transform hover:scale-[1.05] active:scale-[1.0];
-            background-color: var(--color-primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 1.75rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #6c63ff, #4c46d9);
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: none;
+            gap: 0.5rem;
         }
+
         .cta-primary:hover {
-            background-color: #a496d0; /* Slightly darker hover */
-            box-shadow: 0 15px 30px -10px rgba(200, 182, 255, 0.6); 
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 30px 60px -25px rgba(79, 70, 229, 0.55);
         }
 
         .cta-secondary {
-            /* Now uses the new primary color for border/text */
-            @apply inline-flex items-center justify-center px-10 py-3.5 border-2 text-lg font-semibold rounded-2xl bg-white transition duration-300 transform hover:scale-[1.05] active:scale-[1.0];
-            border-color: var(--color-primary);
-            color: var(--color-primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 1.75rem;
+            border-radius: 999px;
+            border: 1.5px solid rgba(112, 105, 255, 0.4);
+            background: rgba(255, 255, 255, 0.82);
+            color: #4c46d9;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            gap: 0.35rem;
         }
+
         .cta-secondary:hover {
-            background-color: #f7f9f3; /* Very light hover */
+            transform: translateY(-2px);
+            border-color: rgba(112, 105, 255, 0.7);
+            box-shadow: 0 18px 45px -26px rgba(79, 70, 229, 0.35);
         }
-        
-        /* Utility class is transparent for gradient flow */
-        .bg-secondary-light {
-            background-color: transparent;
+
+        .cta-secondary.is-ghost {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.7);
+            color: #ffffff;
+        }
+
+        .cta-secondary.is-ghost:hover {
+            border-color: #ffffff;
         }
 
         .feature-badge {
-            /* Card backgrounds are kept white for readability against the gradient */
-            @apply flex flex-col p-6 rounded-2xl shadow-xl transition duration-300 hover:shadow-2xl hover:ring-2 ring-opacity-70;
-            background-color: white;
-            border: 1px solid #f0f0f0;
-            --tw-ring-color: var(--color-secondary);
-        }
-        /* Updated color references */
-        .text-gold-accent {
-            color: var(--color-primary); 
-        }
-        .border-gold-accent {
-            border-color: var(--color-accent-text);
-        }
-        .ring-premium-highlight {
-            --tw-ring-color: var(--color-secondary);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1.75rem;
+            border-radius: 1.5rem;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(244, 243, 255, 0.92));
+            border: 1px solid rgba(236, 233, 255, 0.9);
+            box-shadow: var(--shadow-card);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
         }
 
-        /* Hero Text Animation/Highlight */
-        .hero-headline {
-            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.05);
+        .feature-badge:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 70px -34px rgba(67, 56, 202, 0.35);
+            border-color: rgba(124, 113, 255, 0.55);
         }
-        
-        .check-icon {
+
+        .stat-pill {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            background: rgba(255, 255, 255, 0.78);
+            border-radius: 1.25rem;
+            padding: 1.25rem 1.5rem;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 18px 50px -30px rgba(30, 64, 175, 0.4);
+        }
+
+        .stat-pill strong {
+            font-size: 1.35rem;
+            color: #111827;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-pill span {
+            font-size: 0.875rem;
+            color: var(--color-muted);
+        }
+
+        .badge-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 1rem;
+            background: rgba(112, 105, 255, 0.1);
             color: var(--color-primary);
         }
         
-        /* Mobile Menu Styles */
+        header { backdrop-filter: blur(14px); }
+        header nav a { transition: color 0.2s ease, opacity 0.2s ease; }
+        header nav a:hover { color: var(--color-primary); opacity: 0.9; }
+
         #mobile-menu {
-            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: -8px 0 40px rgba(30, 41, 59, 0.16);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(18px);
         }
         
         #mobile-menu a:hover,
         #mobile-menu button:hover {
-            background-color: rgba(200, 182, 255, 0.1);
+            background-color: rgba(112, 105, 255, 0.08);
+        }
+
+        .testimonial-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(239, 238, 255, 0.9));
+            border-radius: 1.75rem;
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 2rem;
+            box-shadow: var(--shadow-card);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .testimonial-card footer {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .testimonial-card footer .avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 999px;
+            background: rgba(112, 105, 255, 0.15);
+            display: grid;
+            place-items: center;
+            color: var(--color-primary-strong);
+            font-weight: 600;
+        }
+
+        .faq-item {
+            border-radius: 1.5rem;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(226, 232, 240, 0.7);
+            padding: 1.5rem 1.75rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        footer {
+            background: #111827;
+        }
+
+        @media (max-width: 1024px) {
+            header nav {
+                display: none;
+            }
+
+            .page-shell {
+                padding: 0 1.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-headline {
+                font-size: clamp(2.375rem, 7vw, 3.25rem);
+            }
+
+            .feature-badge {
+                padding: 1.5rem;
+            }
+
+            .stat-pill {
+                border-radius: 1rem;
+                padding: 1rem 1.1rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
     </style>
 </head>
 <body class="text-gray-800">
 
-    <!-- Header / Navigation - RESPONSIVE FIXES APPLIED --><header class="sticky top-0 z-50 bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20 sm:h-24">
-                <!-- Logo (Left) --><a href="index.html" class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">Sparsh <span class="text-gold-accent">NFC</span></a>
+    <header class="fixed inset-x-0 top-0 z-50 border-b border-slate-200/60 bg-white/80">
+        <div class="page-shell">
+            <div class="flex items-center justify-between gap-6 py-4 lg:py-5">
+                <a href="index.html" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+                    <span>Sparsh</span>
+                    <span class="hero-highlight">NFC</span>
+                </a>
 
-                <!-- Navigation Links (Center - Desktop Only) --><nav class="hidden lg:flex space-x-6 xl:space-x-8 text-base xl:text-lg font-medium">
-                    <!-- Nav Item 1: Shop (Dropdown Mimic) --><div class="relative group">
-                        <a href="#shop" class="flex items-center text-gray-700 hover:text-primary transition" style="--text-primary: var(--color-primary);">
-                            Shop
-                            <!-- Dropdown Arrow --><svg class="ml-1 w-4 h-4 text-gray-500 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="--text-primary: var(--color-primary);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </a>
-                        <!-- Mock Dropdown Content: FIXED with opacity/visibility classes --><div class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-300 z-20 mt-3 w-48 rounded-lg shadow-xl bg-white ring-1 ring-black ring-opacity-5">
-                            <a href="classic card.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-secondary-light rounded-t-lg">Classic Card</a>
-                            <a href="premiumcard.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-secondary-light">Premium Card</a>
-                            <a href="corporatepack.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-secondary-light rounded-b-lg">Corporate Packs</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Nav Item 2: Learn (Dropdown Mimic) --><div class="relative group">
-                         <a href="#faq" class="flex items-center text-gray-700 hover:text-primary transition" style="--text-primary: var(--color-primary);">
-                            Learn
-                            <!-- Dropdown Arrow --><svg class="ml-1 w-4 h-4 text-gray-500 group-hover:text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="--text-primary: var(--color-primary);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                        </a>
-                         <!-- Mock Dropdown Content: FIXED with opacity/visibility classes --><div class="absolute invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-300 z-20 mt-3 w-48 rounded-lg shadow-xl bg-white ring-1 ring-black ring-opacity-5">
-                            <a href="#how-it-works" class="block px-4 py-2 text-sm text-gray-700 hover:bg-secondary-light rounded-t-lg">How It Works</a>
-                            <a href="#faq" class="block px-4 py-2 text-sm text-gray-700 hover:bg-secondary-light">FAQ & Support</a>
-                            <a href="#about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-secondary-light rounded-b-lg">About Sparsh</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Nav Item 3: For Teams (Simple Link) --><a href="corporatepack.html" class="text-gray-700 hover:text-primary transition" style="--text-primary: var(--color-primary);">For Teams & Enterprise</a>
-                    
-                    <!-- Nav Item 4: Pricing (Simple Link)<a href="#pricing" class="text-gray-700 hover:text-primary transition" style="--text-primary: var(--color-primary);">Pricing</a> -->
+                <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                    <a href="#shop" class="transition hover:text-slate-900">Shop</a>
+                    <!-- <a href="#features" class="transition hover:text-slate-900">Features</a> -->
+                    <!-- <a href="#how-it-works" class="transition hover:text-slate-900">How it works</a> -->
+                    <a href="corporatepack.html" class="transition hover:text-slate-900">Teams</a>
+                    <!-- <a href="#faq" class="transition hover:text-slate-900">FAQ</a> -->
                 </nav>
 
-                <!-- CTAs and Cart (Right Aligned) --><div class="flex items-center space-x-4">
-                    <!-- Login Link (Desktop/Tablet) --><a href="login.html" id="header-login-link" class="text-lg font-medium text-gray-700 hover:text-primary hidden sm:inline-block" style="--text-primary: var(--color-primary);">Login</a>
+                <div class="flex items-center gap-3">
+                    <a href="login.html" id="header-login-link" class="hidden sm:inline-flex text-sm font-semibold text-slate-600 hover:text-slate-900 transition">Login</a>
                     
-                    <!-- Primary CTA Button (Get Started) - Visible on all sizes, adjusted for mobile alignment --><a href="#shop" class="inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 text-sm sm:text-base font-bold rounded-xl shadow-lg text-white transition duration-300 transform hover:scale-[1.05]" style="background-color: var(--color-primary); hover-bg: #a496d0;">
-                        Get Started
-                    </a>
+                    <!-- <a href="#shop" class="cta-primary hidden sm:inline-flex">
+                        Get started
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                    </a> -->
                     
-                    <a href="cart.html" aria-label="Shopping Cart" class="relative hidden sm:block">
-                        <button class="text-gray-700 hover:text-primary p-2 rounded-full transition relative" style="--text-primary: var(--color-primary);">
+                    <a href="cart.html" aria-label="Shopping Cart" class="relative inline-block mr-3">
+                        <button class="p-2.5 rounded-full border border-slate-200/70 text-slate-600 hover:text-slate-900 hover:border-slate-300 transition bg-white/80">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
-                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                             </svg>
-                            <!-- Cart Badge -->
-                            <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center" style="display: none;">
-                                <span id="cart-count">0</span>
+                            <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center shadow-xl z-[60] pointer-events-none" style="display: none; min-width: 1.5rem; padding: 0.15rem; border: 2px solid white;" aria-hidden="true">
+                                <span id="cart-count" class="leading-none text-[10px] sm:text-xs font-extrabold">0</span>
                             </span>
                         </button>
                     </a>
 
-                    <!-- Mobile Menu Button --><button id="mobile-menu-btn" class="lg:hidden text-gray-600 hover:text-primary focus:outline-none p-2 rounded-full transition" style="--text-primary: var(--color-primary);" aria-label="Toggle mobile menu">
-                        <svg id="menu-icon" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
-                        <svg id="close-icon" class="h-8 w-8 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    <button id="mobile-menu-btn" class="lg:hidden relative z-[70] inline-flex items-center justify-center rounded-full border border-slate-300/70 p-2.5 text-slate-600 hover:text-slate-900 transition bg-white/80 ml-2" aria-label="Open menu" aria-controls="mobile-menu" aria-expanded="false">
+                        <svg id="menu-icon" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                        <svg id="close-icon" class="h-7 w-7 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
             </div>
         </div>
         
-        <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="lg:hidden fixed inset-0 bg-white z-40 transform -translate-x-full transition-transform duration-300 ease-in-out" style="top: 5rem;">
-            <div class="flex flex-col h-[calc(100vh-5rem)] overflow-y-auto pb-20">
-                <!-- Mobile Navigation Links -->
-                <nav class="px-4 py-6 space-y-1">
-                    <!-- Shop Section -->
-                    <div class="mb-4">
-                        <button class="mobile-menu-item w-full flex items-center justify-between text-lg font-semibold text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition" id="mobile-shop-toggle">
+        <div id="mobile-menu" class="lg:hidden fixed inset-0 z-70 transform -translate-x-full transition-transform duration-300 ease-in-out" style="top: 4.75rem;">
+            <div class="flex flex-col h-[calc(100vh-4.75rem)] overflow-y-auto pb-16 bg-white shadow-xl">
+                <div class="px-6 pt-6 pb-3 border-b border-slate-200/70">
+                    <!-- <p class="text-sm font-semibold text-slate-500 uppercase tracking-widest">Navigation</p> -->
+                    <div class="lg:flex flex flex-col font-semibold text-slate-600">
+                        <a href="#shop" class="transition hover:text-slate-900">Shop</a>
+                        <a href="corporatepack.html" class="transition hover:text-slate-900">Teams</a>
+                        <a href="login.html" id="header-login-link" class=" sm:inline-flex  font-semibold text-slate-600 hover:text-slate-900 transition">Login</a>
+                    </div>
+                </div>
+                <nav class="px-4 py-6 space-y-2 text-slate-900 opacity-100">
+                    <div class="rounded-2xl border border-slate-200/70 bg-white/80">
+                        <button class="mobile-menu-item w-full flex items-center justify-between text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl hover:bg-slate-50 transition" id="mobile-shop-toggle">
                             Shop
                             <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
-                        <div id="mobile-shop-submenu" class="hidden pl-4 space-y-1">
-                            <a href="classic card.html" class="mobile-menu-item block py-2 px-4 text-base text-gray-600 hover:text-primary rounded-lg hover:bg-gray-50 transition" style="--text-primary: var(--color-primary);">Classic Card</a>
-                            <a href="premiumcard.html" class="mobile-menu-item block py-2 px-4 text-base text-gray-600 hover:text-primary rounded-lg hover:bg-gray-50 transition" style="--text-primary: var(--color-primary);">Premium Card</a>
-                            <a href="corporatepack.html" class="mobile-menu-item block py-2 px-4 text-base text-gray-600 hover:text-primary rounded-lg hover:bg-gray-50 transition" style="--text-primary: var(--color-primary);">Corporate Packs</a>
+                        <div id="mobile-shop-submenu" class="hidden border-t border-slate-200/70">
+                            <a href="classic card.html" class="mobile-menu-item block py-3 px-5 text-base text-slate-600 hover:text-slate-900 transition">Classic card</a>
+                            <a href="premiumcard.html" class="mobile-menu-item block py-3 px-5 text-base text-slate-600 hover:text-slate-900 transition">Premium card</a>
+                            <a href="corporatepack.html" class="mobile-menu-item block py-3 px-5 text-base text-slate-600 hover:text-slate-900 transition">Corporate packs</a>
                         </div>
                     </div>
                     
-                    <!-- Learn Section -->
-                    <div class="mb-4">
-                        <button class="mobile-menu-item w-full flex items-center justify-between text-lg font-semibold text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition" id="mobile-learn-toggle">
+                    <div class="rounded-2xl border border-slate-200/70 bg-white/80">
+                        <button class="mobile-menu-item w-full flex items-center justify-between text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl hover:bg-slate-50 transition" id="mobile-learn-toggle">
                             Learn
                             <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
-                        <div id="mobile-learn-submenu" class="hidden pl-4 space-y-1">
-                            <a href="#how-it-works" class="mobile-menu-item block py-2 px-4 text-base text-gray-600 hover:text-primary rounded-lg hover:bg-gray-50 transition" style="--text-primary: var(--color-primary);">How It Works</a>
-                            <a href="#faq" class="mobile-menu-item block py-2 px-4 text-base text-gray-600 hover:text-primary rounded-lg hover:bg-gray-50 transition" style="--text-primary: var(--color-primary);">FAQ & Support</a>
-                            <a href="#about" class="mobile-menu-item block py-2 px-4 text-base text-gray-600 hover:text-primary rounded-lg hover:bg-gray-50 transition" style="--text-primary: var(--color-primary);">About Sparsh</a>
+                        <div id="mobile-learn-submenu" class="hidden border-t border-slate-200/70">
+                            <a href="#how-it-works" class="mobile-menu-item block py-3 px-5 text-base text-slate-600 hover:text-slate-900 transition">How it works</a>
+                            <a href="#faq" class="mobile-menu-item block py-3 px-5 text-base text-slate-600 hover:text-slate-900 transition">FAQ & support</a>
+                            <a href="#about" class="mobile-menu-item block py-3 px-5 text-base text-slate-600 hover:text-slate-900 transition">About Sparsh</a>
                         </div>
                     </div>
                     
-                    <!-- For Teams Link -->
-                    <a href="corporatepack.html" class="mobile-menu-item block text-lg font-semibold text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition">For Teams & Enterprise</a>
-                    
-                    <!-- Login Link (Mobile) -->
-                    <a href="login.html" id="mobile-login-link" class="mobile-menu-item block text-lg font-medium text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition">Login</a>
-                    
-                    <!-- Cart Link (Mobile) -->
-                    <a href="cart.html" class="mobile-menu-item block text-lg font-medium text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-50 transition flex items-center">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <a href="corporatepack.html" class="mobile-menu-item block text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">For teams & enterprise</a>
+
+                    <a href="login.html" id="mobile-login-link" class="mobile-menu-item block text-base font-medium text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">Login</a>
+
+                    <a href="cart.html" class="mobile-menu-item flex items-center justify-between text-base font-medium text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">
+                        <span class="flex items-center gap-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
-                        Shopping Cart
-                        <span id="mobile-cart-count" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-0.5" style="display: none;">0</span>
+                            Shopping cart
+                        </span>
+                        <span id="mobile-cart-count" class="ml-2 bg-rose-500 text-white font-bold rounded-full px-2 py-0.5" style="display: none;">0</span>
                     </a>
-                    
-                    <!-- CTA Buttons (Mobile) -->
-                    <div class="pt-4 space-y-3">
-                        <a href="#shop" class="mobile-menu-item block text-center py-3 px-6 rounded-xl font-bold text-white transition" style="background-color: var(--color-primary);">
-                            Get Started
-                        </a>
-                        <a href="cart.html" class="mobile-menu-item block text-center py-3 px-6 rounded-xl font-semibold border-2 transition" style="border-color: var(--color-primary); color: var(--color-primary);">
-                            View Cart
-                        </a>
+
+                    <div class="pt-2 space-y-3">
+                        <a href="#shop" class="mobile-menu-item block text-center py-3.5 px-6 rounded-2xl font-semibold text-white bg-gradient-to-r from-indigo-500 to-indigo-600 shadow-lg shadow-indigo-500/30 transition">Get started</a>
+                        <a href="cart.html" class="mobile-menu-item block text-center py-3.5 px-6 rounded-2xl font-semibold border border-slate-200/80 text-indigo-600 bg-white/80 hover:bg-slate-50 transition">View cart</a>
                     </div>
                 </nav>
             </div>
         </div>
         
-        <!-- Mobile Menu Backdrop -->
-        <div id="mobile-menu-backdrop" class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-30 opacity-0 pointer-events-none transition-opacity duration-300" style="top: 5rem;"></div>
+    <div id="mobile-menu-backdrop" class="lg:hidden fixed inset-0 bg-slate-900/40 z-60 opacity-0 pointer-events-none transition-opacity duration-300" style="top: 0;"></div>
     </header>
 
-    <main>
-        <!-- Hero Section --><section id="hero" class="pt-16 sm:pt-28 pb-20 sm:pb-40 bg-secondary-light relative overflow-hidden">
-            <!-- Subtle background shape for visual interest (now transparent) --><div class="absolute inset-x-0 bottom-0 h-1/2 bg-white transform skew-y-12 origin-bottom-left -translate-y-1/2 hidden md:block" style="background-color: transparent;"></div>
-
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                <!-- Hero Illustration -->
-                <div class="mb-8 sm:mb-12 flex justify-center fade-in">
-                    <svg class="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="400" height="400" rx="40" fill="url(#heroGradient)"/>
-                        <defs>
-                            <linearGradient id="heroGradient" x1="0" y1="0" x2="400" y2="400">
-                                <stop offset="0%" stop-color="#FFD6FF"/>
-                                <stop offset="50%" stop-color="#E7C6FF"/>
-                                <stop offset="100%" stop-color="#C8B6FF"/>
-                            </linearGradient>
-                        </defs>
-                        <!-- NFC Card -->
-                        <rect x="80" y="100" width="240" height="150" rx="12" fill="#FFFFFF" stroke="#6b4c9e" stroke-width="3"/>
-                        <rect x="100" y="130" width="200" height="20" rx="4" fill="#C8B6FF"/>
-                        <rect x="100" y="160" width="160" height="15" rx="3" fill="#E7C6FF"/>
-                        <rect x="100" y="185" width="140" height="15" rx="3" fill="#E7C6FF"/>
-                        <circle cx="320" cy="175" r="15" fill="#B8C0FF"/>
-                        <!-- Phone -->
-                        <rect x="150" y="280" width="100" height="180" rx="20" fill="#1e2025" stroke="#6b4c9e" stroke-width="3"/>
-                        <rect x="160" y="290" width="80" height="140" rx="8" fill="#FFFFFF"/>
-                        <circle cx="200" cy="445" r="15" fill="#C8B6FF"/>
-                        <!-- NFC Connection Waves -->
-                        <path d="M200 250 Q250 230 300 250" stroke="#C8B6FF" stroke-width="4" fill="none" stroke-dasharray="5,5" opacity="0.6"/>
-                        <circle cx="250" cy="245" r="8" fill="#6b4c9e" opacity="0.5">
-                            <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
-                        </circle>
-                    </svg>
+    <main class="pt-24 sm:pt-28">
+        <section id="hero" class="section-spacing relative overflow-hidden pt-24 sm:pt-32">
+            <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+                <div class="absolute -top-20 -left-20 h-72 w-72 rounded-full bg-gradient-to-br from-indigo-200/70 to-purple-200/70 blur-3xl"></div>
+                <div class="absolute top-1/3 -right-10 h-80 w-80 rounded-full bg-gradient-to-br from-indigo-300/50 to-purple-200/60 blur-[110px]"></div>
                 </div>
-                <h1 class="hero-headline text-4xl sm:text-5xl md:text-8xl font-extrabold tracking-tighter text-gray-900 mb-6 sm:mb-8 fade-in">
-                    Ditch the paper. <span class="text-primary block mt-2 md:mt-4" style="color: var(--color-primary);">Tap. Connect.</span>
+
+            <div class="page-shell relative">
+                <div class="grid grid-cols-1 items-center gap-16 lg:grid-cols-[1.05fr,1fr]">
+                    <div class="space-y-8 lg:space-y-10 max-w-2xl fade-in">
+                        <span class="hero-badge">
+                            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Ships nationwide in 5 days • One tap, instant save
+                        </span>
+
+                        <h1 class="hero-headline">
+                            Tap once. <span class="hero-highlight">Stay remembered.</span>
                 </h1>
-                <p class="text-lg sm:text-xl md:text-3xl text-gray-700 max-w-4xl mx-auto mb-10 sm:mb-12 font-light px-4 fade-in">
-                    Elegant NFC business cards that share your contact, links, and brand with a single tap. Sleek design — **effortless networking.**
-                </p>
-                <!-- CTA Container --><div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-16 sm:mb-20 px-4 sm:px-0">
-                    <a href="#shop" class="cta-primary w-full sm:w-auto text-center py-4 px-12 text-xl">Shop Cards</a>
-                    <a href="#design" class="cta-secondary w-full sm:w-auto text-center py-4 px-12 text-xl">Design Your Card</a>
+
+                        <p class="text-lg sm:text-xl leading-relaxed text-slate-600 max-w-xl">
+                            Sparsh NFC cards fuse premium materials with smart contact sharing. Deliver your portfolio, socials or payments in a single tap — backed by QR and .vcf fallbacks.
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
+                            <a href="#shop" class="cta-primary">
+                                Shop cards
+                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                            </a>
+                            <a href="premiumcard.html" class="cta-secondary">
+                                Preview premium finishes
+                            </a>
                 </div>
 
-                <!-- Hero Supporting Text (The subtle value prop) --><p class="text-base sm:text-lg text-gray-700 max-w-5xl mx-auto border-t pt-8 sm:pt-10" style="border-color: var(--color-secondary);">
-                    A modern, sustainable alternative to paper business cards. Share phone, email, portfolio links, social profiles or payment pages — all with a single tap. **No app required.**
-                </p>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5 pt-4">
+                            <div class="stat-pill">
+                                <strong>2k+</strong>
+                                <span>Professionals switched to Sparsh</span>
+                            </div>
+                            <div class="stat-pill">
+                                <strong>60s</strong>
+                                <span>To personalise and go live</span>
+                            </div>
+                            <div class="stat-pill">
+                                <strong>98%</strong>
+                                <span>Report better follow-ups</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative fade-in">
+                        <div class="absolute -top-8 -right-6 h-60 w-60 rounded-full bg-gradient-to-br from-indigo-400/30 via-sky-200/40 to-purple-200/30 blur-[90px]"></div>
+                        <div class="relative surface-card p-6 sm:p-8 lg:p-10">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <p class="text-sm font-semibold uppercase tracking-widest text-indigo-500/90">Live demo</p>
+                                    <h3 class="text-2xl font-bold text-slate-900 mt-1">Sparsh digital card</h3>
+                                </div>
+                                <span class="inline-flex items-center gap-2 rounded-full bg-indigo-500/10 px-4 py-2 text-sm font-semibold text-indigo-600">
+                                    <span class="h-2.5 w-2.5 rounded-full bg-indigo-500 animate-pulse"></span>
+                                    NFC active
+                                </span>
+                            </div>
+
+                            <div class="grid gap-6">
+                                <div class="glass-card p-6 flex flex-col gap-4 shadow-lg">
+                                    <div class="flex items-center gap-4">
+                                        <div class="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white text-xl font-semibold">SN</div>
+                                        <div>
+                                            <p class="text-sm font-semibold text-slate-500 uppercase">Founder card</p>
+                                            <p class="text-xl font-semibold text-slate-900">Sara Patel</p>
+                                            <p class="text-sm text-slate-500">sparshnfc.me/sara</p>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3 text-sm">
+                                        <div class="rounded-2xl border border-slate-200/70 bg-white/70 px-4 py-3">
+                                            <p class="font-semibold text-slate-600">Tap share</p>
+                                            <p class="text-xs text-slate-500">Instant contact & socials</p>
+                                        </div>
+                                        <div class="rounded-2xl border border-slate-200/70 bg-white/70 px-4 py-3">
+                                            <p class="font-semibold text-slate-600">QR fallback</p>
+                                            <p class="text-xs text-slate-500">Works with any camera</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50/80 to-white/80 p-6 flex flex-col gap-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-semibold text-slate-600">Smart analytics</p>
+                                            <p class="text-2xl font-bold text-slate-900">+34%</p>
+                                        </div>
+                                        <span class="badge-icon">
+                                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12h4l2.5-5 3 10 2-5H20"/></svg>
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-slate-500">Teams use Sparsh dashboards to monitor taps, QR scans and follow-through in real-time.</p>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 flex flex-wrap items-center gap-5 text-xs uppercase tracking-[0.25em] text-slate-400">
+                                <span>Compatible</span>
+                                <span class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 px-3 py-1">iOS</span>
+                                <span class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 px-3 py-1">Android</span>
+                                <span class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 px-3 py-1">.vcf</span>
+                                <span class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 px-3 py-1">QR</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-20 flex flex-wrap items-center gap-6 text-sm text-slate-500/80">
+                    <span class="uppercase tracking-[0.35em] text-xs text-slate-400">Trusted by teams at</span>
+                    <div class="flex flex-wrap items-center gap-6">
+                        <span class="text-base font-semibold text-slate-500">T-Hub</span>
+                        <span class="text-base font-semibold text-slate-500">Headstart</span>
+                        <span class="text-base font-semibold text-slate-500">100X.VC</span>
+                        <span class="text-base font-semibold text-slate-500">NASSCOM CoE</span>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Value Propositions (Badges) - ILLUSTRATIONS ENHANCED -->
-        <section id="values" class="py-20 sm:py-28" style="background-color: transparent;">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 text-center mb-12 sm:mb-16">The Smart Networking Advantage</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                    <!-- Value Prop 1: Instant Contact Share (New SVG) --><div class="feature-badge text-center">
-                        <span class="mb-3 mx-auto flex justify-center items-center h-16 w-16">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);">
+        <section id="values" class="section-spacing">
+            <div class="page-shell space-y-12">
+                <div class="max-w-3xl mx-auto text-center space-y-5">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">The smart networking advantage</h2>
+                    <p class="text-base sm:text-lg text-slate-600">Every Sparsh card is engineered for modern teams that need to share richer stories, faster. Tap, scan or download — your brand is always ready.</p>
+                </div>
+
+                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <article class="feature-badge fade-in">
+                        <span class="badge-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                                 <polyline points="14 2 14 8 20 8"/>
-                                <line x1="8" y1="13" x2="16" y2="13"/>
-                                <line x1="8" y1="17" x2="16" y2="17"/>
-                                <line x1="10" y1="9" x2="14" y2="9"/>
                             </svg>
                         </span>
-                        <p class="font-extrabold text-lg text-gray-900">Instant Contact Share</p>
-                        <p class="text-sm text-gray-500 mt-1">Tap to save as a vCard.</p>
-                    </div>
-                    <!-- Value Prop 2: Premium Materials (New SVG) --><div class="feature-badge text-center">
-                        <span class="mb-3 mx-auto flex justify-center items-center h-16 w-16">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-accent-text);">
+                        <h3 class="text-lg font-semibold text-slate-900">Instant tap share</h3>
+                        <p class="text-sm text-slate-500">Drop your full contact suite straight into phones — no apps or setup required.</p>
+                    </article>
+
+                    <article class="feature-badge fade-in">
+                        <span class="badge-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                                <path d="M2 17l10 5 10-5"/>
                                 <path d="M2 12l10 5 10-5"/>
-                                <path d="M12 22V7"/>
+                                <path d="M2 17l10 5 10-5"/>
                             </svg>
                         </span>
-                        <p class="font-extrabold text-lg text-gray-900">Premium Materials</p>
-                        <p class="text-sm text-gray-500 mt-1">Metal, wood-look, matte & glossy finishes.</p>
-                    </div>
-                    <!-- Value Prop 3: QR and .vcf backup (New SVG) --><div class="feature-badge text-center">
-                        <span class="mb-3 mx-auto flex justify-center items-center h-16 w-16">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                                <line x1="9" y1="15" x2="15" y2="9"/>
-                                <line x1="15" y1="15" x2="9" y2="9"/>
-                                <polyline points="12 18 12 21 9 21"/>
-                                <path d="M16 18h2a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2"/>
+                        <h3 class="text-lg font-semibold text-slate-900">Materials that impress</h3>
+                        <p class="text-sm text-slate-500">Choose from matte, metal, translucent, recycled and luxe foiled finishes.</p>
+                    </article>
+
+                    <article class="feature-badge fade-in">
+                        <span class="badge-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                <path d="M7 7h0"/>
+                                <path d="M17 7h0"/>
+                                <path d="M7 17h0"/>
+                                <path d="M17 17h0"/>
+                                <path d="M10 10h4v4h-4z"/>
                             </svg>
                         </span>
-                        <p class="font-extrabold text-lg text-gray-900">QR & .vcf Backup</p>
-                        <p class="text-sm text-gray-500 mt-1">Included with every card purchase.</p>
-                    </div>
-                    <!-- Value Prop 4: Secure & Reprogrammable (New SVG) --><div class="feature-badge text-center">
-                        <span class="mb-3 mx-auto flex justify-center items-center h-16 w-16">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <h3 class="text-lg font-semibold text-slate-900">QR & .vcf backup</h3>
+                        <p class="text-sm text-slate-500">Every card prints with dynamic QR and downloadable .vcf as standard.</p>
+                    </article>
+
+                    <article class="feature-badge fade-in">
+                        <span class="badge-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2"/>
                                 <path d="M7 11V7a5 5 0 0 1 9.9-1.2"/>
-                                <path d="M12 15v4"/>
-                                <path d="M12 19a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
                             </svg>
                         </span>
-                        <p class="font-extrabold text-lg text-gray-900">Secure & Rewritable</p>
-                        <p class="text-sm text-gray-500 mt-1">Update your info anytime.</p>
-                    </div>
-                    <!-- Value Prop 5: Bulk & Corporate Orders (New SVG) --><div class="feature-badge text-center sm:col-span-2 lg:col-span-1">
-                        <span class="mb-3 mx-auto flex justify-center items-center h-16 w-16">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-dark-bg);">
+                        <h3 class="text-lg font-semibold text-slate-900">Secure + rewritable</h3>
+                        <p class="text-sm text-slate-500">Update any time through your dashboard. Permissions stay encrypted.</p>
+                    </article>
+
+                    <article class="feature-badge fade-in">
+                        <span class="badge-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
                                 <circle cx="8.5" cy="7" r="4"/>
                                 <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                                <circle cx="16" cy="17" r="5"/>
                             </svg>
                         </span>
-                        <p class="font-extrabold text-lg text-gray-900">Corporate Solutions</p>
-                        <p class="text-sm text-gray-500 mt-1">Branded onboarding solutions.</p>
-                    </div>
+                        <h3 class="text-lg font-semibold text-slate-900">Team-ready admin</h3>
+                        <p class="text-sm text-slate-500">Bulk provisioning, approvals and role-based access built in.</p>
+                    </article>
+
+                    <article class="feature-badge fade-in">
+                        <span class="badge-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 8v4l3 3"/>
+                                <circle cx="12" cy="12" r="9"/>
+                            </svg>
+                        </span>
+                        <h3 class="text-lg font-semibold text-slate-900">Analytics you need</h3>
+                        <p class="text-sm text-slate-500">Track taps, locations and conversions to optimise your outreach.</p>
+                    </article>
+
+                    <article class="feature-badge fade-in">
+                        <span class="badge-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M7 21v-2a4 4 0 0 1 3-3.87"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </span>
+                        <h3 class="text-lg font-semibold text-slate-900">Personalised landing</h3>
+                        <p class="text-sm text-slate-500">Deliver branded microsites for each teammate without development.</p>
+                    </article>
+
+                    <article class="feature-badge fade-in">
+                        <span class="badge-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M4 21v-2a4 4 0 0 1 3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                <path d="M8 3.13a4 4 0 0 0 0 7.75"/>
+                            </svg>
+                        </span>
+                        <h3 class="text-lg font-semibold text-slate-900">White-label ready</h3>
+                        <p class="text-sm text-slate-500">Embed your brand story and domain while we manage fulfilment.</p>
+                    </article>
                 </div>
             </div>
         </section>
 
-        <!-- Product Overview - ILLUSTRATIONS INTEGRATED --><section id="shop" class="py-20 sm:py-28 bg-secondary-light">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 mb-12 sm:mb-20">Find Your Perfect Card</h2>
+        <section id="shop" class="section-spacing relative">
+            <div class="page-shell space-y-12">
+                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                    <div class="space-y-4 max-w-2xl">
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Find your perfect card</h2>
+                        <p class="text-base sm:text-lg text-slate-600">From single founders to scaling teams, choose a Sparsh card that feels like your brand. Each order includes tap, QR and .vcf support with lifetime rewrites.</p>
+                    </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-500">
+                        <span class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 px-4 py-2">
+                            <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+                            Free design consultation included
+                        </span>
+                    </div>
+                </div>
 
-                <!-- Product Cards --><div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                    <!-- Product 1: Classic --><div class="bg-white p-6 sm:p-8 border border-gray-100 rounded-3xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:translate-y-[-4px]">
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Classic NFC Card</h3>
-                        <p class="text-gray-500 mb-6 sm:mb-8 font-medium text-sm sm:text-base">Minimal • Reliable • Affordable</p>
-                        <!-- Classic Card Illustration -->
-                        <div class="w-full mb-6 sm:mb-8 rounded-xl border border-gray-200 shadow-md bg-gradient-to-br from-#FFD6FF to-#E7C6FF p-6 sm:p-8" style="background: linear-gradient(135deg, #FFD6FF, #E7C6FF);">
-                            <svg class="w-full h-auto" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="30" y="30" width="240" height="140" rx="8" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                <rect x="50" y="50" width="200" height="25" rx="4" fill="#C8B6FF" opacity="0.3"/>
-                                <rect x="50" y="85" width="150" height="15" rx="3" fill="#E7C6FF" opacity="0.5"/>
-                                <rect x="50" y="110" width="180" height="15" rx="3" fill="#E7C6FF" opacity="0.5"/>
-                                <circle cx="250" cy="100" r="20" fill="#B8C0FF" opacity="0.6"/>
-                                <path d="M245 100 L248 103 L255 96" stroke="#6b4c9e" stroke-width="2" stroke-linecap="round"/>
+                <div class="grid gap-7 lg:grid-cols-3">
+                    <article class="glass-card p-8 flex flex-col gap-6 fade-in">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Starter</p>
+                                <h3 class="mt-2 text-2xl font-bold text-slate-900">Classic NFC</h3>
+                                <p class="mt-2 text-sm text-slate-500">Minimal, durable and ready in 72 hours.</p>
+                            </div>
+                            <span class="inline-flex items-center rounded-full border border-slate-200/70 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-600">Best value</span>
+                        </div>
+                        <div class="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-br from-indigo-50 via-white to-indigo-100 p-6">
+                            <div class="absolute -top-12 -right-8 h-32 w-32 rounded-full bg-indigo-200/60 blur-3xl"></div>
+                            <div class="relative">
+                                <svg class="w-full h-auto" viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="30" y="30" width="240" height="120" rx="14" fill="#ffffff" stroke="#c7d2fe" stroke-width="3"/>
+                                    <rect x="60" y="52" width="180" height="20" rx="6" fill="#e0e7ff"/>
+                                    <rect x="60" y="84" width="140" height="12" rx="4" fill="#e0e7ff" opacity="0.7"/>
+                                    <rect x="60" y="106" width="110" height="12" rx="4" fill="#e0e7ff" opacity="0.5"/>
+                                    <circle cx="230" cy="90" r="16" fill="#a5b4fc" opacity="0.6"/>
                             </svg>
                         </div>
-                        <p class="text-gray-600 mb-8">
-                            The Classic is perfect for professionals who want an elegant, no-fuss NFC card. Slim, durable, and water-resistant — programmed to share your vCard, website, socials, or a custom landing page.
-                        </p>
-                        <ul class="text-sm text-gray-500 space-y-2 mb-10 pl-4 list-disc list-outside">
-                            <li>ISO card size</li>
-                            <li>Passive NFC tag (Type 2/4)</li>
-                            <li>Rewritable & works with iOS/Android</li>
+                        </div>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> Matte or gloss finish with custom print</li>
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> NFC + QR + .vcf out of the box</li>
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> Unlimited rewrites through dashboard</li>
                         </ul>
-                        <a href="classic card.html" class="cta-primary w-full text-center text-base">Customize & Buy</a>
+                        <div class="mt-auto">
+                            <a href="classic card.html" class="cta-primary w-full justify-center">Customise & buy</a>
                     </div>
+                    </article>
 
-                    <!-- Product 2: Premium (The Highlight) --><div class="bg-white p-8 sm:p-10 rounded-3xl shadow-3xl ring-4 ring-premium-highlight hover:shadow-4xl transition duration-500 md:scale-[1.07] relative z-10 border-2 border-primary" style="border-color: var(--color-primary);">
-                         <span class="absolute top-0 right-0 text-white text-xs font-bold uppercase py-1 px-3 rounded-tr-3xl rounded-bl-xl tracking-widest" style="background-color: var(--color-primary);">Top Seller</span>
-                        <h3 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Premium NFC Card</h3>
-                        <p class="text-primary mb-6 sm:mb-8 font-bold tracking-wider text-base sm:text-lg" style="color: var(--color-primary);">Luxury finish, lasting impression</p>
-                        <!-- Premium Card Illustration -->
-                        <div class="w-full mb-6 sm:mb-8 rounded-xl border-4 border-gold-accent/50 shadow-lg bg-gradient-to-br p-6 sm:p-8" style="background: linear-gradient(135deg, #6b4c9e, #C8B6FF); border-color: var(--color-primary);">
-                            <svg class="w-full h-auto" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="25" y="25" width="250" height="150" rx="10" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="3"/>
-                                <rect x="45" y="45" width="210" height="30" rx="5" fill="#6b4c9e" opacity="0.2"/>
-                                <rect x="45" y="85" width="180" height="18" rx="4" fill="#C8B6FF" opacity="0.3"/>
-                                <rect x="45" y="115" width="200" height="18" rx="4" fill="#C8B6FF" opacity="0.3"/>
-                                <circle cx="240" cy="100" r="25" fill="#FFD6FF" opacity="0.8"/>
-                                <path d="M232 100 L238 106 L248 96" stroke="#6b4c9e" stroke-width="3" stroke-linecap="round"/>
-                                <!-- Engraving lines -->
-                                <path d="M45 145 L255 145" stroke="#E7C6FF" stroke-width="2" stroke-dasharray="3,3"/>
+                    <article class="glass-card p-8 flex flex-col gap-6 fade-in border border-indigo-200/70 shadow-xl shadow-indigo-500/20 relative overflow-hidden">
+                        <div class="absolute inset-0 rounded-[1.75rem] bg-gradient-to-br from-indigo-500/10 via-purple-500/05 to-transparent pointer-events-none"></div>
+                        <div class="flex items-start justify-between relative">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-indigo-500">Flagship</p>
+                                <h3 class="mt-2 text-3xl font-bold text-slate-900">Premium NFC</h3>
+                                <p class="mt-2 text-sm text-slate-500">Metal, brushed steel, wood and glass variants.</p>
+                            </div>
+                            <span class="inline-flex items-center rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-3 py-1 text-xs font-semibold text-white">Top seller</span>
+                        </div>
+                        <div class="relative overflow-hidden rounded-2xl border border-indigo-200/80 bg-gradient-to-br from-indigo-500/20 via-indigo-400/10 to-white/70 p-6">
+                            <div class="absolute -top-16 -right-10 h-32 w-32 rounded-full bg-white/40 blur-2xl"></div>
+                            <div class="relative">
+                                <svg class="w-full h-auto" viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="28" y="28" width="244" height="124" rx="18" fill="#f8fafc" stroke="#6366f1" stroke-width="2.5"/>
+                                    <rect x="54" y="54" width="192" height="24" rx="8" fill="#6366f1" opacity="0.3"/>
+                                    <rect x="54" y="90" width="160" height="16" rx="6" fill="#6366f1" opacity="0.2"/>
+                                    <rect x="54" y="116" width="130" height="16" rx="6" fill="#6366f1" opacity="0.2"/>
+                                    <circle cx="232" cy="90" r="22" fill="#818cf8" opacity="0.7"/>
+                                    <path d="M220 90l8 8 16-16" stroke="#4f46e5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
-                        <p class="text-gray-700 mb-8">
-                            The Premium edition uses upgraded materials (metal-backed or high-grade laminate) and offers premium engraving/foil-print options. Ideal for founders, creatives, and executives who want a **memorable first impression.**
-                        </p>
-                        <ul class="text-sm text-gray-600 space-y-2 mb-10 pl-4 list-disc list-outside">
-                            <li>Enhanced tag durability</li>
-                            <li>Refined finishes & laser engraving</li>
-                            <li>Anti-scratch coating</li>
-                            <li>Gift-ready packaging included</li>
+                        </div>
+                        <ul class="space-y-3 text-sm text-slate-600 relative">
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> Metal, frosted acrylic, bamboo & satin finishes</li>
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> Laser engraving, spot UV & foil stamping options</li>
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> Presentation box + velvet sleeve included</li>
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> Concierge onboarding for brand assets</li>
                         </ul>
-                        <a href="premiumcard.html" class="cta-secondary w-full text-center text-base" style="color: var(--color-primary); border-color: var(--color-primary);">View Options</a>
+                        <div class="mt-auto relative flex gap-3">
+                            <a href="premiumcard.html" class="cta-primary w-full justify-center">Explore finishes</a>
+                            <a href="premiumcard.html#gallery" class="cta-secondary w-full justify-center">View gallery</a>
                     </div>
+                    </article>
 
-                    <!-- Product 3: Corporate --><div class="bg-white p-6 sm:p-8 border border-gray-100 rounded-3xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:translate-y-[-4px]">
-                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Corporate & Team Packs</h3>
-                        <p class="text-gray-500 mb-6 sm:mb-8 font-medium text-sm sm:text-base">Manage • Scale • Impress</p>
-                        <!-- Corporate Cards Illustration -->
-                        <div class="w-full mb-6 sm:mb-8 rounded-xl border border-gray-200 shadow-md bg-gradient-to-br p-6 sm:p-8" style="background: linear-gradient(135deg, #BBD0FF, #E7C6FF);">
-                            <svg class="w-full h-auto" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <!-- Stacked Cards -->
-                                <rect x="40" y="50" width="220" height="130" rx="8" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2" opacity="0.9"/>
-                                <rect x="50" y="60" width="220" height="130" rx="8" fill="#FFFFFF" stroke="#B8C0FF" stroke-width="2" opacity="0.95"/>
-                                <rect x="60" y="70" width="220" height="130" rx="8" fill="#FFFFFF" stroke="#6b4c9e" stroke-width="2"/>
-                                <rect x="80" y="90" width="180" height="20" rx="4" fill="#C8B6FF" opacity="0.3"/>
-                                <rect x="80" y="120" width="150" height="15" rx="3" fill="#E7C6FF" opacity="0.4"/>
-                                <rect x="80" y="145" width="170" height="15" rx="3" fill="#E7C6FF" opacity="0.4"/>
-                                <circle cx="230" cy="110" r="15" fill="#B8C0FF" opacity="0.6"/>
+                    <article class="glass-card p-8 flex flex-col gap-6 fade-in">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Scale</p>
+                                <h3 class="mt-2 text-2xl font-bold text-slate-900">Team & corporate</h3>
+                                <p class="mt-2 text-sm text-slate-500">Centralised control for distributed teams.</p>
+                            </div>
+                            <span class="inline-flex items-center rounded-full border border-slate-200/70 bg-white/80 px-3 py-1 text-xs font-semibold text-slate-600">Includes admin suite</span>
+                        </div>
+                        <div class="relative overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-br from-indigo-100/70 via-white to-indigo-50 p-6">
+                            <div class="relative">
+                                <svg class="w-full h-auto" viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="46" y="44" width="208" height="112" rx="16" fill="#ffffff" stroke="#cbd5f5" stroke-width="2"/>
+                                    <rect x="60" y="68" width="180" height="18" rx="6" fill="#cbd5f5" opacity="0.6"/>
+                                    <rect x="60" y="98" width="150" height="12" rx="4" fill="#cbd5f5" opacity="0.4"/>
+                                    <rect x="60" y="118" width="134" height="12" rx="4" fill="#cbd5f5" opacity="0.35"/>
+                                    <circle cx="220" cy="92" r="18" fill="#94a3ff" opacity="0.6"/>
+                                    <circle cx="240" cy="116" r="10" fill="#6366f1" opacity="0.4"/>
+                                    <circle cx="206" cy="120" r="12" fill="#818cf8" opacity="0.35"/>
                             </svg>
                         </div>
-                        <p class="text-gray-600 mb-8">
-                            Bulk ordering with custom branding, onboarding assistance, and a simple admin workflow to push updated URLs or landing pages to a fleet of cards. Includes team analytics and dedicated support.
-                        </p>
-                        <ul class="text-sm text-gray-500 space-y-2 mb-10 pl-4 list-disc list-outside">
-                            <li>Volume pricing & white-label</li>
-                            <li>Centralized reprogramming</li>
-                            <li>Personalized landing pages</li>
+                        </div>
+                        <ul class="space-y-3 text-sm text-slate-600">
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> Volume pricing with branded fulfilment</li>
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> Admin portal for updates, HRIS sync & SSO</li>
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> Usage analytics, GDPR compliant hosting</li>
+                            <li class="flex items-start gap-2"><span class="text-indigo-500 mt-1">•</span> Dedicated account manager & support</li>
                         </ul>
-                        <a href="corporatepack.html" class="cta-primary w-full text-center text-base bg-gray-700 hover:bg-gray-800">Request a Quote</a>
+                        <div class="mt-auto flex gap-3">
+                            <a href="corporatepack.html" class="cta-primary w-full justify-center">Request a quote</a>
+                            <a href="corporatepack.html#demo" class="cta-secondary w-full justify-center">Book demo</a>
                     </div>
+                    </article>
                 </div>
             </div>
         </section>
         
-              <!-- Core Features -->
-              <section id="features" class="py-20 sm:py-24" style="background-color: transparent;">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 mb-12 sm:mb-16">The Sparsh Advantage</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-6 text-center">
-                    <div class="p-4 rounded-xl shadow-md" style="background-color: var(--color-light-bg);">
-                        <p class="text-xl mb-1" style="color: var(--color-primary);">📞</p>
-                        <p class="text-sm font-semibold">Tap-to-share vCard</p>
+        <section id="features" class="section-spacing relative">
+            <div class="page-shell space-y-12">
+                <div class="max-w-2xl mx-auto text-center space-y-4">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Everything modern teams expect</h2>
+                    <p class="text-base sm:text-lg text-slate-600">Deliver an on-brand experience from the first tap. Sparsh weaves hardware, software and support into a single workflow so you can focus on conversations.</p>
                     </div>
-                    <div class="p-4 rounded-xl shadow-md" style="background-color: var(--color-light-bg);">
-                        <p class="text-xl mb-1" style="color: var(--color-primary);">🔗</p>
-                        <p class="text-sm font-semibold">Portfolio & Link Sharing</p>
+
+                <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                    <div class="rounded-2xl border border-slate-200/70 bg-white/80 p-6 shadow-sm hover:shadow-xl transition-shadow duration-200">
+                        <div class="flex items-start gap-4">
+                            <span class="badge-icon shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6H4z"/><path d="M9 14h6"/><path d="M12 17v-3"/><path d="M4 10h16v10H4z"/></svg>
+                            </span>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900">Tap + scan dual-mode</h3>
+                                <p class="mt-1 text-sm text-slate-500">Share via NFC, QR, SMS fallback or downloadable .vcf so every meeting lands.</p>
                     </div>
-                    <div class="p-4 rounded-xl shadow-md" style="background-color: var(--color-light-bg);">
-                        <p class="text-xl mb-1" style="color: var(--color-primary);">🔄</p>
-                        <p class="text-sm font-semibold">Rewritable Tag</p>
                     </div>
-                    <div class="p-4 rounded-xl shadow-md" style="background-color: var(--color-light-bg);">
-                        <p class="text-xl mb-1" style="color: var(--color-primary);">🔲</p>
-                        <p class="text-sm font-semibold">Built-in QR Fallback</p>
                     </div>
-                    <div class="p-4 rounded-xl shadow-md" style="background-color: var(--color-light-bg);">
-                        <p class="text-xl mb-1" style="color: var(--color-primary);">⚙️</p>
-                        <p class="text-sm font-semibold">Privacy Controls</p>
+
+                    <div class="rounded-2xl border border-slate-200/70 bg-white/80 p-6 shadow-sm hover:shadow-xl transition-shadow duration-200">
+                        <div class="flex items-start gap-4">
+                            <span class="badge-icon shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6V4"/><path d="M6 6V4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v2"/><path d="M8 2v2"/><path d="M3 10h18"/></svg>
+                            </span>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900">No-code landing pages</h3>
+                                <p class="mt-1 text-sm text-slate-500">Spin up branded micro-sites per teammate with bios, links, lead forms and calendar embeds.</p>
                     </div>
-                    <div class="p-4 rounded-xl shadow-md" style="background-color: var(--color-light-bg);">
-                        <p class="text-xl mb-1" style="color: var(--color-primary);">🛡️</p>
-                        <p class="text-sm font-semibold">Durable Finishes</p>
                     </div>
-                    <div class="p-4 rounded-xl shadow-md" style="background-color: var(--color-light-bg);">
-                        <p class="text-xl mb-1" style="color: var(--color-primary);">📱</p>
-                        <p class="text-sm font-semibold">iOS/Android Compatible</p>
                     </div>
+
+                    <div class="rounded-2xl border border-slate-200/70 bg-white/80 p-6 shadow-sm hover:shadow-xl transition-shadow duration-200">
+                        <div class="flex items-start gap-4">
+                            <span class="badge-icon shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h18v13H3z"/><path d="M8 21h8"/><path d="M10 17v4"/><path d="M14 17v4"/></svg>
+                            </span>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900">Enterprise-grade materials</h3>
+                                <p class="mt-1 text-sm text-slate-500">Scratch-proof coatings, metal cores and waterproof laminates engineered for daily use.</p>
                 </div>
             </div>
-        </section>
+                    </div>
 
-        <!-- How It Works (3-step section) - ILLUSTRATIONS INTEGRATED --><section id="how-it-works" class="py-20 sm:py-28 bg-secondary-light">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 mb-16 sm:mb-20">Effortless Connections in 3 Steps</h2>
-                <div class="space-y-12 sm:space-y-16">
-                    <!-- Step 1 --><div class="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-8">
-                        <div class="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center rounded-full text-white font-extrabold text-lg sm:text-xl shadow-lg" style="background-color: var(--color-primary);">
-                            1
+                    <div class="rounded-2xl border border-slate-200/70 bg-white/80 p-6 shadow-sm hover:shadow-xl transition-shadow duration-200">
+                        <div class="flex items-start gap-4">
+                            <span class="badge-icon shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12a5 5 0 0 1 5 5v5H7v-5a5 5 0 0 1 5-5z"/><path d="M12 12a3 3 0 0 0 3-3V7a3 3 0 0 0-6 0v2a3 3 0 0 0 3 3z"/></svg>
+                            </span>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900">Privacy-first controls</h3>
+                                <p class="mt-1 text-sm text-slate-500">Granular permissions, expiring links and audit logs ensure compliance from day one.</p>
                         </div>
-                        <div class="flex-grow">
-                            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Design & Order</h3>
-                            <p class="text-base sm:text-lg text-gray-600">Choose a premium finish and personalize the landing page or vCard details through our easy-to-use customizer. We handle the NFC programming.</p>
                         </div>
-                         <!-- Design Illustration -->
-                         <div class="mt-4 md:mt-0 md:ml-auto hidden sm:block">
-                             <svg class="w-28 h-28 sm:w-32 sm:h-32" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                 <rect width="120" height="120" rx="20" fill="#FFD6FF"/>
-                                 <rect x="20" y="30" width="80" height="60" rx="8" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                 <rect x="30" y="40" width="60" height="12" rx="3" fill="#C8B6FF" opacity="0.4"/>
-                                 <rect x="30" y="58" width="50" height="10" rx="2" fill="#E7C6FF" opacity="0.5"/>
-                                 <rect x="30" y="74" width="45" height="10" rx="2" fill="#E7C6FF" opacity="0.5"/>
-                                 <circle cx="85" cy="75" r="8" fill="#B8C0FF"/>
-                                 <path d="M80 75 L83 78 L90 71" stroke="#6b4c9e" stroke-width="2" stroke-linecap="round"/>
-                             </svg>
                          </div>
+
+                    <div class="rounded-2xl border border-slate-200/70 bg-white/80 p-6 shadow-sm hover:shadow-xl transition-shadow duration-200">
+                        <div class="flex items-start gap-4">
+                            <span class="badge-icon shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M19 21V3H3"/><path d="M15 15l4 4"/><path d="M15 19h4"/></svg>
+                            </span>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900">Live analytics</h3>
+                                <p class="mt-1 text-sm text-slate-500">Monitor tap hotspots, QR scans and conversions to steer your outreach.</p>
                     </div>
-                    <!-- Step 2 --><div class="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-8">
-                        <div class="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center rounded-full text-white font-extrabold text-lg sm:text-xl shadow-lg" style="background-color: var(--color-primary);">
-                            2
                         </div>
-                        <div class="flex-grow">
-                            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Tap & Share</h3>
-                            <p class="text-base sm:text-lg text-gray-600">Tap the card directly to a smartphone's NFC reader. Your contact details and links pop up instantly — no friction, no app download. The QR code on the card serves as a seamless backup.</p>
                         </div>
-                        <!-- Tap Illustration -->
-                        <div class="mt-4 md:mt-0 md:ml-auto hidden sm:block">
-                            <svg class="w-28 h-28 sm:w-32 sm:h-32" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="120" height="120" rx="20" fill="#E7C6FF"/>
-                                <!-- Card -->
-                                <rect x="25" y="20" width="50" height="35" rx="5" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                <circle cx="50" cy="37" r="8" fill="#B8C0FF"/>
-                                <!-- Phone -->
-                                <rect x="35" y="55" width="40" height="65" rx="8" fill="#1e2025" stroke="#6b4c9e" stroke-width="2"/>
-                                <rect x="38" y="60" width="34" height="50" rx="5" fill="#FFFFFF"/>
-                                <!-- Connection Waves -->
-                                <path d="M50 55 Q45 50 40 55" stroke="#C8B6FF" stroke-width="3" fill="none" stroke-dasharray="3,3"/>
-                                <circle cx="42" cy="55" r="3" fill="#6b4c9e" opacity="0.7">
-                                    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.5s" repeatCount="indefinite"/>
-                                </circle>
-                            </svg>
+
+                    <div class="rounded-2xl border border-slate-200/70 bg-white/80 p-6 shadow-sm hover:shadow-xl transition-shadow duration-200">
+                        <div class="flex items-start gap-4">
+                            <span class="badge-icon shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M12 4h9"/><path d="M4 9h16"/><path d="M4 15h16"/><path d="M10 4v16"/></svg>
+                            </span>
+                            <div>
+                                <h3 class="text-lg font-semibold text-slate-900">Team automation</h3>
+                                <p class="mt-1 text-sm text-slate-500">Bulk updates, HRIS sync and role-based access streamline large deployments.</p>
                         </div>
                     </div>
-                    <!-- Step 3 --><div class="flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-8">
-                        <div class="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center rounded-full text-white font-extrabold text-lg sm:text-xl shadow-lg" style="background-color: var(--color-primary);">
-                            3
                         </div>
-                        <div class="flex-grow">
-                            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Update Anytime</h3>
-                            <p class="text-base sm:text-lg text-gray-600">Your information changes? No problem. Use our secure web tool to update your links or contact info immediately. The card remains the same, but your details are always current.</p>
                         </div>
-                        <!-- Update Illustration -->
-                        <div class="mt-4 md:mt-0 md:ml-auto hidden sm:block">
-                            <svg class="w-28 h-28 sm:w-32 sm:h-32" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="120" height="120" rx="20" fill="#FFD6FF"/>
-                                <!-- Browser Window -->
-                                <rect x="15" y="20" width="90" height="80" rx="6" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                <rect x="20" y="25" width="80" height="8" rx="2" fill="#E7C6FF"/>
-                                <rect x="20" y="38" width="70" height="10" rx="2" fill="#C8B6FF" opacity="0.3"/>
-                                <rect x="20" y="53" width="60" height="8" rx="2" fill="#E7C6FF" opacity="0.4"/>
-                                <rect x="20" y="68" width="65" height="8" rx="2" fill="#E7C6FF" opacity="0.4"/>
-                                <!-- Refresh Arrow -->
-                                <path d="M75 50 L85 45 L85 55 Z" fill="#6b4c9e"/>
-                                <circle cx="80" cy="50" r="8" fill="none" stroke="#6b4c9e" stroke-width="2"/>
-                            </svg>
                         </div>
-                    </div>
-                    <div class="text-center pt-8 sm:pt-10">
-                         <a href="#" class="cta-secondary text-base">Try Demo</a>
-                    </div>
-                </div>
-            </div>
         </section>
 
-        <!-- About Us & Trust - ILLUSTRATIONS INTEGRATED -->
-        <section id="about" class="py-20 sm:py-28" style="background-color: transparent;">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-                    <div class="mb-12 lg:mb-0">
-                        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6">Our Mission</h2>
-                        <p class="text-lg text-gray-600 leading-relaxed">
-                            At **Sparsh NFC**, we blend thoughtful design with smart technology. Founded to replace wasteful paper cards and to help professionals make meaningful connections faster, we craft premium, reprogrammable NFC cards that are beautiful, functional, and built to last. We’re proudly based in India and ship nationwide.
-                        </p>
-                         <!-- Mission Illustration -->
-                         <div class="mt-8 mx-auto lg:mx-0 hidden md:block max-w-xs">
-                             <svg class="w-full h-auto" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                 <rect width="300" height="200" rx="16" fill="#FFD6FF"/>
-                                 <!-- Team Members -->
-                                 <circle cx="80" cy="80" r="25" fill="#C8B6FF" stroke="#6b4c9e" stroke-width="2"/>
-                                 <circle cx="150" cy="80" r="25" fill="#E7C6FF" stroke="#6b4c9e" stroke-width="2"/>
-                                 <circle cx="220" cy="80" r="25" fill="#B8C0FF" stroke="#6b4c9e" stroke-width="2"/>
-                                 <!-- Connecting Lines -->
-                                 <path d="M105 80 L125 80" stroke="#6b4c9e" stroke-width="2"/>
-                                 <path d="M175 80 L195 80" stroke="#6b4c9e" stroke-width="2"/>
-                                 <!-- NFC Cards -->
-                                 <rect x="60" y="130" width="50" height="35" rx="4" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                 <rect x="130" y="130" width="50" height="35" rx="4" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                 <rect x="200" y="130" width="50" height="35" rx="4" fill="#FFFFFF" stroke="#C8B6FF" stroke-width="2"/>
-                                 <circle cx="85" cy="147" r="8" fill="#B8C0FF"/>
-                             </svg>
+        <section id="how-it-works" class="section-spacing relative overflow-hidden">
+            <div class="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-indigo-100/40 via-white to-transparent pointer-events-none"></div>
+            <div class="page-shell space-y-12 relative">
+                <div class="max-w-3xl mx-auto text-center space-y-4">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Effortless in three steps</h2>
+                    <p class="text-base sm:text-lg text-slate-600">We handle the heavy lifting — you focus on the handshake. From custom design to launch day, going live with Sparsh takes minutes.</p>
+                    </div>
+
+                <div class="grid gap-6 lg:grid-cols-3">
+                    <div class="surface-card p-8 flex flex-col gap-4 fade-in">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 text-lg font-semibold text-white shadow-md">01</span>
+                            <span class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Create</span>
+                    </div>
+                        <h3 class="text-xl font-semibold text-slate-900">Design & personalise</h3>
+                        <p class="text-sm text-slate-500">Pick a finish, upload your brand assets or use our templates. Define links, CTA buttons and lead forms in minutes.</p>
+                        <ul class="text-sm text-slate-500 space-y-2">
+                            <li>• Collaborative proofs with your team</li>
+                            <li>• Import LinkedIn, Calendly, WhatsApp & more</li>
+                        </ul>
+                </div>
+
+                    <div class="surface-card p-8 flex flex-col gap-4 fade-in">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 text-lg font-semibold text-white shadow-md">02</span>
+                            <span class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Launch</span>
+            </div>
+                        <h3 class="text-xl font-semibold text-slate-900">Tap, scan, share</h3>
+                        <p class="text-sm text-slate-500">Ship within 5 business days. Tap any phone with NFC or let contacts scan the QR. Smart fallback ensures no one is left out.</p>
+                        <ul class="text-sm text-slate-500 space-y-2">
+                            <li>• Works instantly with iOS & Android</li>
+                            <li>• Optional short links for email signatures</li>
+                        </ul>
+                    </div>
+
+                    <div class="surface-card p-8 flex flex-col gap-4 fade-in">
+                        <div class="flex items-center justify-between">
+                            <span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 text-lg font-semibold text-white shadow-md">03</span>
+                            <span class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Evolve</span>
                          </div>
+                        <h3 class="text-xl font-semibold text-slate-900">Update & measure</h3>
+                        <p class="text-sm text-slate-500">Edit links, upload new media or trigger campaigns anytime. Dashboard analytics show taps, top links and conversion funnels.</p>
+                        <ul class="text-sm text-slate-500 space-y-2">
+                            <li>• Bulk updates with HRIS or CSV import</li>
+                            <li>• Export insights to CRM or Slack</li>
+                        </ul>
                     </div>
-                    <div>
-                        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6">Trusted by Professionals</h2>
-                        <div class="space-y-4">
-                            <div class="flex items-center space-x-3 text-lg p-4 rounded-xl shadow-md" style="color: var(--color-dark-text); background-color: var(--color-light-bg);">
-                                <span class="text-green-500 font-bold text-xl">✓</span>
-                                <p>Trusted by **2,000+ professionals and startups**</p>
                             </div>
-                            <div class="flex items-center space-x-3 text-lg p-4 rounded-xl shadow-md" style="color: var(--color-dark-text); background-color: var(--color-light-bg);">
-                                <span class="text-green-500 font-bold text-xl">✓</span>
-                                <p>**30-day satisfaction guarantee**</p>
-                            </div>
-                            <div class="flex items-center space-x-3 text-lg p-4 rounded-xl shadow-md" style="color: var(--color-dark-text); background-color: var(--color-light-bg);">
-                                <span class="text-green-500 font-bold text-xl">✓</span>
-                                <p>Secure, GDPR-aligned data handling for landing pages</p>
-                            </div>
-                            <div class="flex items-center space-x-3 text-lg p-4 rounded-xl shadow-md" style="color: var(--color-dark-text); background-color: var(--color-light-bg);">
-                                <span class="text-green-500 font-bold text-xl">✓</span>
-                                <p>Fast dispatch for custom orders</p>
-                            </div>
-                        </div>
-                    </div>
+
+                <div class="text-center">
+                    <a href="premiumcard.html#demo" class="cta-secondary inline-flex items-center gap-2">
+                        Try interactive demo
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- FAQ Section (Simple Accordion Style) --><section id="faq" class="py-20 sm:py-28 bg-secondary-light">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-center text-gray-900 mb-12 sm:mb-16">Frequently Asked Questions</h2>
+        <section id="about" class="section-spacing">
+            <div class="page-shell grid gap-12 lg:grid-cols-[1.05fr,1fr] items-start">
+                <div class="space-y-6">
+                    <span class="hero-badge">Our mission</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Design-led NFC that feels personal</h2>
+                    <p class="text-base sm:text-lg text-slate-600 leading-relaxed">
+                        Sparsh NFC was built to replace wasteful paper cards with living, breathing brand experiences. From our studio in India we engineer handcrafted cards, robust NFC hardware and a software layer that lets you refresh your story whenever you need.
+                    </p>
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <div class="rounded-2xl border border-slate-200/70 bg-white/80 p-5 shadow-sm">
+                            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Sustainability</p>
+                            <p class="mt-2 text-slate-900 font-semibold">1 card replaces ~500 paper prints yearly</p>
+                         </div>
+                        <div class="rounded-2xl border border-slate-200/70 bg-white/80 p-5 shadow-sm">
+                            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Support</p>
+                            <p class="mt-2 text-slate-900 font-semibold">Dedicated concierge & design QA on every order</p>
+                    </div>
+                            </div>
+                            </div>
+
+                <div class="surface-card p-8 space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-semibold text-slate-900">Trusted by professionals</h3>
+                        <span class="inline-flex items-center gap-2 text-sm font-semibold text-emerald-500">
+                            <span class="h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Live satisfaction score 4.9/5
+                        </span>
+                            </div>
+                    <ul class="space-y-4 text-sm text-slate-500">
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 text-emerald-500">✓</span>
+                            <p><strong>2,000+ founders & teams</strong> onboarded across India, SEA & the Middle East.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 text-emerald-500">✓</span>
+                            <p><strong>GDPR-aligned infrastructure</strong> with role-based access, ISO 27001 hosting and data residency options.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 text-emerald-500">✓</span>
+                            <p><strong>30-day delight guarantee</strong> — we iterate designs until you’re ready to print.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 text-emerald-500">✓</span>
+                            <p><strong>Rapid production network</strong> with priority fulfilment for launches and events.</p>
+                        </li>
+                    </ul>
+                            </div>
+                        </div>
+        </section>
+
+        <section id="testimonials" class="section-spacing">
+            <div class="page-shell space-y-10">
+                <div class="max-w-3xl mx-auto text-center space-y-4">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Loved by teams who network for a living</h2>
+                    <p class="text-base sm:text-lg text-slate-600">From VC partners to creative agencies, Sparsh becomes the go-to intro tool. Here’s what recent customers say.</p>
+                    </div>
+
+                <div class="grid gap-6 lg:grid-cols-3">
+                    <article class="testimonial-card fade-in">
+                        <p class="text-sm sm:text-base text-slate-600 leading-relaxed">“Our sales team stopped carrying stacks of brochures. One tap shares product decks, rate cards and our Calendly link. Follow-ups feel instant.”</p>
+                        <footer>
+                            <div class="avatar">AR</div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">Aditi Rao</p>
+                                <p class="text-xs uppercase tracking-[0.25em] text-slate-400">Growth Lead · SaaS Unicorn</p>
+                            </div>
+                        </footer>
+                    </article>
+
+                    <article class="testimonial-card fade-in">
+                        <p class="text-sm sm:text-base text-slate-600 leading-relaxed">“We issued 350 cards for our campus ambassadors. Bulk provisioning took less than an hour and analytics show which cities respond fastest.”</p>
+                        <footer>
+                            <div class="avatar">NK</div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">Nikhil Kapoor</p>
+                                <p class="text-xs uppercase tracking-[0.25em] text-slate-400">Program Manager · EdTech Collective</p>
+                            </div>
+                        </footer>
+                    </article>
+
+                    <article class="testimonial-card fade-in">
+                        <p class="text-sm sm:text-base text-slate-600 leading-relaxed">“The cards look luxurious and clients remember us. Updating the landing page before a pitch night takes 30 seconds — zero printing stress.”</p>
+                        <footer>
+                            <div class="avatar">SJ</div>
+                            <div>
+                                <p class="text-sm font-semibold text-slate-900">Sonia Jain</p>
+                                <p class="text-xs uppercase tracking-[0.25em] text-slate-400">Creative Director · Boutique Agency</p>
+                            </div>
+                        </footer>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq" class="section-spacing">
+            <div class="page-shell space-y-10">
+                <div class="max-w-2xl mx-auto text-center space-y-4">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Frequently asked</h2>
+                    <p class="text-base sm:text-lg text-slate-600">Everything you need to know about switching to Sparsh. Still unsure? Chat with our specialists.</p>
+                </div>
+
                 <div class="space-y-4">
-                    <!-- FAQ 1 -->
-                    <details class="bg-white p-6 rounded-2xl shadow-xl cursor-pointer border border-gray-100 group">
-                        <summary class="flex justify-between items-center text-lg font-semibold text-gray-800 focus:outline-none">
+                    <details class="faq-item group">
+                        <summary class="flex justify-between items-center text-base sm:text-lg font-semibold text-slate-800 cursor-pointer">
                             Do NFC cards work with all phones?
-                            <span class="transform transition group-open:rotate-90" style="color: var(--color-primary);">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            <span class="text-indigo-500 transition-transform group-open:rotate-90">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                             </span>
                         </summary>
-                        <p class="mt-4 text-gray-600">
-                            Most modern **Android phones and iPhones (iPhone 7 and later) support NFC**. For older/non-NFC phones, the printed QR code provides the same functionality.
-                        </p>
+                        <p class="mt-4 text-sm sm:text-base text-slate-500">Most modern Android phones and iPhones (iPhone 7 onwards) support NFC. For older models or laptops, your printed QR code and short links offer the same experience.</p>
                     </details>
-                    <!-- FAQ 2 -->
-                    <details class="bg-white p-6 rounded-2xl shadow-xl cursor-pointer border border-gray-100 group">
-                        <summary class="flex justify-between items-center text-lg font-semibold text-gray-800 focus:outline-none">
-                            Can I reprogram the card?
-                            <span class="transform transition group-open:rotate-90" style="color: var(--color-primary);">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+
+                    <details class="faq-item group">
+                        <summary class="flex justify-between items-center text-base sm:text-lg font-semibold text-slate-800 cursor-pointer">
+                            Can I rewrite the card after printing?
+                            <span class="text-indigo-500 transition-transform group-open:rotate-90">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                             </span>
                         </summary>
-                        <p class="mt-4 text-gray-600">
-                            Yes. Every card is **rewritable**. We provide a simple web tool to update the card’s destination URL or vCard details, allowing you to change your information anytime.
-                        </p>
+                        <p class="mt-4 text-sm sm:text-base text-slate-500">Yes. Your dashboard allows unlimited rewrites. Update destination URLs, swap contact details or pause the card entirely — changes publish instantly.</p>
                     </details>
-                    <!-- FAQ 3 -->
-                    <details class="bg-white p-6 rounded-2xl shadow-xl cursor-pointer border border-gray-100 group">
-                        <summary class="flex justify-between items-center text-lg font-semibold text-gray-800 focus:outline-none">
-                            Is there any personal data stored on the card?
-                            <span class="transform transition group-open:rotate-90" style="color: var(--color-primary);">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+
+                    <details class="faq-item group">
+                        <summary class="flex justify-between items-center text-base sm:text-lg font-semibold text-slate-800 cursor-pointer">
+                            What data lives on the NFC chip?
+                            <span class="text-indigo-500 transition-transform group-open:rotate-90">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                             </span>
                         </summary>
-                        <p class="mt-4 text-gray-600">
-                            The NFC tag typically contains only a **URL or vCard**. Landing pages are hosted securely; personal data storage follows our privacy policy. **You control what’s shared.**
-                        </p>
+                        <p class="mt-4 text-sm sm:text-base text-slate-500">Only a secure URL or vCard reference. Personal data lives on your Sparsh landing page with bank-grade encryption, GDPR processes and Indian data residency options.</p>
                     </details>
-                    <!-- FAQ 4 -->
-                    <details class="bg-white p-6 rounded-2xl shadow-xl cursor-pointer border border-gray-100 group">
-                        <summary class="flex justify-between items-center text-lg font-semibold text-gray-800 focus:outline-none">
-                            How long does the battery last?
-                            <span class="transform transition group-open:rotate-90" style="color: var(--color-primary);">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+
+                    <details class="faq-item group">
+                        <summary class="flex justify-between items-center text-base sm:text-lg font-semibold text-slate-800 cursor-pointer">
+                            Is there a battery or maintenance?
+                            <span class="text-indigo-500 transition-transform group-open:rotate-90">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                             </span>
                         </summary>
-                        <p class="mt-4 text-gray-600">
-                            NFC cards are **passive and don’t have a battery** — they work indefinitely unless physically damaged.
-                        </p>
+                        <p class="mt-4 text-sm sm:text-base text-slate-500">No battery needed. The NFC chip powers up from the receiving device. Cards last for years — just avoid bending beyond 30° or exposing to extreme heat.</p>
                     </details>
-                    <!-- FAQ 5 -->
-                    <details class="bg-white p-6 rounded-2xl shadow-xl cursor-pointer border border-gray-100 group">
-                        <summary class="flex justify-between items-center text-lg font-semibold text-gray-800 focus:outline-none">
-                            What are the shipping times?
-                            <span class="transform transition group-open:rotate-90" style="color: var(--color-primary);">
-                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+
+                    <details class="faq-item group">
+                        <summary class="flex justify-between items-center text-base sm:text-lg font-semibold text-slate-800 cursor-pointer">
+                            How fast can you ship large team orders?
+                            <span class="text-indigo-500 transition-transform group-open:rotate-90">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                             </span>
                         </summary>
-                        <p class="mt-4 text-gray-600">
-                            Standard items ship within **3–7 business days**. Custom and engraved orders may take **7–10 business days**.
-                        </p>
+                        <p class="mt-4 text-sm sm:text-base text-slate-500">Standard cards ship within 3–5 business days. Corporate runs ship in 5–10 days depending on finish and engraving. We offer rush production for events.</p>
                     </details>
                 </div>
             </div>
         </section>
 
-        <!-- CTA Banner --><section class="py-16 sm:py-20" style="background-color: var(--color-primary);">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">Ready to upgrade your networking?</h2>
-                <p class="text-lg sm:text-xl mb-10 text-white">Start designing your perfect card today and make every connection count.</p>
-                <a href="#design" class="inline-flex items-center justify-center w-full sm:w-auto px-14 py-4 border border-transparent text-xl font-bold rounded-2xl shadow-2xl transition duration-300 transform hover:scale-[1.05]" style="color: var(--color-primary); background-color: white;">
-                    Design Your Card
-                </a>
+        <section class="relative overflow-hidden py-16 sm:py-20">
+            <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-500"></div>
+            <div class="page-shell relative">
+                <div class="surface-card bg-white/10 border-white/20 text-center px-6 py-14 sm:py-16 lg:py-20 text-white space-y-6">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Make your next intro unforgettable</h2>
+                    <p class="text-base sm:text-lg text-white/80 max-w-2xl mx-auto">Craft a bespoke Sparsh NFC card, launch a branded micro-site and get analytics on every tap. We’ll help you ship in days, not weeks.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#shop" class="cta-primary">
+                            Start with templates
+                        </a>
+                        <a href="corporatepack.html#demo" class="cta-secondary is-ghost">
+                            Book a team walkthrough
+                        </a>
+                    </div>
+                </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer - UPDATED WITH NEW DARK BACKGROUND COLOR --><footer class="text-white" style="background-color: var(--color-dark-bg);">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
-            <!-- Grid Layout (Left-aligned on Desktop, stacks gracefully on mobile) --><div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b pb-4 mb-4" style="border-color: #4b5563;">
-                <div class="col-span-2 md:col-span-1 text-left">
-                    <h4 class="text-2xl font-extrabold text-white tracking-tight mb-4">Sparsh <span style="color: var(--color-accent-text);">NFC</span></h4>
-                    <p class="text-sm text-gray-400">Upgrade how you share your details. Elegant, smart, and sustainable.</p>
-                </div>
-
-                <!-- Quick Links --><div class="text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Products</h5>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#shop" class="text-gray-300 hover:text-white transition">Shop</a></li>
-                        <li><a href="corporatepack.html" class="text-gray-300 hover:text-white transition">Corporate</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Try Demo</a></li>
-                    </ul>
-                </div>
-
-                <!-- Company --><div class="text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Company</h5>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#about" class="text-gray-300 hover:text-white transition">About Us</a></li>
-                        <li><a href="#faq" class="text-gray-300 hover:text-white transition">FAQs</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Support</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Contact</a></li>
-                    </ul>
-                </div>
-
-                <!-- Legal --><div class="text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Legal</h5>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Terms of Service</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Shipping</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Returns & Warranty</a></li>
-                    </ul>
-                </div>
-
-                 <!-- Contact --><div class="col-span-2 md:col-span-1 text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Stay Connected</h5>
-                    <p class="text-sm text-gray-400 mb-4">
-                        Networking in one tap. Meet Sparsh NFC — elegant, reprogrammable business cards that actually get used. 🔗✨
-                    </p>
-                    <div class="flex space-x-4 justify-start">
-                        <a href="#" class="text-gray-400 hover:text-white transition" aria-label="LinkedIn">
-                            <!-- Placeholder for LinkedIn Icon --><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.563-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.764 7 2.457v6.778z"/></svg>
+    <footer class="text-white">
+        <div class="page-shell py-12 lg:py-16">
+            <div class="grid gap-10 lg:grid-cols-5">
+                <div class="lg:col-span-2 space-y-4">
+                    <a href="#hero" class="inline-flex items-center gap-2 text-2xl font-extrabold tracking-tight text-white">
+                        <span>Sparsh</span>
+                        <span class="text-indigo-300">NFC</span>
+                    </a>
+                    <p class="text-sm text-slate-300 max-w-md">Elegant NFC business cards, bespoke landing pages and analytics — handcrafted in India and shipped worldwide.</p>
+                    <div class="flex gap-4 text-slate-300">
+                        <a href="https://www.linkedin.com" aria-label="LinkedIn" class="hover:text-white transition">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zm-11 19H5V9h3v10zM6.5 7.73c-.96 0-1.75-.79-1.75-1.76 0-.97.79-1.76 1.75-1.76s1.75.79 1.75 1.76c0 .97-.79 1.76-1.75 1.76zM20 19h-3v-4.9c0-3.26-4-3.01-4 0V19h-3V9h3v1.71c1.4-2.6 7-2.8 7 2.48V19z"/></svg>
                         </a>
-                         <a href="#" class="text-gray-400 hover:text-white transition" aria-label="Instagram">
-                             <!-- Placeholder for Instagram Icon --><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c2.716 0 3.056.01 4.122.06 1.066.05 1.791.218 2.428.465.66.254 1.216.591 1.77.996.558.406.97.973 1.135 1.77.202.558.37 1.283.418 2.348.049 1.066.06 1.405.06 4.122s-.011 3.056-.06 4.122c-.05 1.066-.218 1.791-.465 2.428-.254.66-.591 1.216-.996 1.77-.406.558-.973.97-1.77 1.135-.558.202-1.283.37-2.348.418-1.066.049-1.405.06-4.122.06s-3.056-.011-4.122-.06c-1.066-.05-1.791-.218-2.428-.465-.66-.254-1.216-.591-1.77-.996-.558-.406-.97-.973-1.135-1.77-.202-.558-.37-1.283-.418-2.348-.049-1.066-.06-1.405-.06-4.122s.011-3.056.06-4.122c.05-1.066.218-1.791.465-2.428.254-.66.591-1.216.996-1.77.406-.558.973-.97 1.77-1.135.558-.202 1.283-.37 2.348-.418 1.066-.049 1.405-.06 4.122-.06zm0-2c-2.793 0-3.148.01-4.238.061-1.09.051-1.849.227-2.502.483-.717.275-1.341.678-1.933 1.269s-.994 1.216-1.269 1.933c-.256.653-.432 1.412-.483 2.502-.051 1.09-.061 1.445-.061 4.238s.01 3.148.061 4.238c.051 1.09.227 1.849.483 2.502.275.717.678 1.341 1.269 1.933s1.216.994 1.933 1.269c.653.256 1.412.432 2.502.483 1.09.051 1.445.061 4.238.061s3.148-.01 4.238-.061c1.09-.051 1.849-.227 2.502-.483.717-.275 1.341-.678 1.933-1.269s.994-1.216 1.269-1.933c-.256-.653-.432-1.412-.483-2.502-.051-1.09-.061-1.445-.061-4.122s.01-3.148-.061-4.238c-.051-1.09-.227-1.849-.483-2.502-.275-.717-.678-1.341-1.269-1.933s-1.216-.994-1.933-1.269c-.653-.256-1.412-.432-2.502-.483-1.09-.051-1.445-.061-4.238-.061zm0 4c-4.411 0-8 3.589-8 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8zm0 14c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6zm6-11.417c0-1.416-1.157-2.583-2.573-2.583s-2.573 1.167-2.573 2.583 1.157 2.583 2.573 2.583 2.573-1.167 2.573-2.583z"/></svg>
+                        <a href="https://www.instagram.com" aria-label="Instagram" class="hover:text-white transition">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm8.75 2.15a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/></svg>
                         </a>
                     </div>
                 </div>
-            </div>
-            <div class="pt-4 text-center text-sm text-gray-500">
-                &copy; 2025 Sparsh NFC. All rights reserved. Shipping across India.
+
+                <div>
+                    <h5 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 mb-4">Products</h5>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><a href="#shop" class="hover:text-white transition">Classic card</a></li>
+                        <li><a href="premiumcard.html" class="hover:text-white transition">Premium card</a></li>
+                        <li><a href="corporatepack.html" class="hover:text-white transition">Corporate packs</a></li>
+                        <li><a href="premiumcard.html#gallery" class="hover:text-white transition">Material gallery</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 mb-4">Company</h5>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><a href="#about" class="hover:text-white transition">About Sparsh</a></li>
+                        <li><a href="#testimonials" class="hover:text-white transition">Customer stories</a></li>
+                        <li><a href="#faq" class="hover:text-white transition">FAQs</a></li>
+                        <li><a href="mailto:hello@sparshnfc.com" class="hover:text-white transition">Contact support</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 mb-4">Legal</h5>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><a href="#" class="hover:text-white transition">Privacy policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms & conditions</a></li>
+                        <li><a href="#" class="hover:text-white transition">Shipping & returns</a></li>
+                        <li><a href="#" class="hover:text-white transition">Accessibility</a></li>
+                    </ul>
+                </div>
+                </div>
+
+            <div class="mt-10 border-t border-slate-700 pt-6 flex flex-col sm:flex-row justify-between gap-4 text-xs text-slate-400">
+                <p>&copy; 2025 Sparsh NFC. All rights reserved.</p>
+               <p>Made in India · Shipping worldwide · GST invoices available</p>
             </div>
         </div>
     </footer>
@@ -800,48 +1159,82 @@
                 if (isOpen) {
                     // Close menu
                     mobileMenu.classList.add('-translate-x-full');
+                    // Prevent interaction while hidden
+                    mobileMenu.classList.add('pointer-events-none');
                     mobileMenuBackdrop.classList.add('opacity-0', 'pointer-events-none');
                     menuIcon.classList.remove('hidden');
                     closeIcon.classList.add('hidden');
                     document.body.style.overflow = '';
+                    if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'false');
                 } else {
                     // Open menu
                     mobileMenu.classList.remove('-translate-x-full');
+                    // Ensure menu can receive pointer events when visible
+                    mobileMenu.classList.remove('pointer-events-none');
                     mobileMenuBackdrop.classList.remove('opacity-0', 'pointer-events-none');
                     menuIcon.classList.add('hidden');
                     closeIcon.classList.remove('hidden');
                     document.body.style.overflow = 'hidden';
+                    if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'true');
                     updateMobileCartCount();
+
+                    // Defensive overrides: force child elements visible and dark text
+                    try {
+                        // Make panel fully opaque in case utility classes caused translucency
+                        mobileMenu.style.backgroundColor = '#ffffff';
+
+                        // Force visible colors and opacity for known menu elements
+                        mobileMenu.querySelectorAll('.mobile-menu-item, nav, a, button, p').forEach(el => {
+                            el.style.opacity = '1';
+                            el.style.color = '#111827';
+                            el.style.visibility = 'visible';
+                        });
+
+                        // Log classList for debugging (temporary)
+                        console.log('Mobile menu opened — classList:', mobileMenu.className);
+                    } catch (err) {
+                        console.warn('Mobile menu defensive styling failed:', err);
+                    }
                 }
             }
             
             // Close mobile menu
             function closeMobileMenu() {
                 mobileMenu.classList.add('-translate-x-full');
+                mobileMenu.classList.add('pointer-events-none');
                 mobileMenuBackdrop.classList.add('opacity-0', 'pointer-events-none');
                 menuIcon.classList.remove('hidden');
                 closeIcon.classList.add('hidden');
                 document.body.style.overflow = '';
+                if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'false');
             }
             
             // Event listeners
-            if (mobileMenuBtn) {
+            // Avoid double-binding: skip if a global script already bound handlers
+            if (mobileMenuBtn && !mobileMenuBtn.dataset.bound) {
                 mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+                // Mark as bound so global fallback in interactive-ui.js doesn't double-bind
+                mobileMenuBtn.dataset.bound = 'true';
+                mobileMenuBtn.setAttribute('aria-controls', 'mobile-menu');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
             }
-            
+
             if (mobileMenuBackdrop) {
                 mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
             }
-            
+
             // Close menu when clicking on menu items
             const mobileMenuItems = document.querySelectorAll('.mobile-menu-item');
             mobileMenuItems.forEach(item => {
+                // Prevent duplicate bindings across scripts
+                if (item.dataset.bound) return;
                 item.addEventListener('click', function(e) {
                     // Don't close if it's a dropdown toggle
                     if (!this.id || (!this.id.includes('toggle'))) {
                         closeMobileMenu();
                     }
                 });
+                item.dataset.bound = 'true';
             });
             
             // Dropdown toggles for mobile menu

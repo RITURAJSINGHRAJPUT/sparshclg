@@ -135,9 +135,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Add page transition animation
+    // Add page transition animation (skip if marked no-transition)
     document.querySelectorAll('a[href]:not([href^="#"]):not([href^="javascript:"]):not([href^="mailto:"]):not([href^="tel:"])').forEach(link => {
         link.addEventListener('click', function(e) {
+            if (this.classList.contains('no-transition')) return;
             if (this.hostname === window.location.hostname || !this.hostname) {
                 const targetUrl = this.href;
                 if (targetUrl && !targetUrl.includes('#')) {
@@ -151,6 +152,106 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Mobile menu fallback (if page hasn't bound handlers)
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    let mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+    const menuIcon = document.getElementById('menu-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    // Create a backdrop if missing
+    if (!mobileMenuBackdrop && mobileMenu) {
+        mobileMenuBackdrop = document.createElement('div');
+        mobileMenuBackdrop.id = 'mobile-menu-backdrop';
+        mobileMenuBackdrop.className = 'lg:hidden fixed inset-0 bg-slate-900/40 z-30 opacity-0 pointer-events-none transition-opacity duration-300';
+        mobileMenuBackdrop.style.top = '0';
+        document.body.appendChild(mobileMenuBackdrop);
+    }
+
+    if (mobileMenuBtn && mobileMenu && !mobileMenuBtn.dataset.bound) {
+        mobileMenuBtn.dataset.bound = 'true';
+
+        // Ensure menu starts closed
+        if (!mobileMenu.classList.contains('-translate-x-full')) {
+            mobileMenu.classList.add('-translate-x-full');
+        }
+
+        const toggle = () => {
+            const isOpen = !mobileMenu.classList.contains('-translate-x-full');
+            if (isOpen) {
+                mobileMenu.classList.add('-translate-x-full');
+                mobileMenu.classList.add('pointer-events-none');
+                mobileMenuBackdrop && mobileMenuBackdrop.classList.add('opacity-0', 'pointer-events-none');
+                menuIcon && menuIcon.classList.remove('hidden');
+                closeIcon && closeIcon.classList.add('hidden');
+                document.body.style.overflow = '';
+            } else {
+                mobileMenu.classList.remove('-translate-x-full');
+                mobileMenu.classList.remove('pointer-events-none');
+                mobileMenuBackdrop && mobileMenuBackdrop.classList.remove('opacity-0', 'pointer-events-none');
+                menuIcon && menuIcon.classList.add('hidden');
+                closeIcon && closeIcon.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                // Update cart count badge in mobile menu if available
+                if (typeof getCartCount === 'function') {
+                    const count = getCartCount();
+                    const mobileCartCount = document.getElementById('mobile-cart-count');
+                    if (mobileCartCount) {
+                        mobileCartCount.textContent = count;
+                        mobileCartCount.style.display = count > 0 ? 'inline-flex' : 'none';
+                    }
+                }
+            }
+            mobileMenuBtn.setAttribute('aria-expanded', String(!isOpen));
+        };
+
+        mobileMenuBtn.addEventListener('click', toggle);
+        mobileMenuBtn.setAttribute('aria-controls', 'mobile-menu');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+
+        if (mobileMenuBackdrop) {
+            mobileMenuBackdrop.addEventListener('click', () => {
+                if (!mobileMenu.classList.contains('-translate-x-full')) toggle();
+            });
+        }
+
+        // Close when resizing to desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024 && !mobileMenu.classList.contains('-translate-x-full')) {
+                toggle();
+            }
+        });
+
+        // Close menu when clicking on menu items (except toggles)
+        mobileMenu.querySelectorAll('.mobile-menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (!this.id || !this.id.includes('toggle')) {
+                    if (!mobileMenu.classList.contains('-translate-x-full')) toggle();
+                }
+            });
+        });
+
+        // Optional: bind submenu toggles if present
+        const shopToggle = document.getElementById('mobile-shop-toggle');
+        const learnToggle = document.getElementById('mobile-learn-toggle');
+        const shopSubmenu = document.getElementById('mobile-shop-submenu');
+        const learnSubmenu = document.getElementById('mobile-learn-submenu');
+        if (shopToggle && shopSubmenu) {
+            shopToggle.addEventListener('click', function() {
+                shopSubmenu.classList.toggle('hidden');
+                const svg = this.querySelector('svg');
+                svg && svg.classList.toggle('rotate-180');
+            });
+        }
+        if (learnToggle && learnSubmenu) {
+            learnToggle.addEventListener('click', function() {
+                learnSubmenu.classList.toggle('hidden');
+                const svg = this.querySelector('svg');
+                svg && svg.classList.toggle('rotate-180');
+            });
+        }
+    }
 });
 
 // Field validation function
@@ -268,6 +369,30 @@ style.textContent = `
     .form-input:focus {
         transform: scale(1.01);
         transition: transform 0.2s ease;
+    }
+
+    /* Click-through for cart badge to not block adjacent buttons */
+    #cart-count-badge { pointer-events: none; }
+    /* Ensure mobile menu btn stays above sibling elements */
+    #mobile-menu-btn { position: relative; z-index: 70; }
+
+    /* Mobile improvements */
+    @media (max-width: 640px) {
+        #cart-count-badge {
+            top: 3px !important;
+            right: 4px !important;
+            width: 22px !important;
+            height: 22px !important;
+            font-size: 12px !important;
+            z-index: 100 !important;
+        }
+        .quantity-input {
+            min-width: 64px;
+            padding: 0.5rem 0.75rem;
+        }
+        .mobile-menu-item, #mobile-menu button, #mobile-menu a {
+            min-height: 48px;
+        }
     }
 `;
 

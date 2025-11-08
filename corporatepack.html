@@ -1,264 +1,494 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Meta / SEO -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sparsh Corporate NFC Packs - Seamless Team Networking</title>
-    <meta name="description" content="Discover bulk pricing and centralized management solutions for your entire team's NFC business cards. Streamline networking for enterprise.">
-    <!-- Favicon uses the new palette -->
-    <link rel="icon" href="https://placehold.co/32x32/C8B6FF/FFD6FF?text=S" type="image/x-icon">
+    <title>Sparsh Corporate NFC Solutions — Scale Networking for Teams</title>
+    <meta name="description" content="Roll out NFC business cards across your organisation with bulk pricing, admin dashboards and concierge onboarding. Plan pilots or enterprise-wide rollouts with Sparsh NFC.">
+    <link rel="icon" href="https://placehold.co/32x32/6366f1/ffffff?text=S" type="image/x-icon">
 
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="auth-modular.js"></script>
+    <script src="cart.js"></script>
+    <script src="interactive-ui.js"></script>
 
-        /* --- COLOR PALETTE (Pinks/Purples) --- */
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
         :root {
-            --color-primary: #C8B6FF;    /* Mid Purple (CTA/Accent) */
-            --color-secondary: #E7C6FF;  /* Light Lavender (Secondary/Accent) */
-            --color-light-bg: #FFD6FF;   /* Lightest Pink (Background Start) */
-            --color-accent-text: #B8C0FF;/* Light Blue-Violet Accent */
-            --color-dark-text: #1e2025;  /* Dark text for contrast */
-            --color-dark-bg: #6b4c9e;    /* Dark footer/contrast background */
+            --color-primary: #4c46d9;
+            --color-secondary: #f5f3ff;
+            --color-accent: #111827;
+            --color-muted: #6b7280;
+            --color-surface: rgba(255, 255, 255, 0.88);
+            --shadow-soft: 0 28px 70px -36px rgba(30, 64, 175, 0.55);
+            --shadow-card: 0 24px 55px -28px rgba(15, 23, 42, 0.28);
         }
-        
-        /* FULL-PAGE GRADIENT */
+
+        * {
+            box-sizing: border-box;
+        }
+
         html {
             height: 100%;
-            background: linear-gradient(
-                to bottom right,
-                var(--color-light-bg),
-                var(--color-secondary),
-                var(--color-accent-text)
-            );
-            background-repeat: no-repeat;
-            background-attachment: fixed; 
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: transparent; 
-            color: var(--color-dark-text); 
-            min-height: 100%; 
+            min-height: 100%;
+            color: var(--color-accent);
+            background: radial-gradient(circle at top left, #f8faff 0%, #eef2ff 35%, #f6f9ff 70%, #ffffff 100%);
+            position: relative;
         }
-        
-        /* Custom CTA Styles */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 8% 10%, rgba(79, 70, 229, 0.2) 0, transparent 45%),
+                        radial-gradient(circle at 92% 12%, rgba(56, 189, 248, 0.18) 0, transparent 50%),
+                        radial-gradient(circle at 20% 82%, rgba(129, 140, 248, 0.25) 0, transparent 55%);
+            z-index: -2;
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-shell {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .section-spacing {
+            padding-top: clamp(3rem, 2vw + 3rem, 6rem);
+            padding-bottom: clamp(3rem, 2vw + 3rem, 6rem);
+        }
+
+        .surface-card {
+            background-color: var(--color-surface);
+            backdrop-filter: blur(24px);
+            box-shadow: var(--shadow-card);
+            border-radius: 1.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .headline {
+            font-size: clamp(2.4rem, 3vw + 2rem, 4.2rem);
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            color: #0f172a;
+        }
+
+        .headline span {
+            background: linear-gradient(120deg, #4c46d9, #38bdf8);
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
         .cta-primary {
-            /* Large, pill-shaped button for Quote Request */
-            @apply inline-flex items-center justify-center px-14 py-5 text-2xl font-semibold rounded-full shadow-xl text-white transition duration-300 transform hover:scale-[1.03];
-            background-color: var(--color-primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 1.9rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #4f46e5, #2563eb);
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            gap: 0.5rem;
+            border: none;
         }
+
         .cta-primary:hover {
-            background-color: #a496d0;
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 34px 70px -25px rgba(59, 130, 246, 0.5);
         }
 
         .cta-secondary {
-            /* Secondary button style for Contact Sales */
-            @apply inline-flex items-center justify-center px-14 py-5 text-2xl font-semibold rounded-full border-2 transition duration-300 transform hover:scale-[1.03] hover:bg-gray-50;
-            border-color: var(--color-primary);
-            color: var(--color-primary);
-            background-color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 1.9rem;
+            border-radius: 999px;
+            border: 1.5px solid rgba(37, 99, 235, 0.4);
+            background: rgba(255, 255, 255, 0.95);
+            color: #2563eb;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            gap: 0.5rem;
         }
-        
-        /* Ensures internal sections use the body's dark text color */
-        .text-dark {
-            color: var(--color-dark-text);
+
+        .cta-secondary:hover {
+            transform: translateY(-2px);
+            border-color: rgba(37, 99, 235, 0.7);
+            box-shadow: 0 22px 48px -24px rgba(37, 99, 235, 0.35);
+        }
+
+        .cta-secondary.is-ghost {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.7);
+            color: #ffffff;
+        }
+
+        .cta-secondary.is-ghost:hover {
+            border-color: #ffffff;
+        }
+
+        .stat-pill {
+            display: grid;
+            gap: 0.35rem;
+            padding: 1.2rem 1.4rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 1.25rem;
+            border: 1px solid rgba(209, 213, 219, 0.6);
+            box-shadow: 0 22px 56px -30px rgba(30, 64, 175, 0.3);
+        }
+
+        .stat-pill strong {
+            font-size: 1.3rem;
+            color: #0f172a;
+        }
+
+        .stat-pill span {
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+        .feature-card {
+            border-radius: 1.5rem;
+            border: 1px solid rgba(226, 232, 240, 0.75);
+            background: rgba(255, 255, 255, 0.92);
+            padding: 1.8rem;
+            box-shadow: var(--shadow-card);
+        }
+
+        header {
+            backdrop-filter: blur(14px);
+        }
+
+        #mobile-menu {
+            box-shadow: -8px 0 40px rgba(30, 41, 59, 0.16);
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(18px);
+        }
+
+        footer {
+            background: #0f172a;
+        }
+
+        @media (max-width: 1024px) {
+            header nav {
+                display: none;
+            }
+            .page-shell {
+                padding: 0 1.25rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .headline {
+                font-size: clamp(2.2rem, 8vw, 3.2rem);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
     </style>
 </head>
-<body>
-    
-    <!-- Header / Navigation -->
-    <header class="sticky top-0 z-50 bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <!-- Logo (Left) -->
-                <a href="index.html" class="text-2xl font-extrabold text-gray-900 tracking-tight">Sparsh <span class="text-accent-text" style="color: var(--color-accent-text);">NFC</span></a>
-
-                <!-- Nav/Back Link (Right) -->
-                <a href="index.html#shop" class="text-lg font-medium text-gray-700 hover:text-primary transition" style="--text-primary: var(--color-primary);">
-                    ← Back to Shop Overview
+<body class="text-slate-800">
+    <header class="fixed inset-x-0 top-0 z-50 border-b border-slate-200/60 bg-white/80">
+        <div class="page-shell">
+            <div class="flex items-center justify-between gap-6 py-4 lg:py-5">
+                <a href="index.html" class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+                    <span>Sparsh</span>
+                    <span class="headline"><span>NFC</span></span>
                 </a>
+
+                <nav class="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                    <a href="index.html#shop" class="transition hover:text-slate-900">Shop</a>
+                    <a href="classic card.html" class="transition hover:text-slate-900">Classic</a>
+                    <a href="premiumcard.html" class="transition hover:text-slate-900">Premium</a>
+                    <a href="index.html#faq" class="transition hover:text-slate-900">FAQ</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <a href="login.html" class="hidden sm:inline-flex text-sm font-semibold text-slate-600 hover:text-slate-900 transition">Login</a>
+
+                    <a href="cart.html" aria-label="Shopping cart" class="relative inline-flex">
+                        <button class="p-2.5 rounded-full border border-slate-200/70 text-slate-600 hover:text-slate-900 hover:border-slate-300 transition bg-white/80 flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-lg w-7 h-7 flex items-center justify-center shadow-xl z-50" style="display: none; min-width: 1.75rem; padding: 0.25rem; border: 2px solid white;">
+                                <span id="cart-count" class="leading-none text-xs font-bold rounded-full px-2 py-0.5">0</span>
+                            </span>
+                        </button>
+                    </a>
+
+                    <button id="mobile-menu-btn" class="lg:hidden inline-flex items-center justify-center rounded-full border border-slate-300/70 p-2.5 text-slate-600 hover:text-slate-900 transition bg-white/80" aria-label="Toggle mobile menu">
+                        <svg id="menu-icon" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                        <svg id="close-icon" class="h-7 w-7 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
             </div>
         </div>
+
+        <div id="mobile-menu" class="lg:hidden fixed inset-0 z-40 transform -translate-x-full transition-transform duration-300 ease-in-out" style="top: 4.75rem;">
+            <div class="flex flex-col h-[calc(100vh-4.75rem)] overflow-y-auto pb-16 bg-white/95">
+                <div class="px-6 pt-6 pb-3 border-b border-slate-200/70">
+                    <!-- <p class="text-sm font-semibold text-slate-500 uppercase tracking-widest">Navigation</p> -->
+                     
+                </div>
+                <nav class="px-4 py-6 space-y-2">
+                    <a href="index.html#shop" class="mobile-menu-item block text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">Shop</a>
+                    <a href="classic card.html" class="mobile-menu-item block text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">Classic NFC</a>
+                    <a href="premiumcard.html" class="mobile-menu-item block text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">Premium NFC</a>
+                    <a href="index.html#faq" class="mobile-menu-item block text-base font-semibold text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">FAQ</a>
+                    <a href="login.html" class="mobile-menu-item block text-base font-medium text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">Login</a>
+                    <a href="cart.html" class="mobile-menu-item flex items-center justify-between text-base font-medium text-slate-700 py-3.5 px-4 rounded-2xl border border-slate-200/70 bg-white/80 hover:bg-slate-50 transition">
+                        <span class="flex items-center gap-3"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>Cart</span>
+                        <span id="mobile-cart-count" class="ml-2 bg-rose-500 text-white text-xs font-bold rounded-full px-2 py-0.5" style="display: none;">0</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <div id="mobile-menu-backdrop" class="lg:hidden fixed inset-0 bg-slate-900/40 z-30 opacity-0 pointer-events-none transition-opacity duration-300" style="top: 0;"></div>
     </header>
 
-    <main class="py-12 sm:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="pt-28 sm:pt-32">
+        <section class="section-spacing">
+            <div class="page-shell space-y-8">
+                <nav class="text-sm text-slate-500 flex items-center gap-2">
+                    <a href="index.html" class="hover:text-slate-900 transition">Home</a>
+                    <span>/</span>
+                    <a href="index.html#shop" class="hover:text-slate-900 transition">Shop</a>
+                    <span>/</span>
+                    <span class="text-slate-800 font-semibold">Corporate packs</span>
+                </nav>
 
-            <!-- PRODUCT BREADCRUMBS -->
-            <nav class="mb-8 text-sm text-gray-600">
-                <a href="index.html" class="hover:underline">Home</a> / 
-                <a href="index.html#shop" class="hover:underline">Shop</a> / 
-                <span class="font-semibold text-dark">Corporate Packs</span>
-            </nav>
+                <div class="grid gap-10 lg:grid-cols-[1.15fr,0.85fr] items-center">
+                    <div class="space-y-6">
+                        <span class="surface-card inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-500 uppercase tracking-[0.35em]">Enterprise</span>
+                        <h1 class="headline">Deploy NFC cards <span>across every team</span>.</h1>
+                        <p class="text-base sm:text-lg text-slate-600 max-w-2xl">Launch bespoke NFC business cards for sales, leadership and on-ground teams. Centralised admin, analytics, automations and concierge fulfilment make Sparsh the easiest way to modernise networking at scale.</p>
 
-
-            <!-- HERO AND QUOTE FORM SECTION (Two Columns) -->
-            <div class="lg:grid lg:grid-cols-12 lg:gap-x-12 items-center">
-
-                <!-- 1. Corporate Pitch (Left Column - 7/12) -->
-                <div class="lg:col-span-7 mb-10 lg:mb-0">
-                    <h1 class="text-5xl md:text-6xl font-extrabold text-dark tracking-tight mb-6 leading-tight">
-                        Networking Scaled: <span class="block text-primary" style="color: var(--color-primary);">NFC Solutions for Your Entire Team.</span>
-                    </h1>
-                    <p class="text-xl text-gray-700 mb-8 max-w-lg">
-                        Equip your sales team, executives, and entire staff with professional, branded NFC cards. Get enterprise-grade customization, centralized management tools, and significant volume pricing.
-                    </p>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-center text-lg text-gray-700">
-                            <span class="text-xl mr-3 check-icon" style="color: var(--color-dark-bg);">⭐</span>
-                            <span>**Dedicated Admin Dashboard** for team management.</span>
+                        <div class="grid gap-4 sm:grid-cols-3">
+                            <div class="stat-pill">
+                                <strong>50 - 5,000</strong>
+                                <span>Cards provisioned in a single rollout</span>
+                            </div>
+                            <div class="stat-pill">
+                                <strong>72 hrs</strong>
+                                <span>Average pilot launch with concierge</span>
+                            </div>
+                            <div class="stat-pill">
+                                <strong>99.2%</strong>
+                                <span>Adoption rate across enterprise clients</span>
+                            </div>
                         </div>
-                        <div class="flex items-center text-lg text-gray-700">
-                            <span class="text-xl mr-3 check-icon" style="color: var(--color-dark-bg);">⭐</span>
-                            <span>Volume-based **White Label** and co-branding options.</span>
-                        </div>
-                        <div class="flex items-center text-lg text-gray-700">
-                            <span class="text-xl mr-3 check-icon" style="color: var(--color-dark-bg);">⭐</span>
-                            <span>Streamlined **HR Onboarding** and account provisioning.</span>
+
+                        <div class="grid gap-4 md:grid-cols-2">
+                            <div class="feature-card">
+                                <p class="text-sm font-semibold text-slate-500 uppercase tracking-[0.3em] mb-2">Admin suite</p>
+                                <h3 class="text-lg font-semibold text-slate-900">Control from a single dashboard</h3>
+                                <p class="text-sm text-slate-600">Assign cards, pause access, edit destinations and sync with HRIS / SSO so employee journeys stay seamless.</p>
+                            </div>
+                            <div class="feature-card">
+                                <p class="text-sm font-semibold text-slate-500 uppercase tracking-[0.3em] mb-2">Branding</p>
+                                <h3 class="text-lg font-semibold text-slate-900">Custom finishes & white-label</h3>
+                                <p class="text-sm text-slate-600">Choose Classic PVC, Premium metal or mixed kits. Add white-label microsites, custom packaging and QR design.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 2. Request Quote Form (Right Column - 5/12) -->
-                <div class="lg:col-span-5 bg-white p-8 rounded-3xl shadow-2xl space-y-6 border-4 border-gray-100">
-                    
-                    <h2 class="text-3xl font-extrabold text-dark text-center">Request a Corporate Quote</h2>
-                    <p class="text-sm text-center text-gray-500">Tell us about your team size to receive custom pricing.</p>
-                    
-                    <!-- Mock Form Elements -->
-                    <div class="space-y-4">
-                        <div>
-                            <label for="company_name" class="block text-sm font-medium text-gray-700">Company Name</label>
-                            <input type="text" id="company_name" placeholder="Acme Corp" class="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-primary focus:border-primary" style="border-color: var(--color-primary);">
+                    <aside class="surface-card p-6 sm:p-8 space-y-6">
+                        <div class="space-y-3 text-center">
+                            <h2 class="text-2xl font-extrabold text-slate-900">Request pricing & pilot kit</h2>
+                            <p class="text-sm text-slate-500">Share a few details and our enterprise team gets back in a business day.</p>
                         </div>
-                        <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700">Work Email</label>
-                            <input type="email" id="email" placeholder="name@company.com" class="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-primary focus:border-primary" style="border-color: var(--color-primary);">
-                        </div>
-                        <div>
-                            <label for="employee_count" class="block text-sm font-medium text-gray-700">Estimated Number of Employees Needing Cards</label>
-                            <select id="employee_count" class="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-primary focus:border-primary appearance-none" style="border-color: var(--color-primary);">
-                                <option>10 - 25 Cards</option>
-                                <option>26 - 100 Cards</option>
-                                <option>101 - 500 Cards</option>
-                                <option>500+ Cards</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="details" class="block text-sm font-medium text-gray-700">Project Details (Optional)</label>
-                            <textarea id="details" rows="3" placeholder="Do you require metal cards, white labeling, or integration?" class="mt-1 block w-full border border-gray-300 rounded-lg p-3 focus:ring-primary focus:border-primary" style="border-color: var(--color-primary);"></textarea>
-                        </div>
-                    </div>
-                    
-                    <!-- CTA Buttons -->
-                    <div class="flex flex-col space-y-4 pt-4">
-                        <button class="cta-primary text-white">
-                            Submit Quote Request
-                        </button>
-                        <a href="mailto:sales@sparshnfc.com" class="cta-secondary text-center">
-                            Contact Sales
-                        </a>
-                    </div>
-                    <p class="text-xs text-center text-gray-500 pt-2">We will respond within one business day.</p>
-                </div>
-            </div>
-            
-            
-            <!-- DETAILED CORPORATE BENEFITS SECTION (Full Width) -->
-            <div class="mt-20">
-                <h2 class="text-3xl font-extrabold text-dark text-center mb-10">Why Sparsh for Enterprise?</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    
-                    <!-- Benefit 1: Centralized Management -->
-                    <div class="p-8 rounded-2xl shadow-xl bg-white border border-gray-100">
-                        <svg class="w-10 h-10 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: var(--color-dark-bg);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        <h3 class="text-xl font-bold mb-3 text-dark">Centralized Admin Control</h3>
-                        <p class="text-gray-600">Manage all team cards from one dashboard. Instantly update links, change contact details, and disable cards for departing employees.</p>
-                    </div>
-                    
-                    <!-- Benefit 2: Cost Savings -->
-                    <div class="p-8 rounded-2xl shadow-xl bg-white border border-gray-100">
-                        <svg class="w-10 h-10 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: var(--color-dark-bg);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V6m0 2v4m0 4v2m-6 3h12a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z"></path></svg>
-                        <h3 class="text-xl font-bold mb-3 text-dark">Significant Volume Discounts</h3>
-                        <p class="text-gray-600">Enjoy substantial savings compared to individual pricing. Custom packages ensure you get the best cost per card for your organization's size.</p>
-                    </div>
 
-                    <!-- Benefit 3: Branding -->
-                    <div class="p-8 rounded-2xl shadow-xl bg-white border border-gray-100">
-                        <svg class="w-10 h-10 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="color: var(--color-dark-bg);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.5v11M12 6.5C10.06 6.5 7 8 7 11c0 2.5 3.5 5 5 5s5-2.5 5-5c0-3-3.06-4.5-5-4.5z"></path></svg>
-                        <h3 class="text-xl font-bold mb-3 text-dark">Seamless Team Branding</h3>
-                        <p class="text-gray-600">Ensure consistent brand presentation with unified designs, custom color schemes, and professional logo placement across every single card.</p>
-                    </div>
+                        <form class="space-y-4" id="quote-form">
+                            <div>
+                                <label for="company" class="block text-sm font-semibold text-slate-700">Company name</label>
+                                <input type="text" id="company" required placeholder="Acme Technologies" class="mt-1 block w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+                            </div>
+                            <div>
+                                <label for="work-email" class="block text-sm font-semibold text-slate-700">Work email</label>
+                                <input type="email" id="work-email" required placeholder="name@company.com" class="mt-1 block w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+                            </div>
+                            <div>
+                                <label for="team-size" class="block text-sm font-semibold text-slate-700">How many cards?</label>
+                                <select id="team-size" class="mt-1 block w-full rounded-xl border border-slate-200 px-4 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-300">
+                                    <option value="10-25">10 – 25</option>
+                                    <option value="26-100">26 – 100</option>
+                                    <option value="101-500">101 – 500</option>
+                                    <option value="500+">500+</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="notes" class="block text-sm font-semibold text-slate-700">Project details (optional)</label>
+                                <textarea id="notes" rows="3" placeholder="Tell us about the event, branding requirements or integrations." class="mt-1 block w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-300"></textarea>
+                            </div>
+                            <button type="submit" class="cta-primary w-full justify-center" id="request-quote-btn">
+                                Submit quote request
+                            </button>
+                            <a href="mailto:sales@sparshnfc.com" class="cta-secondary w-full justify-center">Talk to sales</a>
+                        </form>
+                        <p class="text-xs text-center text-slate-500">NDA available · GST invoicing · Procurement friendly</p>
+                    </aside>
                 </div>
             </div>
-            
-        </div>
+        </section>
+
+        <section class="section-spacing bg-white/70">
+            <div class="page-shell space-y-10">
+                <div class="max-w-3xl space-y-4">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Why enterprises choose Sparsh</h2>
+                    <p class="text-base sm:text-lg text-slate-600">From fast pilots to global rollouts, our stack is designed for IT admins, HR and brand teams working together.</p>
+                </div>
+
+                <div class="grid gap-6 md:grid-cols-3">
+                    <article class="feature-card space-y-3">
+                        <p class="text-sm font-semibold text-slate-500 uppercase tracking-[0.3em]">Provisioning</p>
+                        <h3 class="text-lg font-semibold text-slate-900">Bulk onboarding + SSO</h3>
+                        <p class="text-sm text-slate-600">Sync with Okta, Azure AD or upload CSVs to auto-provision cards. Deactivate on exit without collecting physical cards.</p>
+                    </article>
+                    <article class="feature-card space-y-3">
+                        <p class="text-sm font-semibold text-slate-500 uppercase tracking-[0.3em]">Analytics</p>
+                        <h3 class="text-lg font-semibold text-slate-900">Actionable insights</h3>
+                        <p class="text-sm text-slate-600">Track taps, QR scans, top-performing teams and link conversions. Export to HubSpot, Salesforce or Slack.</p>
+                    </article>
+                    <article class="feature-card space-y-3">
+                        <p class="text-sm font-semibold text-slate-500 uppercase tracking-[0.3em]">Security</p>
+                        <h3 class="text-lg font-semibold text-slate-900">Enterprise-grade compliance</h3>
+                        <p class="text-sm text-slate-600">SOC 2 controls, GDPR alignment, data residency options and audit trails keep your rollout compliant.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section-spacing">
+            <div class="page-shell space-y-8">
+                <div class="surface-card p-6 sm:p-8 lg:p-12 grid gap-8 lg:grid-cols-[0.9fr,1.1fr] items-center">
+                    <div class="space-y-4">
+                        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Pilot kit for leadership meetings</h2>
+                        <p class="text-base sm:text-lg text-slate-600">Send a curated pack of Classic and Premium cards to stakeholders, including microsite samples, analytics preview and packaging options.</p>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="premiumcard.html" class="cta-secondary">Explore premium finishes</a>
+                            <a href="index.html#testimonials" class="cta-secondary">Read customer stories</a>
+                        </div>
+                    </div>
+                    <div class="relative overflow-hidden rounded-3xl border border-slate-200/70 bg-gradient-to-br from-indigo-50 via-white to-sky-100 p-8 flex items-center justify-center">
+                        <div class="absolute -top-16 -right-8 h-48 w-48 rounded-full bg-sky-200/40 blur-3xl"></div>
+                        <div class="absolute bottom-0 left-0 h-36 w-36 rounded-full bg-indigo-200/30 blur-3xl"></div>
+                        <div class="relative w-full max-w-lg">
+                            <svg class="w-full h-auto" viewBox="0 0 420 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="35" y="32" width="180" height="120" rx="18" fill="#111827" stroke="#4c46d9" stroke-width="3"/>
+                                <rect x="215" y="60" width="180" height="120" rx="18" fill="#f19cb5" stroke="#ec4899" stroke-width="3"/>
+                                <rect x="75" y="172" width="270" height="36" rx="18" fill="#2563eb" opacity="0.25"/>
+                                <path d="M90 96 L160 96" stroke="#4f46e5" stroke-width="6" stroke-linecap="round"/>
+                                <path d="M260 110 L330 110" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="relative overflow-hidden py-16 sm:py-20">
+            <div class="absolute inset-0 bg-gradient-to-r from-indigo-600 via-blue-600 to-sky-500"></div>
+            <div class="page-shell relative">
+                <div class="surface-card bg-white/10 border-white/20 text-center px-6 py-14 sm:py-16 lg:py-20 text-white space-y-6">
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Ready to modernise team networking?</h2>
+                    <p class="text-base sm:text-lg text-white/80 max-w-2xl mx-auto">Schedule a strategy call, share your procurement needs and we’ll help you roll out NFC cards with analytics, dashboards and white-label microsites.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#quote-form" class="cta-primary">Request pricing</a>
+                        <a href="corporatepack.html#demo" class="cta-secondary is-ghost">Book enterprise demo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Footer - Consistent with original file -->
-    <footer class="text-white" style="background-color: var(--color-dark-bg);">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
-            <!-- Grid Layout -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b pb-4 mb-4" style="border-color: #4b5563;">
-                <div class="col-span-2 md:col-span-1 text-left">
-                    <h4 class="text-2xl font-extrabold text-white tracking-tight mb-4">Sparsh <span class="text-gold-accent" style="color: var(--color-accent-text);">NFC</span></h4>
-                    <p class="text-sm text-gray-400">Upgrade how you share your details. Elegant, smart, and sustainable.</p>
-                </div>
-                <!-- Quick Links -->
-                <div class="text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Products</h5>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="index.html#shop" class="text-gray-300 hover:text-white transition">Shop</a></li>
-                        <li><a href="corporatepack.html" class="text-gray-300 hover:text-white transition">Corporate</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Try Demo</a></li>
-                    </ul>
-                </div>
-                <!-- Company -->
-                <div class="text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Company</h5>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="index.html#about" class="text-gray-300 hover:text-white transition">About Us</a></li>
-                        <li><a href="index.html#faq" class="text-gray-300 hover:text-white transition">FAQs</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Support</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Contact</a></li>
-                    </ul>
-                </div>
-                <!-- Legal -->
-                <div class="text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Legal</h5>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Terms of Service</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Shipping</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Returns & Warranty</a></li>
-                    </ul>
-                </div>
-                 <!-- Contact -->
-                 <div class="col-span-2 md:col-span-1 text-left">
-                    <h5 class="font-semibold text-gray-300 mb-4">Stay Connected</h5>
-                    <p class="text-sm text-gray-400 mb-4">
-                        Networking in one tap. Meet Sparsh NFC — elegant, reprogrammable business cards that actually get used. 🔗✨
-                    </p>
-                    <div class="flex space-x-4 justify-start">
-                        <a href="#" class="text-gray-400 hover:text-white transition" aria-label="LinkedIn">
-                            <!-- Placeholder for LinkedIn Icon --><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.563-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.764 7 2.457v6.778z"/></svg>
-                        </a>
-                         <a href="#" class="text-gray-400 hover:text-white transition" aria-label="Instagram">
-                             <!-- Placeholder for Instagram Icon --><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2c2.716 0 3.056.01 4.122.06 1.066.05 1.791.218 2.428.465.66.254 1.216.591 1.77.996.558.406.97.973 1.135 1.77.202.558.37 1.283.418 2.348.049 1.066.06 1.405.06 4.122s-.011 3.056-.06 4.122c-.05 1.066-.218 1.791-.465 2.428-.254.66-.591 1.216-.996 1.77-.406.558-.973.97-1.77 1.135-.558.202-1.283.37-2.348.418-1.066.049-1.405.06-4.122.06s-3.056-.011-4.122-.06c-1.066-.05-1.791-.218-2.428-.465-.66-.254-1.216-.591-1.77-.996-.558-.406-.97-.973-1.135-1.77-.202-.558-.37-1.283-.418-2.348-.049-1.066-.06-1.405-.06-4.122s.011-3.056.06-4.122c.05-1.066.218-1.791.465-2.428.254-.66.591-1.216.996-1.77.406-.558.973-.97 1.77-1.135.558-.202 1.283-.37 2.348-.418 1.066-.049 1.405-.06 4.122-.06zm0-2c-2.793 0-3.148.01-4.238.061-1.09.051-1.849.227-2.502.483-.717.275-1.341.678-1.933 1.269s-.994 1.216-1.269 1.933c-.256.653-.432 1.412-.483 2.502-.051 1.09-.061 1.445-.061 4.238s.01 3.148.061 4.238c.051 1.09.227 1.849.483 2.502.275.717.678 1.341 1.269 1.933s1.216.994 1.933 1.269c.653.256 1.412.432 2.502.483 1.09.051 1.445.061 4.238.061s3.148-.01 4.238-.061c1.09-.051 1.849-.227 2.502-.483.717-.275 1.341-.678 1.933-1.269s.994-1.216 1.269-1.933c-.256-.653-.432-1.412-.483-2.502-.051-1.09-.061-1.445-.061-4.122s.01-3.148-.061-4.238c-.051-1.09-.227-1.849-.483-2.502-.275-.717-.678-1.341-1.269-1.933s-1.216-.994-1.933-1.269c-.653-.256-1.412-.432-2.502-.483-1.09-.051-1.445-.061-4.238-.061zm0 4c-4.411 0-8 3.589-8 8s3.589 8 8 8 8-3.589 8-8-3.589-8-8-8zm0 14c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6zm6-11.417c0-1.416-1.157-2.583-2.573-2.583s-2.573 1.167-2.573 2.583 1.157 2.583 2.573 2.583 2.573-1.167 2.573-2.583z"/></svg>
-                        </a>
+    <footer class="text-white">
+        <div class="page-shell py-12 lg:py-16">
+            <div class="grid gap-10 lg:grid-cols-5">
+                <div class="lg:col-span-2 space-y-4">
+                    <a href="#top" class="inline-flex items-center gap-2 text-2xl font-extrabold tracking-tight text-white">
+                        <span>Sparsh</span>
+                        <span class="text-indigo-300">NFC</span>
+                    </a>
+                    <p class="text-sm text-slate-300 max-w-md">Elegant NFC business cards, bespoke landing pages and analytics — handcrafted in India and shipped worldwide.</p>
+                    <div class="flex gap-4 text-slate-300">
+                        <a href="https://www.linkedin.com" aria-label="LinkedIn" class="hover:text-white transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zm-11 19H5V9h3v10zM6.5 7.73c-.96 0-1.75-.79-1.75-1.76 0-.97.79-1.76 1.75-1.76s1.75.79 1.75 1.76c0 .97-.79 1.76-1.75 1.76zM20 19h-3v-4.9c0-3.26-4-3.01-4 0V19h-3V9h3v1.71c1.4-2.6 7-2.8 7 2.48V19z"/></svg></a>
+                        <a href="https://www.instagram.com" aria-label="Instagram" class="hover:text-white transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zm8.75 2.15a.9.9 0 1 1 0 1.8.9.9 0 0 1 0-1.8zM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/></svg></a>
                     </div>
                 </div>
+
+                <div>
+                    <h5 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 mb-4">Products</h5>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><a href="index.html#shop" class="hover:text-white transition">Classic card</a></li>
+                        <li><a href="premiumcard.html" class="hover:text-white transition">Premium card</a></li>
+                        <li><a href="corporatepack.html" class="hover:text-white transition">Corporate packs</a></li>
+                        <li><a href="premiumcard.html#gallery" class="hover:text-white transition">Material gallery</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 mb-4">Company</h5>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><a href="index.html#about" class="hover:text-white transition">About Sparsh</a></li>
+                        <li><a href="index.html#testimonials" class="hover:text-white transition">Customer stories</a></li>
+                        <li><a href="index.html#faq" class="hover:text-white transition">FAQs</a></li>
+                        <li><a href="mailto:hello@sparshnfc.com" class="hover:text-white transition">Contact support</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h5 class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400 mb-4">Legal</h5>
+                    <ul class="space-y-3 text-sm text-slate-300">
+                        <li><a href="#" class="hover:text-white transition">Privacy policy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms & conditions</a></li>
+                        <li><a href="#" class="hover:text-white transition">Shipping & returns</a></li>
+                        <li><a href="#" class="hover:text-white transition">Accessibility</a></li>
+                    </ul>
+                </div>
             </div>
-            <div class="pt-4 text-center text-sm text-gray-500">
-                &copy; 2025 Sparsh NFC. All rights reserved. Shipping across India.
+
+            <div class="mt-10 border-t border-slate-700 pt-6 flex flex-col sm:flex-row justify-between gap-4 text-xs text-slate-400">
+                <p>&copy; 2025 Sparsh NFC. All rights reserved.</p>
+                <p>Made in India · Shipping worldwide · GST invoices available</p>
             </div>
         </div>
     </footer>
 
+    <script>
+        document.getElementById('quote-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const button = document.getElementById('request-quote-btn');
+            button.disabled = true;
+            button.textContent = 'Submitting…';
+            setTimeout(() => {
+                button.disabled = false;
+                button.textContent = 'Submit quote request';
+                alert('Thanks! Our enterprise team will reach out shortly.');
+            }, 1200);
+        });
+    </script>
 </body>
 </html>

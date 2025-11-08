@@ -20,6 +20,8 @@
     <script type="module" src="firebase-config.js"></script>
     <!-- Auth Management (Module) -->
     <script type="module" src="auth-modular.js"></script>
+    <!-- Admin Functions (for admin login check) -->
+    <script type="module" src="admin-functions.js"></script>
     <!-- Interactive UI Enhancements -->
     <script src="interactive-ui.js"></script>
 
@@ -661,6 +663,87 @@
                 submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Signing In...';
 
                 try {
+                    // Check for admin credentials first (hardcoded)
+                    const isAdminLogin = email.toLowerCase() === 'admin@gmail.com' && password === '799020';
+                    
+                    if (isAdminLogin) {
+                        console.log('Admin credentials detected, attempting login...');
+                        
+                        // For admin, try to sign in with Firebase
+                        let result = await sparshAuth.signIn(email, password);
+                        console.log('Sign in result:', result);
+                        
+                        // If admin doesn't exist, create account
+                        if (!result.success && result.error) {
+                            const errorLower = result.error.toLowerCase();
+                            if (errorLower.includes('user-not-found') || 
+                                errorLower.includes('no account found') || 
+                                errorLower.includes('there is no user record')) {
+                                console.log('Admin account not found, creating new account...');
+                                const adminProfile = {
+                                    fullName: 'Admin',
+                                    email: email,
+                                    phone: '',
+                                    role: 'admin'
+                                };
+                                result = await sparshAuth.signUp(email, password, adminProfile);
+                                console.log('Sign up result:', result);
+                                
+                                // If signup successful, try to sign in again
+                                if (result.success) {
+                                    console.log('Admin account created, signing in...');
+                                    result = await sparshAuth.signIn(email, password);
+                                    console.log('Sign in after signup:', result);
+                                }
+                            }
+                        }
+                        
+                        if (result.success) {
+                            console.log('Admin login successful, setting admin email in Firestore...');
+                            
+                            // Store admin email in sessionStorage for quick access
+                            sessionStorage.setItem('adminEmail', email);
+                            localStorage.setItem('adminEmail', email);
+                            
+                            // Set admin in Firestore
+                            // Wait for adminFunctions if needed
+                            let attempts = 0;
+                            while (typeof adminFunctions === 'undefined' && attempts < 20) {
+                                await new Promise(resolve => setTimeout(resolve, 200));
+                                attempts++;
+                            }
+                            
+                            if (typeof adminFunctions !== 'undefined' && adminFunctions.setAdminEmail) {
+                                try {
+                                    await adminFunctions.setAdminEmail(email);
+                                    console.log('Admin email set in Firestore');
+                                } catch (err) {
+                                    console.warn('Failed to set admin email in Firestore:', err);
+                                    // Continue anyway - hardcoded check will work
+                                }
+                            }
+                            
+                            successDiv.textContent = 'Admin login successful! Redirecting...';
+                            successDiv.classList.remove('d-none');
+                            
+                            // Wait a bit to ensure auth state is saved
+                            await new Promise(resolve => setTimeout(resolve, 300));
+                            
+                            setTimeout(() => {
+                                window.location.href = 'admin-dashboard.html';
+                            }, 500);
+                            return;
+                        } else {
+                            console.error('Admin login failed:', result.error);
+                            errorDiv.textContent = 'Admin login failed: ' + (result.error || 'Please check your credentials. Make sure the admin account exists in Firebase.');
+                            errorDiv.classList.remove('d-none');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Sign in';
+                            return;
+                        }
+                    }
+                    
+                    // Regular user login
                     const result = await sparshAuth.signIn(email, password);
 
                     if (result.success) {
@@ -852,13 +935,98 @@
                 }
             });
 
-            // Social Login Placeholders
-            document.getElementById('google-signin-btn').addEventListener('click', function() {
-                alert('Google Sign In will be available after Firebase configuration.');
+            // Google Sign In
+            document.getElementById('google-signin-btn').addEventListener('click', async function() {
+                const errorDiv = document.getElementById('signin-error');
+                const submitBtn = this;
+                
+                if (typeof sparshAuth === 'undefined' || !sparshAuth.signInWithGoogle) {
+                    errorDiv.textContent = 'Authentication service is not ready. Please refresh the page and try again.';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Signing in...';
+                errorDiv.style.display = 'none';
+                
+                try {
+                    const result = await sparshAuth.signInWithGoogle();
+                    if (result.success) {
+                        // Redirect to dashboard or previous page
+                        const redirectUrl = localStorage.getItem('redirectAfterLogin') || 'dashboard.html';
+                        localStorage.removeItem('redirectAfterLogin');
+                        window.location.href = redirectUrl;
+                    } else {
+                        // Show detailed error message
+                        let errorMessage = result.error || 'Failed to sign in with Google. Please try again.';
+                        if (result.error && result.error.includes('Domain not authorized')) {
+                            errorMessage = result.error + '\n\nNote: This is a development setup issue. Contact your administrator.';
+                        }
+                        errorDiv.textContent = errorMessage;
+                        errorDiv.style.display = 'block';
+                        errorDiv.style.whiteSpace = 'pre-line';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Sign in with Google';
+                    }
+                } catch (error) {
+                    console.error('Google sign in error:', error);
+                    let errorMessage = 'An error occurred. Please try again.';
+                    if (error.code === 'auth/unauthorized-domain') {
+                        errorMessage = `Domain authorization required. Please add "${window.location.hostname}" to Firebase Console > Authentication > Settings > Authorized domains.`;
+                    }
+                    errorDiv.textContent = errorMessage;
+                    errorDiv.style.display = 'block';
+                    errorDiv.style.whiteSpace = 'pre-line';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Sign in with Google';
+                }
             });
 
-            document.getElementById('google-signup-btn').addEventListener('click', function() {
-                alert('Google Sign Up will be available after Firebase configuration.');
+            // Google Sign Up
+            document.getElementById('google-signup-btn').addEventListener('click', async function() {
+                const errorDiv = document.getElementById('signup-error');
+                const submitBtn = this;
+                
+                if (typeof sparshAuth === 'undefined' || !sparshAuth.signInWithGoogle) {
+                    errorDiv.textContent = 'Authentication service is not ready. Please refresh the page and try again.';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Signing up...';
+                errorDiv.style.display = 'none';
+                
+                try {
+                    const result = await sparshAuth.signInWithGoogle();
+                    if (result.success) {
+                        // Redirect to dashboard
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        // Show detailed error message
+                        let errorMessage = result.error || 'Failed to sign up with Google. Please try again.';
+                        if (result.error && result.error.includes('Domain not authorized')) {
+                            errorMessage = result.error + '\n\nNote: This is a development setup issue. Contact your administrator.';
+                        }
+                        errorDiv.textContent = errorMessage;
+                        errorDiv.style.display = 'block';
+                        errorDiv.style.whiteSpace = 'pre-line';
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Sign up with Google';
+                    }
+                } catch (error) {
+                    console.error('Google sign up error:', error);
+                    let errorMessage = 'An error occurred. Please try again.';
+                    if (error.code === 'auth/unauthorized-domain') {
+                        errorMessage = `Domain authorization required. Please add "${window.location.hostname}" to Firebase Console > Authentication > Settings > Authorized domains.`;
+                    }
+                    errorDiv.textContent = errorMessage;
+                    errorDiv.style.display = 'block';
+                    errorDiv.style.whiteSpace = 'pre-line';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Sign up with Google';
+                }
             });
 
             document.getElementById('facebook-signin-btn').addEventListener('click', function() {

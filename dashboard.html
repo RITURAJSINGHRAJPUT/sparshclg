@@ -265,10 +265,12 @@
                 }, 100);
             });
 
-            // Check authentication
-            if (!sparshAuth.isAuthenticated()) {
-                window.location.href = 'login.html';
-                return;
+            // Wait until Firebase restores the auth state before deciding
+            if (typeof sparshAuth.waitForAuthReady === 'function') {
+                await sparshAuth.waitForAuthReady();
+            } else {
+                // Fallback: small delay to allow auth state to hydrate
+                await new Promise(r => setTimeout(r, 300));
             }
 
             const user = sparshAuth.getCurrentUser();
